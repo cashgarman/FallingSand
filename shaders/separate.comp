@@ -1,32 +1,60 @@
+// Phase separation: oil and lava slowly trade places with water on staggered row pairs.
+// Each tick only half the rows run, toggled by operation phase so pairs do not fight.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
-void exchangePhase(inout vec3 upper, inout vec3 lower, int heavy, int light, float speed)
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Move a little heavy liquid down and light liquid up between two stacked cells.
+void exchangePhase(inout vec3 upper, inout vec3 lower, int heavyChannel, int lightChannel, float speed)
 {
-    float exchange = min(upper[heavy], lower[light]) * speed;
-    upper[heavy] -= exchange;
-    lower[heavy] += exchange;
-    upper[light] += exchange;
-    lower[light] -= exchange;
+	// Swap only what both cells can spare, scaled by how fast this pairing mixes.
+	float exchange = min(upper[heavyChannel], lower[lightChannel]) * speed;
+	upper[heavyChannel] -= exchange;
+	lower[heavyChannel] += exchange;
+	upper[lightChannel] += exchange;
+	lower[lightChannel] -= exchange;
 }
 
+// Compare upper and lower row in a pair; write back only if liquid channels changed.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    p.y = p.y * 2 + int(pc.operation.y);
-    ivec2 q = p + DOWN;
-    if (!inside(q)) return;
-    int i = indexOf(p), j = indexOf(q);
-    Cell a = readCell(i), b = readCell(j);
-    if (volume(a) < 0.03 || volume(b) < 0.03) return;
+	// Map this thread to one grid square in the simulation.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
 
-    vec3 beforeA = a.liquid, beforeB = b.liquid;
-    exchangePhase(a.liquid, b.liquid, 0, 1, 0.25);
-    exchangePhase(a.liquid, b.liquid, 2, 1, 0.18);
-    exchangePhase(a.liquid, b.liquid, 2, 0, 0.16);
-    if (any(notEqual(beforeA, a.liquid))) writeCell(i, a);
-    if (any(notEqual(beforeB, b.liquid))) writeCell(j, b);
+	// Alternate which stacked pairs run this tick — even vs odd rows by phase.
+	gridPos.y = gridPos.y * 2 + int(pc.operation.y);
+	ivec2 belowPos = gridPos + DOWN;
+
+	// Need a valid cell below — top-edge threads have no pair to separate.
+	if (!inside(belowPos))
+		return;
+
+	// Upper and lower cells in this column pair.
+	int upperIndex = indexOf(gridPos);
+	int lowerIndex = indexOf(belowPos);
+	Cell upperCell = readCell(upperIndex);
+	Cell lowerCell = readCell(lowerIndex);
+
+	// Nearly dry cells have nothing meaningful to separate.
+	if (volume(upperCell) < 0.03 || volume(lowerCell) < 0.03) // 0.03: skip nearly empty pairs
+		return;
+
+	// Remember liquids so we write back only when a swap actually changed them.
+	vec3 beforeUpper = upperCell.liquid, beforeLower = lowerCell.liquid;
+
+	// Oil–water and lava–water exchanges run at different speeds per channel pairing.
+	exchangePhase(upperCell.liquid, lowerCell.liquid, 0, 1, 0.25); // 0.25: oil vs water rate
+	exchangePhase(upperCell.liquid, lowerCell.liquid, 2, 1, 0.18); // 0.18: lava vs water (oil slot)
+	exchangePhase(upperCell.liquid, lowerCell.liquid, 2, 0, 0.16); // 0.16: lava vs water (water slot)
+
+	// Push changes only to the upper cell when its mix moved.
+	if (any(notEqual(beforeUpper, upperCell.liquid)))
+		writeCell(upperIndex, upperCell);
+
+	// Same for the lower cell when only it changed.
+	if (any(notEqual(beforeLower, lowerCell.liquid)))
+		writeCell(lowerIndex, lowerCell);
 }
-

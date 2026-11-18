@@ -1,37 +1,60 @@
+// Flux pass: record how much liquid would leave each square along positive velocity axes.
+// Negative flow steals volume from the neighbor in the opposite direction instead.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
-vec2 faces(ivec2 p)
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Read simulation velocity at a grid position, or zero off-world.
+vec2 faces(ivec2 gridPos)
 {
-    return inside(p) ? velocity[indexOf(p)] : vec2(0);
+	return inside(gridPos) ? velocity[indexOf(gridPos)] : vec2(0);
 }
 
-float outgoingScale(ivec2 p)
+// Limit outgoing rate so multiple faces cannot siphon more than the cell holds.
+float outgoingScale(ivec2 gridPos)
 {
-    vec2 outward = max(faces(p), vec2(0));
-    float rate = outward.x + outward.y - min(0.0, faces(p - RIGHT).x)
-                                       - min(0.0, faces(p - DOWN).y);
-    return min(1.0, 0.95 / max(rate, 0.001));
+	// Implementation: rate = outward sum minus inward pulls from left and above neighbors
+	vec2 outward = max(faces(gridPos), vec2(0));
+	float rate = outward.x + outward.y - min(0.0, faces(gridPos - RIGHT).x)
+	                                       - min(0.0, faces(gridPos - DOWN).y);
+	return min(1.0, 0.95 / max(rate, 0.001)); // 0.95: safety headroom; 0.001: avoid divide-by-zero
 }
 
+// Write this cell's outward flux along +x and +y from current velocity and volume.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
-    int i = indexOf(p);
-    vec2 speed = velocity[i];
-    float here = volume(readCell(i));
-    float ownScale = here > 0.0 ? outgoingScale(p) * here : 0.0;
-    vec2 transfer = max(speed, vec2(0)) * ownScale;
+	// Map this thread to one grid square in the simulation.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+	if (!inside(gridPos))
+		return;
 
-    if (speed.x < 0.0 && p.x + 1 < pc.size.x) {
-        transfer.x = speed.x * volume(readCell(i + 1)) * outgoingScale(p + RIGHT);
-    }
-    if (speed.y < 0.0 && p.y + 1 < pc.size.y) {
-        transfer.y = speed.y * volume(readCell(i + pc.size.x)) * outgoingScale(p + DOWN);
-    }
-    flux[i] = transfer;
+	// Same flat slot the advect pass uses for this square.
+	int cellIndex = indexOf(gridPos);
+
+	// Flow already sitting on this cell from the pressure projection step.
+	vec2 speed = velocity[cellIndex];
+
+	// How much water, oil, and lava fills the square — export scales with volume.
+	float here = volume(readCell(cellIndex));
+
+	// Throttle so competing faces cannot drain more liquid than we actually hold.
+	float ownScale = here > 0.0 ? outgoingScale(gridPos) * here : 0.0;
+
+	// Volume that would leave along +x and +y when velocity points outward.
+	vec2 transfer = max(speed, vec2(0)) * ownScale;
+
+	// Negative x or y velocity pulls from the neighbor we are flowing toward.
+	if (speed.x < 0.0 && gridPos.x + 1 < pc.size.x)
+	{
+		transfer.x = speed.x * volume(readCell(cellIndex + 1)) * outgoingScale(gridPos + RIGHT);
+	}
+	if (speed.y < 0.0 && gridPos.y + 1 < pc.size.y)
+	{
+		transfer.y = speed.y * volume(readCell(cellIndex + pc.size.x)) * outgoingScale(gridPos + DOWN);
+	}
+
+	flux[cellIndex] = transfer;
 }
-

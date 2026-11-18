@@ -1,47 +1,96 @@
+// Velocity prediction: estimate how liquid will move this tick from neighbor velocities and viscosity.
+// Each thread writes one square's predicted flow for the pressure and advection passes.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
-vec2 at(ivec2 p) { return inside(p) ? velocity[indexOf(p)] : vec2(0); }
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Sample velocity at a grid square, or zero outside the world.
+vec2 velocityAt(ivec2 gridPos)
+{
+	return inside(gridPos) ? velocity[indexOf(gridPos)] : vec2(0);
+}
+
+// Follow the flow field backward one grid step and bilinearly sample one velocity component.
 float trace(vec2 sampleAt, int component)
 {
-    ivec2 p = ivec2(floor(sampleAt));
-    vec2 f = fract(sampleAt);
-    return mix(mix(at(p)[component], at(p + RIGHT)[component], f.x),
-               mix(at(p + DOWN)[component], at(p + RIGHT + DOWN)[component], f.x), f.y);
+	// Cell corner under the back-traced sample point.
+	// Implementation: floor/fract sample position; bilinear mix of velocityAt at four corners
+	ivec2 basePos = ivec2(floor(sampleAt));
+
+	// How far inside that cell we landed — drives smooth interpolation.
+	vec2 frac = fract(sampleAt);
+
+	// Blend the same velocity component from four neighbors (bilinear).
+	return mix(mix(velocityAt(basePos)[component], velocityAt(basePos + RIGHT)[component], frac.x),
+	           mix(velocityAt(basePos + DOWN)[component], velocityAt(basePos + RIGHT + DOWN)[component], frac.x), frac.y);
 }
 
+// Blend traced velocity with neighbors when horizontal or vertical liquid links are open.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
-    int i = indexOf(p);
-    Cell c = readCell(i), right = readCell(p + RIGHT), down = readCell(p + DOWN);
-    vec2 v = vec2(0);
-    bool horizontal = !solid(c) && !solid(right) && (wet(c) || wet(right));
-    bool vertical = !solid(c) && !solid(down) &&
-                    (wet(c) || wet(down) || volume(c) > 0.001);
-    if (horizontal || vertical) {
-        vec2 old = velocity[i];
-        vec2 leftV = at(p - RIGHT), rightV = at(p + RIGHT);
-        vec2 upV = at(p - DOWN), downV = at(p + DOWN);
-        // Each component lives on its own face. Interpolate the transverse component there.
-        if (horizontal) {
-            float crossY = (old.y + upV.y + rightV.y + at(p + RIGHT - DOWN).y) * 0.25;
-            v.x = trace(vec2(p) - vec2(old.x, crossY), 0);
-        }
-        if (vertical) {
-            float crossX = (old.x + leftV.x + downV.x + at(p + DOWN - RIGHT).x) * 0.25;
-            v.y = trace(vec2(p) - vec2(crossX, old.y), 1);
-        }
-        vec3 phase = c.liquid + right.liquid + down.liquid;
-        float viscosity = dot(phase, vec3(0.022, 0.095, 0.19)) /
-                          max(dot(phase, vec3(1)), 0.001);
-        v = (v * (1.0 - 4.0 * viscosity) + viscosity * (leftV + rightV + upV + downV)) * 0.992;
-        v.y += 0.085;
-        v = clamp(v, vec2(-0.9), vec2(0.9));
-    }
-    prediction[i] = vec2(horizontal ? v.x : 0.0, vertical ? v.y : 0.0);
-}
+	// Map this thread to one grid square in the simulation.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+	if (!inside(gridPos))
+		return;
 
+	// Flat slot shared with pressure, flux, and advect passes.
+	int cellIndex = indexOf(gridPos);
+
+	// Center cell plus face neighbors — links decide whether each axis can carry flow.
+	Cell centerCell = readCell(cellIndex);
+	Cell rightCell = readCell(gridPos + RIGHT);
+	Cell downCell = readCell(gridPos + DOWN);
+
+	// Start with no motion; axes that fail the link test stay zero.
+	vec2 predicted = vec2(0);
+
+	// Open faces on a wet run let us predict horizontal sliding along the x stagger.
+	bool horizontal = !solid(centerCell) && !solid(rightCell) && (wet(centerCell) || wet(rightCell));
+
+	// Open faces below or beside wet volume let us predict vertical flow (includes trace-damp cells).
+	bool vertical = !solid(centerCell) && !solid(downCell) &&
+	                (wet(centerCell) || wet(downCell) || volume(centerCell) > 0.001); // 0.001: treat trace damp cells as vertical links
+
+	// Skip the heavy path when neither liquid link is available.
+	if (horizontal || vertical)
+	{
+		// Last frame's velocity here, plus the four neighbors used for drag and tracing.
+		vec2 oldVelocity = velocity[cellIndex];
+		vec2 leftVelocity = velocityAt(gridPos - RIGHT);
+		vec2 rightVelocity = velocityAt(gridPos + RIGHT);
+		vec2 upVelocity = velocityAt(gridPos - DOWN);
+		vec2 downVelocity = velocityAt(gridPos + DOWN);
+
+		// Each axis lives on its own staggered face — sample the cross-component there before tracing along flow.
+		if (horizontal)
+		{
+			float crossY = (oldVelocity.y + upVelocity.y + rightVelocity.y + velocityAt(gridPos + RIGHT - DOWN).y) * 0.25; // 0.25: average four face samples
+			predicted.x = trace(vec2(gridPos) - vec2(oldVelocity.x, crossY), 0);
+		}
+		if (vertical)
+		{
+			float crossX = (oldVelocity.x + leftVelocity.x + downVelocity.x + velocityAt(gridPos + DOWN - RIGHT).x) * 0.25;
+			predicted.y = trace(vec2(gridPos) - vec2(crossX, oldVelocity.y), 1);
+		}
+
+		// Thick liquids drag harder; blend toward neighbor velocities and add a tiny downward bias.
+		// Implementation: viscosity from weighted liquid phase; blend 1 - 4*viscosity; *0.992 damp; +0.085 gravity on y
+		vec3 phase = centerCell.liquid + rightCell.liquid + downCell.liquid;
+		float viscosity = dot(phase, vec3(0.022, 0.095, 0.19)) /
+		                  max(dot(phase, vec3(1)), 0.001);
+		// Keep most of the traced speed, but let neighbors pull thick fluid along each axis.
+		predicted = (predicted * (1.0 - 4.0 * viscosity) + viscosity * (leftVelocity + rightVelocity + upVelocity + downVelocity)) * 0.992; // 0.992: per-tick velocity retention
+
+		// A little extra downward pull each frame — liquids feel heavy.
+		predicted.y += 0.085; // 0.085: gentle downward drift for liquids
+
+		// Keep guesses within what the projection step can correct safely.
+		predicted = clamp(predicted, vec2(-0.9), vec2(0.9)); // 0.9: speed cap before pressure projection
+	}
+
+	// Publish only the axes that had an open liquid link this tick.
+	prediction[cellIndex] = vec2(horizontal ? predicted.x : 0.0, vertical ? predicted.y : 0.0);
+}

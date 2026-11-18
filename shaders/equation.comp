@@ -1,26 +1,49 @@
+// Pressure setup: each thread writes one row of the slow liquid network for its grid square.
+// Wet, non-solid cells get connection weights to neighbors; dry or solid squares stay disconnected.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Build one pressure-network row for the square this thread owns.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
-    int i = indexOf(p);
-    Cell c = readCell(i);
-    Equation row = Equation(vec4(0), 0.0);
-    if (wet(c) && !solid(c)) {
-        row.weights = vec4(faceWeight(c, readCell(p - RIGHT)),
-                           faceWeight(c, readCell(p + RIGHT)),
-                           faceWeight(c, readCell(p - DOWN)),
-                           faceWeight(c, readCell(p + DOWN)));
-        vec2 vp = prediction[i];
-        float left = p.x > 0 ? prediction[i - 1].x : 0.0;
-        float up = p.y > 0 ? prediction[i - pc.size.x].y : 0.0;
-        row.rhs = left + up - vp.x - vp.y;
-    }
-    equation[i] = row;
-    pressureA[i] = dot(row.weights, vec4(1)) > 0.0 ? 0.86 * pressureA[i] : 0.0;
-}
+	// One thread owns one grid square, identified by the GPU's global thread coordinates.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
 
+	// Off-world threads exit without touching the buffers.
+	if (!inside(gridPos))
+		return;
+
+	// Find this square in the flat array, read what is in it, and start with an empty pressure row.
+	// Implementation: indexOf(gridPos) is row-major flat index; Equation(vec4(0), 0.0) is zeros until wet links fill in
+	int cellIndex = indexOf(gridPos);
+	Cell cell = readCell(cellIndex);
+	Equation row = Equation(vec4(0), 0.0);
+
+	// Only squares that hold liquid and are not stone/sand grains participate in pressure.
+	if (wet(cell) && !solid(cell))
+	{
+		// Stronger links where fluid can flow more easily through each face (left, right, up, down).
+		// Implementation: faceWeight on each neighbor pair; weights packed left, right, up, down in row.weights
+		row.weights = vec4(faceWeight(cell, readCell(gridPos - RIGHT)),
+		                   faceWeight(cell, readCell(gridPos + RIGHT)),
+		                   faceWeight(cell, readCell(gridPos - DOWN)),
+		                   faceWeight(cell, readCell(gridPos + DOWN)));
+
+		// Planned flow this tick — the balance row subtracts what we push outward from neighbor inflow.
+		vec2 predictedVelocity = prediction[cellIndex];
+
+		// Inflow from the left and top faces minus what this cell pushes right and down must balance.
+		// Implementation: lhs-style rhs = leftInflow + upwardInflow - predictedVelocity.x - predictedVelocity.y
+		float leftInflow = gridPos.x > 0 ? prediction[cellIndex - 1].x : 0.0;
+		float upwardInflow = gridPos.y > 0 ? prediction[cellIndex - pc.size.x].y : 0.0;
+		row.rhs = leftInflow + upwardInflow - predictedVelocity.x - predictedVelocity.y;
+	}
+
+	// Store this row for the Jacobi pressure solve; fade old pressure where the cell is still active.
+	equation[cellIndex] = row;
+	pressureA[cellIndex] = dot(row.weights, vec4(1)) > 0.0 ? 0.86 * pressureA[cellIndex] : 0.0; // 0.86: keep a little history on wet links
+}

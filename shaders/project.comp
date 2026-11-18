@@ -1,19 +1,34 @@
+// Velocity projection: nudge predicted flow so it respects pressure across cell faces.
+// Each thread adjusts one square's velocity from pressure samples on the right and below.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Turn pressure differences on open faces into a corrected velocity for this cell.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
-    int i = indexOf(p);
-    Cell c = readCell(i);
-    float center = pressureA[i];
-    float right = p.x + 1 < pc.size.x ? pressureA[i + 1] : 0.0;
-    float down = p.y + 1 < pc.size.y ? pressureA[i + pc.size.x] : 0.0;
-    vec2 w = vec2(faceWeight(c, readCell(p + RIGHT)), faceWeight(c, readCell(p + DOWN)));
-    velocity[i] = clamp(prediction[i] - w * (vec2(right, down) - center),
-                        vec2(-0.90), vec2(0.90));
-}
+	// Map this thread to one grid square in the simulation.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+	if (!inside(gridPos))
+		return;
 
+	// Flat index and cell contents — face weights depend on solids and liquids here.
+	int cellIndex = indexOf(gridPos);
+	Cell cell = readCell(cellIndex);
+
+	// Center pressure and samples to the right and below (zero past the world edge).
+	float centerPressure = pressureA[cellIndex];
+	float rightPressure = gridPos.x + 1 < pc.size.x ? pressureA[cellIndex + 1] : 0.0;
+	float downPressure = gridPos.y + 1 < pc.size.y ? pressureA[cellIndex + pc.size.x] : 0.0;
+
+	// Weight each axis by how easily fluid can cross that face, then subtract the pressure push.
+	// Implementation: w = faceWeight to right/down neighbors; velocity = clamp(prediction - w * (Δp), ±0.9)
+	vec2 faceWeights = vec2(faceWeight(cell, readCell(gridPos + RIGHT)), faceWeight(cell, readCell(gridPos + DOWN)));
+
+	// Steer predicted flow downhill in pressure along each open face — that becomes the new velocity.
+	velocity[cellIndex] = clamp(prediction[cellIndex] - faceWeights * (vec2(rightPressure, downPressure) - centerPressure),
+	                          vec2(-0.90), vec2(0.90)); // 0.90: max speed after projection
+}

@@ -1,36 +1,62 @@
+// Flow limit pass: how much extra liquid a square may accept this tick when neighbors push in.
+// Neighbor limits can free capacity when liquid is leaving elsewhere first.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
-float previous(ivec2 p)
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Read the previous tick's limit from the ping-pong buffer selected by operation phase.
+float previous(ivec2 gridPos)
 {
-    if (!inside(p)) return 0.0;
-    return pc.operation.y == 0u ? limitB[indexOf(p)] : limitA[indexOf(p)];
+	// Off-map callers get zero — neighbors past the edge cannot absorb overflow.
+	if (!inside(gridPos))
+		return 0.0;
+
+	// Pick whichever buffer still holds last tick's limits for this phase.
+	return pc.operation.y == 0u ? limitB[indexOf(gridPos)] : limitA[indexOf(gridPos)];
 }
 
+// Store how aggressively this cell can accept inflow from the four faces.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
-    int i = indexOf(p);
-    vec2 end = flux[i];
-    float left = p.x > 0 ? flux[i - 1].x : 0.0;
-    float top = p.y > 0 ? flux[i - pc.size.x].y : 0.0;
-    vec4 toward = vec4(left, top, -end.x, -end.y);
-    float incoming = dot(max(toward, vec4(0)), vec4(1));
-    float result = 0.0;
-    if (incoming > 0.0) {
-        float capacity = max(0.0, 1.0 - volume(readCell(i)));
-        if (pc.operation.x != 0u && capacity < incoming) {
-            vec4 accepted = vec4(previous(p - RIGHT), previous(p - DOWN),
-                                 previous(p + RIGHT), previous(p + DOWN));
-            // These neighboring receivers let us credit outflow before accepting more inflow.
-            capacity += dot(max(-toward, vec4(0)), accepted);
-        }
-        result = min(1.0, capacity / incoming);
-    }
-    if (pc.operation.y == 0u) limitA[i] = result;
-    else limitB[i] = result;
-}
+	// Map this thread to one grid square in the simulation.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+	if (!inside(gridPos))
+		return;
 
+	// Same flat slot the flux pass wrote for this square.
+	int cellIndex = indexOf(gridPos);
+
+	// Our export plus neighbor imports — same four-face picture advect uses.
+	vec2 endFlux = flux[cellIndex];
+	float leftFlux = gridPos.x > 0 ? flux[cellIndex - 1].x : 0.0;
+	float topFlux = gridPos.y > 0 ? flux[cellIndex - pc.size.x].y : 0.0;
+	vec4 toward = vec4(leftFlux, topFlux, -endFlux.x, -endFlux.y);
+
+	// Sum positive toward-components to see total incoming demand on this square.
+	float incoming = dot(max(toward, vec4(0)), vec4(1));
+	float result = 0.0;
+	if (incoming > 0.0)
+	{
+		// Headroom left in the cell before it would read as completely full.
+		float capacity = max(0.0, 1.0 - volume(readCell(cellIndex)));
+		if (pc.operation.x != 0u && capacity < incoming)
+		{
+			// Credit outflow the neighbors can still absorb before we accept more inflow.
+			// Implementation: capacity += dot(max(-toward, 0), accepted limits from four neighbors)
+			vec4 accepted = vec4(previous(gridPos - RIGHT), previous(gridPos - DOWN),
+			                     previous(gridPos + RIGHT), previous(gridPos + DOWN));
+			capacity += dot(max(-toward, vec4(0)), accepted);
+		}
+
+		// Accept at most what our headroom can carry relative to total inbound demand.
+		result = min(1.0, capacity / incoming);
+	}
+	// Write the inflow allowance into the buffer advect will read this phase.
+	if (pc.operation.y == 0u)
+		limitA[cellIndex] = result;
+	else
+		limitB[cellIndex] = result;
+}

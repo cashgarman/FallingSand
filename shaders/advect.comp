@@ -1,39 +1,73 @@
+// Liquid advection: move water, oil, and lava between neighbors according to flux and flow limits.
+// Each thread updates one grid square when fluid is actually flowing across its faces.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
-vec3 received(int donor, float amount)
+// Same 16×8 thread layout as the other world simulation compute steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Scale donor cell liquids by how much is leaving through a face.
+vec3 received(int donorIndex, float amount)
 {
-    if (amount <= 0.0) return vec3(0);
-    Cell c = readCell(donor);
-    return c.liquid * (amount / max(volume(c), 1e-30));
+	// Nothing to receive when the face offered no liquid this tick.
+	if (amount <= 0.0)
+		return vec3(0);
+
+	// Donor mix decides how much water, oil, and lava ride along with the transfer.
+	Cell donorCell = readCell(donorIndex);
+	return donorCell.liquid * (amount / max(volume(donorCell), 1e-30)); // 1e-30: avoid divide-by-zero on empty donors
 }
 
+// Apply net inflow and outflow to this square's liquid channels.
 void main()
 {
-    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
-    int i = indexOf(p);
-    Cell c = readCell(i);
-    int leftIndex = p.x > 0 ? i - 1 : i;
-    int rightIndex = p.x + 1 < pc.size.x ? i + 1 : i;
-    int topIndex = p.y > 0 ? i - pc.size.x : i;
-    int bottomIndex = p.y + 1 < pc.size.y ? i + pc.size.x : i;
-    float left = p.x > 0 ? flux[leftIndex].x : 0.0;
-    float top = p.y > 0 ? flux[topIndex].y : 0.0;
-    vec2 end = flux[i];
-    vec4 toward = vec4(left, top, -end.x, -end.y);
-    if (any(notEqual(toward, vec4(0)))) {
-        vec4 into = max(toward, vec4(0)) * limitA[i];
-        vec4 remote = vec4(limitA[leftIndex], limitA[topIndex],
-                           limitA[rightIndex], limitA[bottomIndex]);
-        float outflow = dot(max(-toward, vec4(0)), remote);
-        float amount = volume(c);
-        c.liquid *= amount > 0.0 ? max(0.0, 1.0 - outflow / amount) : 1.0;
-        c.liquid += received(leftIndex, into.x) + received(topIndex, into.y) +
-                    received(rightIndex, into.z) + received(bottomIndex, into.w);
-    }
-    writeOther(i, c);
-}
+	// Map this thread to one grid square in the simulation.
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+	if (!inside(gridPos))
+		return;
 
+	// Same flat slot the flux and limit passes use for this square.
+	int cellIndex = indexOf(gridPos);
+	Cell cell = readCell(cellIndex);
+
+	// Neighbor indices clamp to self at world edges so edge math stays uniform.
+	int leftIndex = gridPos.x > 0 ? cellIndex - 1 : cellIndex;
+	int rightIndex = gridPos.x + 1 < pc.size.x ? cellIndex + 1 : cellIndex;
+	int topIndex = gridPos.y > 0 ? cellIndex - pc.size.x : cellIndex;
+	int bottomIndex = gridPos.y + 1 < pc.size.y ? cellIndex + pc.size.x : cellIndex;
+
+	// Positive flux toward this cell from left and top; negative of our own flux as outward demand.
+	// Implementation: toward = vec4(left, top, -end.x, -end.y) from neighbor flux[] and flux[cellIndex]
+	float leftFlux = gridPos.x > 0 ? flux[leftIndex].x : 0.0;
+	float topFlux = gridPos.y > 0 ? flux[topIndex].y : 0.0;
+	vec2 endFlux = flux[cellIndex];
+	vec4 toward = vec4(leftFlux, topFlux, -endFlux.x, -endFlux.y);
+
+	// When anything is pushing or pulling liquid here, scale down what we keep and add what neighbors send.
+	if (any(notEqual(toward, vec4(0))))
+	{
+		// Conserve mass: clip how much stays here, then add neighbor donations — limits prevent overfilling anyone.
+		// Implementation: into = max(toward, 0) * limitA; outflow = dot(max(-toward, 0), remote limits)
+
+		// How much fluid each face tries to deliver here, capped by this square's inflow allowance.
+		vec4 into = max(toward, vec4(0)) * limitA[cellIndex];
+
+		// Each neighbor's remaining capacity to absorb what we push out that way.
+		vec4 remote = vec4(limitA[leftIndex], limitA[topIndex],
+		                    limitA[rightIndex], limitA[bottomIndex]);
+
+		// Share of our volume demanded outward, weighted by whether the target can take it.
+		float outflow = dot(max(-toward, vec4(0)), remote);
+		float amount = volume(cell);
+
+		// Scale water, oil, and lava down together by the fraction not leaving (empty cells skip the ratio).
+		cell.liquid *= amount > 0.0 ? max(0.0, 1.0 - outflow / amount) : 1.0;
+
+		// Credit imports: each face pulls the donor's mix in proportion to accepted inflow.
+		cell.liquid += received(leftIndex, into.x) + received(topIndex, into.y) +
+		               received(rightIndex, into.z) + received(bottomIndex, into.w);
+	}
+
+	writeOther(cellIndex, cell);
+}
