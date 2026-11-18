@@ -1,0 +1,26 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    Cell c = readCell(i);
+    Equation row = Equation(vec4(0), 0.0);
+    if (wet(c) && !solid(c)) {
+        row.weights = vec4(faceWeight(c, readCell(p - RIGHT)),
+                           faceWeight(c, readCell(p + RIGHT)),
+                           faceWeight(c, readCell(p - DOWN)),
+                           faceWeight(c, readCell(p + DOWN)));
+        vec2 vp = prediction[i];
+        float left = p.x > 0 ? prediction[i - 1].x : 0.0;
+        float up = p.y > 0 ? prediction[i - pc.size.x].y : 0.0;
+        row.rhs = left + up - vp.x - vp.y;
+    }
+    equation[i] = row;
+    pressureA[i] = dot(row.weights, vec4(1)) > 0.0 ? 0.86 * pressureA[i] : 0.0;
+}
+

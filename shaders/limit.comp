@@ -1,0 +1,36 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+float previous(ivec2 p)
+{
+    if (!inside(p)) return 0.0;
+    return pc.operation.y == 0u ? limitB[indexOf(p)] : limitA[indexOf(p)];
+}
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    vec2 end = flux[i];
+    float left = p.x > 0 ? flux[i - 1].x : 0.0;
+    float top = p.y > 0 ? flux[i - pc.size.x].y : 0.0;
+    vec4 toward = vec4(left, top, -end.x, -end.y);
+    float incoming = dot(max(toward, vec4(0)), vec4(1));
+    float result = 0.0;
+    if (incoming > 0.0) {
+        float capacity = max(0.0, 1.0 - volume(readCell(i)));
+        if (pc.operation.x != 0u && capacity < incoming) {
+            vec4 accepted = vec4(previous(p - RIGHT), previous(p - DOWN),
+                                 previous(p + RIGHT), previous(p + DOWN));
+            // These neighboring receivers let us credit outflow before accepting more inflow.
+            capacity += dot(max(-toward, vec4(0)), accepted);
+        }
+        result = min(1.0, capacity / incoming);
+    }
+    if (pc.operation.y == 0u) limitA[i] = result;
+    else limitB[i] = result;
+}
+

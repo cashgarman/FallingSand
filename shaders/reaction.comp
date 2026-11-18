@@ -1,0 +1,89 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    Cell c = readCell(i);
+    uint id = material(c);
+    uint life = age(c);
+    float temperature = heat(c);
+
+    Cell neighbors[4] = Cell[4](readCell(p - RIGHT), readCell(p + RIGHT),
+                                readCell(p - DOWN), readCell(p + DOWN));
+    float water = c.liquid.x, nearbyLava = c.liquid.z, adjacentHeat = 0.0;
+    float adjacentWater = 0.0;
+    bool ignition = false;
+    for (int n = 0; n < 4; ++n) {
+        Cell other = neighbors[n];
+        adjacentWater = max(adjacentWater, other.liquid.x);
+        nearbyLava = max(nearbyLava, other.liquid.z);
+        adjacentHeat += heat(other);
+        ignition = ignition || material(other) == FIRE || other.liquid.z > 0.25;
+    }
+    float chance = random01(uint(i) ^ (pc.tick * 37199u));
+    temperature = clamp(temperature + 0.035 * (adjacentHeat - 4.0 * temperature) - 0.004,
+                        0.0, 1.0);
+    temperature = max(temperature, 0.87 * smoothstep(0.0, 0.5, c.liquid.z));
+
+    if (c.liquid.z > 0.04 && max(water, adjacentWater) > 0.17) {
+        if (chance < 0.30) {
+            // Quenching makes a solid crust and boils water on the opposite side of the interface.
+            c.liquid = vec3(0);
+            id = STONE;
+            life = 0u;
+            temperature = 0.42;
+        }
+    } else if (water > 0.07 && nearbyLava > 0.15 && chance < 0.34) {
+        c.liquid.x = max(0.0, water - 0.28);
+        id = STEAM;
+        life = 0u;
+        temperature = 0.65;
+    } else if (id == ICE && (temperature > 0.10 || nearbyLava > 0.12)) {
+        c.liquid.x = 1.0;
+        id = EMPTY;
+        temperature *= 0.28;
+    } else if (id == WOOD && max(water, adjacentWater) < 0.25
+               && (ignition || temperature > 0.28)) {
+        ++life;
+        temperature = max(temperature, 0.30);
+        if (life > 12u + uint(chance * 29.0)) {
+            id = FIRE;
+            life = 0u;
+        }
+    } else if (c.liquid.y > 0.09 && (ignition || temperature > 0.47 || id == FIRE)
+               && max(water, adjacentWater) < 0.35) {
+        c.liquid.y = max(0.0, c.liquid.y - 0.05);
+        id = FIRE;
+        life = 0u;
+    } else if (id == FIRE) {
+        ++life;
+        temperature = 0.92;
+        if (max(water, adjacentWater) > 0.33) {
+            id = STEAM;
+            life = 0u;
+            temperature = 0.54;
+            c.liquid.x = max(0.0, water - 0.08);
+        } else if (life > 15u + uint(chance * 25.0)) {
+            id = SMOKE;
+            life = 0u;
+        }
+    } else if (id == SMOKE || id == STEAM) {
+        ++life;
+        if (id == STEAM && life > 70u && temperature < 0.06 && chance < 0.07
+            && volume(c) < 0.79) {
+            c.liquid.x += 0.15;
+            id = EMPTY;
+        } else if (life > (id == SMOKE ? 110u : 136u) + uint(chance * 90.0)) {
+            id = EMPTY;
+        }
+    }
+
+    c.matter = packMatter(id, life, temperature);
+    writeOther(i, c);
+}
+

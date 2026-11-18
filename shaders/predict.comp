@@ -1,0 +1,47 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+vec2 at(ivec2 p) { return inside(p) ? velocity[indexOf(p)] : vec2(0); }
+float trace(vec2 sampleAt, int component)
+{
+    ivec2 p = ivec2(floor(sampleAt));
+    vec2 f = fract(sampleAt);
+    return mix(mix(at(p)[component], at(p + RIGHT)[component], f.x),
+               mix(at(p + DOWN)[component], at(p + RIGHT + DOWN)[component], f.x), f.y);
+}
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    Cell c = readCell(i), right = readCell(p + RIGHT), down = readCell(p + DOWN);
+    vec2 v = vec2(0);
+    bool horizontal = !solid(c) && !solid(right) && (wet(c) || wet(right));
+    bool vertical = !solid(c) && !solid(down) &&
+                    (wet(c) || wet(down) || volume(c) > 0.001);
+    if (horizontal || vertical) {
+        vec2 old = velocity[i];
+        vec2 leftV = at(p - RIGHT), rightV = at(p + RIGHT);
+        vec2 upV = at(p - DOWN), downV = at(p + DOWN);
+        // Each component lives on its own face. Interpolate the transverse component there.
+        if (horizontal) {
+            float crossY = (old.y + upV.y + rightV.y + at(p + RIGHT - DOWN).y) * 0.25;
+            v.x = trace(vec2(p) - vec2(old.x, crossY), 0);
+        }
+        if (vertical) {
+            float crossX = (old.x + leftV.x + downV.x + at(p + DOWN - RIGHT).x) * 0.25;
+            v.y = trace(vec2(p) - vec2(crossX, old.y), 1);
+        }
+        vec3 phase = c.liquid + right.liquid + down.liquid;
+        float viscosity = dot(phase, vec3(0.022, 0.095, 0.19)) /
+                          max(dot(phase, vec3(1)), 0.001);
+        v = (v * (1.0 - 4.0 * viscosity) + viscosity * (leftV + rightV + upV + downV)) * 0.992;
+        v.y += 0.085;
+        v = clamp(v, vec2(-0.9), vec2(0.9));
+    }
+    prediction[i] = vec2(horizontal ? v.x : 0.0, vertical ? v.y : 0.0);
+}
+

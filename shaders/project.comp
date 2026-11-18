@@ -1,0 +1,19 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    Cell c = readCell(i);
+    float center = pressureA[i];
+    float right = p.x + 1 < pc.size.x ? pressureA[i + 1] : 0.0;
+    float down = p.y + 1 < pc.size.y ? pressureA[i + pc.size.x] : 0.0;
+    vec2 w = vec2(faceWeight(c, readCell(p + RIGHT)), faceWeight(c, readCell(p + DOWN)));
+    velocity[i] = clamp(prediction[i] - w * (vec2(right, down) - center),
+                        vec2(-0.90), vec2(0.90));
+}
+

@@ -1,0 +1,37 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+vec2 faces(ivec2 p)
+{
+    return inside(p) ? velocity[indexOf(p)] : vec2(0);
+}
+
+float outgoingScale(ivec2 p)
+{
+    vec2 outward = max(faces(p), vec2(0));
+    float rate = outward.x + outward.y - min(0.0, faces(p - RIGHT).x)
+                                       - min(0.0, faces(p - DOWN).y);
+    return min(1.0, 0.95 / max(rate, 0.001));
+}
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    vec2 speed = velocity[i];
+    float here = volume(readCell(i));
+    float ownScale = here > 0.0 ? outgoingScale(p) * here : 0.0;
+    vec2 transfer = max(speed, vec2(0)) * ownScale;
+
+    if (speed.x < 0.0 && p.x + 1 < pc.size.x) {
+        transfer.x = speed.x * volume(readCell(i + 1)) * outgoingScale(p + RIGHT);
+    }
+    if (speed.y < 0.0 && p.y + 1 < pc.size.y) {
+        transfer.y = speed.y * volume(readCell(i + pc.size.x)) * outgoingScale(p + DOWN);
+    }
+    flux[i] = transfer;
+}
+

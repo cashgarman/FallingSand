@@ -1,0 +1,47 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+void main()
+{
+    float radius = pc.cursor.z;
+    vec2 origin = floor(min(pc.brush.xy, pc.brush.zw) - radius);
+    ivec2 p = ivec2(origin) + ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+
+    vec2 segment = pc.brush.zw - pc.brush.xy;
+    vec2 fromStart = vec2(p) + 0.5 - pc.brush.xy;
+    float t = clamp(dot(fromStart, segment) / max(dot(segment, segment), 0.001), 0.0, 1.0);
+    if (length(fromStart - segment * t) > radius) return;
+
+    int i = indexOf(p);
+    uint id = pc.operation.z;
+    Cell c = readCell(i);
+    if (pc.operation.x == 1u) {
+        if (solid(c)) return;
+        vec2 impulse = clamp(segment * 0.24, vec2(-0.7), vec2(0.7));
+        velocity[i] = clamp(velocity[i] + impulse + vec2(0.02, -0.12),
+                            vec2(-0.9), vec2(0.9));
+        return;
+    }
+    if (id == WATER || id == OIL || id == LAVA) {
+        if (solid(c)) return;
+        int phase = id == WATER ? 0 : id == OIL ? 1 : 2;
+        c.liquid[phase] += 1.0 - volume(c);
+        if (id == LAVA) c.matter = packMatter(EMPTY, 0u, 1.0);
+    } else {
+        if (id == SAND && material(c) != EMPTY && !gas(material(c))) return;
+        if (id == SAND && volume(c) > 0.05) return;
+        float temperature = id == FIRE ? 0.92 : id == STEAM ? 0.46 : 0.0;
+        if (gas(id)) {
+            if (solid(c) || volume(c) > 0.35) return;
+            c.matter = packMatter(id, 0u, temperature);
+        } else {
+            c = Cell(vec3(0), packMatter(id, 0u, temperature));
+        }
+    }
+    writeCell(i, c);
+    if (solid(c) || id == EMPTY) velocity[i] = vec2(0);
+}
+

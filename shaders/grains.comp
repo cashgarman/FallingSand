@@ -1,0 +1,59 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+void fall(inout Cell upper, inout Cell lower, float chance)
+{
+    float mobility = 0.90 - dot(lower.liquid, vec3(0.19, 0.39, 0.72));
+    if (material(upper) == SAND && !solid(lower) && chance < mobility) {
+        Cell swapCell = upper;
+        upper = lower;
+        lower = swapCell;
+    }
+}
+
+void rise(inout Cell lower, inout Cell upper)
+{
+    if (gas(material(lower)) && material(upper) == EMPTY && volume(upper) < 0.32) {
+        uint displaced = upper.matter;
+        upper.matter = lower.matter;
+        lower.matter = displaced;
+    }
+}
+
+void main()
+{
+    ivec2 anchor = ivec2(gl_GlobalInvocationID.xy) * 2 -
+                   ivec2(int(pc.tick & 1u), int((pc.tick >> 1u) & 1u));
+    if (any(greaterThanEqual(anchor, pc.size))) return;
+
+    Cell a = readCell(anchor);
+    Cell b = readCell(anchor + RIGHT);
+    Cell c = readCell(anchor + DOWN);
+    Cell d = readCell(anchor + RIGHT + DOWN);
+    if (((a.matter | b.matter | c.matter | d.matter) & 255u) == 0u) return;
+    Cell original[4] = Cell[4](a, b, c, d);
+
+    bool sandA = material(a) == SAND, sandB = material(b) == SAND;
+    uint seed = uint(indexOf(anchor)) ^ (pc.tick * 97987u);
+    fall(a, c, random01(seed));
+    fall(b, d, random01(seed + 1u));
+    if (sandA && solid(c)) fall(a, d, random01(seed + 2u));
+    if (sandB && solid(d)) fall(b, c, random01(seed + 3u));
+    bool gasC = gas(material(c)), gasD = gas(material(d));
+    rise(c, a);
+    rise(d, b);
+    if (gasC) rise(c, b);
+    if (gasD) rise(d, a);
+
+    Cell updated[4] = Cell[4](a, b, c, d);
+    for (int n = 0; n < 4; ++n) {
+        ivec2 p = anchor + ivec2(n & 1, n >> 1);
+        if (inside(p) && (updated[n].matter != original[n].matter ||
+                         any(notEqual(updated[n].liquid, original[n].liquid)))) {
+            writeCell(indexOf(p), updated[n]);
+        }
+    }
+}
+

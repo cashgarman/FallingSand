@@ -1,0 +1,32 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+void exchangePhase(inout vec3 upper, inout vec3 lower, int heavy, int light, float speed)
+{
+    float exchange = min(upper[heavy], lower[light]) * speed;
+    upper[heavy] -= exchange;
+    lower[heavy] += exchange;
+    upper[light] += exchange;
+    lower[light] -= exchange;
+}
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    p.y = p.y * 2 + int(pc.operation.y);
+    ivec2 q = p + DOWN;
+    if (!inside(q)) return;
+    int i = indexOf(p), j = indexOf(q);
+    Cell a = readCell(i), b = readCell(j);
+    if (volume(a) < 0.03 || volume(b) < 0.03) return;
+
+    vec3 beforeA = a.liquid, beforeB = b.liquid;
+    exchangePhase(a.liquid, b.liquid, 0, 1, 0.25);
+    exchangePhase(a.liquid, b.liquid, 2, 1, 0.18);
+    exchangePhase(a.liquid, b.liquid, 2, 0, 0.16);
+    if (any(notEqual(beforeA, a.liquid))) writeCell(i, a);
+    if (any(notEqual(beforeB, b.liquid))) writeCell(j, b);
+}
+

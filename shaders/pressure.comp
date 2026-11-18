@@ -1,0 +1,35 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+// Two Jacobi iterations per dispatch. A two-cell halo leaves a 12x12 exact interior.
+layout(local_size_x=16, local_size_y=16) in;
+shared float first[256];
+shared float second[256];
+
+void main()
+{
+    ivec2 local = ivec2(gl_LocalInvocationID.xy);
+    ivec2 p = ivec2(gl_WorkGroupID.xy) * 12 + local - 2;
+    uint s = gl_LocalInvocationIndex;
+    bool valid = inside(p);
+    int i = valid ? indexOf(p) : 0;
+    Equation row = valid ? equation[i] : Equation(vec4(0), 0.0);
+    float diagonal = dot(row.weights, vec4(1));
+    bool activeCell = diagonal > 0.0;
+    float scale = activeCell ? 1.0 / diagonal : 0.0;
+    first[s] = activeCell ? (pc.operation.y == 0u ? pressureA[i] : pressureB[i]) : 0.0;
+    barrier();
+    second[s] = 0.0;
+    if (activeCell && all(greaterThan(local, ivec2(0))) && all(lessThan(local, ivec2(15)))) {
+        vec4 neighbors = vec4(first[s-1], first[s+1], first[s-16], first[s+16]);
+        second[s] = (dot(row.weights, neighbors) + row.rhs) * scale;
+    }
+    barrier();
+    if (valid && all(greaterThan(local, ivec2(1))) && all(lessThan(local, ivec2(14)))) {
+        vec4 neighbors = vec4(second[s-1], second[s+1], second[s-16], second[s+16]);
+        float result = (dot(row.weights, neighbors) + row.rhs) * scale;
+        if (pc.operation.y == 0u) pressureB[i] = result;
+        else pressureA[i] = result;
+    }
+}
+

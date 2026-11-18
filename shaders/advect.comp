@@ -1,0 +1,39 @@
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+layout(local_size_x=16, local_size_y=8) in;
+
+vec3 received(int donor, float amount)
+{
+    if (amount <= 0.0) return vec3(0);
+    Cell c = readCell(donor);
+    return c.liquid * (amount / max(volume(c), 1e-30));
+}
+
+void main()
+{
+    ivec2 p = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(p)) return;
+    int i = indexOf(p);
+    Cell c = readCell(i);
+    int leftIndex = p.x > 0 ? i - 1 : i;
+    int rightIndex = p.x + 1 < pc.size.x ? i + 1 : i;
+    int topIndex = p.y > 0 ? i - pc.size.x : i;
+    int bottomIndex = p.y + 1 < pc.size.y ? i + pc.size.x : i;
+    float left = p.x > 0 ? flux[leftIndex].x : 0.0;
+    float top = p.y > 0 ? flux[topIndex].y : 0.0;
+    vec2 end = flux[i];
+    vec4 toward = vec4(left, top, -end.x, -end.y);
+    if (any(notEqual(toward, vec4(0)))) {
+        vec4 into = max(toward, vec4(0)) * limitA[i];
+        vec4 remote = vec4(limitA[leftIndex], limitA[topIndex],
+                           limitA[rightIndex], limitA[bottomIndex]);
+        float outflow = dot(max(-toward, vec4(0)), remote);
+        float amount = volume(c);
+        c.liquid *= amount > 0.0 ? max(0.0, 1.0 - outflow / amount) : 1.0;
+        c.liquid += received(leftIndex, into.x) + received(topIndex, into.y) +
+                    received(rightIndex, into.z) + received(bottomIndex, into.w);
+    }
+    writeOther(i, c);
+}
+
