@@ -1,59 +1,116 @@
+// Granular motion: sand falls, gas rises. Each thread updates one 2×2 cell block
+// so swaps stay local and parallel threads interfere less across ticks.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
+// Each GPU thread block is 16×8 threads — enough parallelism without tiny 2×2 blocks fighting neighbors.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Try to drop a sand grain from the upper cell into the cell below when the roll succeeds.
 void fall(inout Cell upper, inout Cell lower, float chance)
 {
-    float mobility = 0.90 - dot(lower.liquid, vec3(0.19, 0.39, 0.72));
-    if (material(upper) == SAND && !solid(lower) && chance < mobility) {
-        Cell swapCell = upper;
-        upper = lower;
-        lower = swapCell;
-    }
+	// Sand slips more on dry ground; water, oil, and lava below make the grain less willing to move this step.
+	// Implementation: dot(lower.liquid, vec3(...)) weights wetness; mobility = 0.90 minus that sum
+	float mobility = 0.90 - dot(lower.liquid, vec3(0.19, 0.39, 0.72)); // slip cap; water / oil / lava weights
+	if (material(upper) == SAND && !solid(lower) && chance < mobility)
+	{
+		// Falling-sand games usually swap neighbors: sand moves down, whatever was below moves up.
+		Cell swapCell = upper;
+		upper = lower;
+		lower = swapCell;
+	}
 }
 
+// Let light gas in the lower cell swap upward into mostly empty space above.
 void rise(inout Cell lower, inout Cell upper)
 {
-    if (gas(material(lower)) && material(upper) == EMPTY && volume(upper) < 0.32) {
-        uint displaced = upper.matter;
-        upper.matter = lower.matter;
-        lower.matter = displaced;
-    }
+	// Smoke or steam below can trade places with mostly empty air above, carrying heat and age with the swap.
+	if (gas(material(lower)) && material(upper) == EMPTY && volume(upper) < 0.32) // 0.32: upper mostly empty
+	{
+		// Trade only the identity bytes (material, age, heat); liquid in the cells stays put.
+		// Implementation: exchange upper.matter and lower.matter without touching liquid[]
+		uint displaced = upper.matter;
+		upper.matter = lower.matter;
+		lower.matter = displaced;
+	}
 }
 
 void main()
 {
-    ivec2 anchor = ivec2(gl_GlobalInvocationID.xy) * 2 -
-                   ivec2(int(pc.tick & 1u), int((pc.tick >> 1u) & 1u));
-    if (any(greaterThanEqual(anchor, pc.size))) return;
+	// Each thread owns one 2×2 patch; the frame number shifts which patches update so neighbors take turns.
+	// Implementation: anchor = gl_GlobalInvocationID.xy * 2 − ivec2(tick&1, (tick>>1)&1) for stagger
+	ivec2 anchor = ivec2(gl_GlobalInvocationID.xy) * 2 - // one invocation covers 2×2 cells
+				   ivec2(int(pc.tick & 1u), int((pc.tick >> 1u) & 1u)); // tick phases stagger x,y
 
-    Cell a = readCell(anchor);
-    Cell b = readCell(anchor + RIGHT);
-    Cell c = readCell(anchor + DOWN);
-    Cell d = readCell(anchor + RIGHT + DOWN);
-    if (((a.matter | b.matter | c.matter | d.matter) & 255u) == 0u) return;
-    Cell original[4] = Cell[4](a, b, c, d);
+	// Skip threads whose patch would start past the edge of the world.
+	// Implementation: any(greaterThanEqual(anchor, pc.size)) when anchor.x or anchor.y is out of bounds
+	if (any(greaterThanEqual(anchor, pc.size)))
+		return;
 
-    bool sandA = material(a) == SAND, sandB = material(b) == SAND;
-    uint seed = uint(indexOf(anchor)) ^ (pc.tick * 97987u);
-    fall(a, c, random01(seed));
-    fall(b, d, random01(seed + 1u));
-    if (sandA && solid(c)) fall(a, d, random01(seed + 2u));
-    if (sandB && solid(d)) fall(b, c, random01(seed + 3u));
-    bool gasC = gas(material(c)), gasD = gas(material(d));
-    rise(c, a);
-    rise(d, b);
-    if (gasC) rise(c, b);
-    if (gasD) rise(d, a);
+	// Read all four corners of the patch before sand and gas moves (top row, then bottom row).
+	Cell topLeft = readCell(anchor);
+	Cell topRight = readCell(anchor + RIGHT);
+	Cell bottomLeft = readCell(anchor + DOWN);
+	Cell bottomRight = readCell(anchor + RIGHT + DOWN);
 
-    Cell updated[4] = Cell[4](a, b, c, d);
-    for (int n = 0; n < 4; ++n) {
-        ivec2 p = anchor + ivec2(n & 1, n >> 1);
-        if (inside(p) && (updated[n].matter != original[n].matter ||
-                         any(notEqual(updated[n].liquid, original[n].liquid)))) {
-            writeCell(indexOf(p), updated[n]);
-        }
-    }
+	// Nothing to do when all four corners are empty — leave the grid untouched this step.
+	// Implementation: (matterA|matterB|...) & 255u is zero only when every material id is EMPTY
+	if (((topLeft.matter | topRight.matter | bottomLeft.matter | bottomRight.matter) & 255u) == 0u)
+		return; // all material ids zero
+
+	// Remember how the patch looked before moves so we only write squares that actually changed.
+	Cell original[4] = Cell[4](topLeft, topRight, bottomLeft, bottomRight);
+
+	// Note which top cells hold sand — diagonal trickle only runs when blocked straight below.
+	bool sandTopLeft = material(topLeft) == SAND, sandTopRight = material(topRight) == SAND;
+
+	// Tie random rolls to this patch and frame so sand jitters naturally instead of marching in lockstep.
+	// Implementation: seed = indexOf(anchor) ^ (pc.tick * 97987u) for per-patch random01
+	uint seed = uint(indexOf(anchor)) ^ (pc.tick * 97987u); // 97987u: salt constant for random01
+
+	// Sand: vertical fall, then diagonal trickle when the cell straight below is solid.
+	fall(topLeft, bottomLeft, random01(seed));
+	fall(topRight, bottomRight, random01(seed + 1u)); // +1u: separate roll per fall attempt
+
+	// Blocked straight down? Try diagonal spill like grains sliding off a pile.
+	if (sandTopLeft && solid(bottomLeft))
+		fall(topLeft, bottomRight, random01(seed + 2u)); // +2u: separate roll for this diagonal spill
+	if (sandTopRight && solid(bottomRight))
+		fall(topRight, bottomLeft, random01(seed + 3u)); // +3u: separate roll for the right-column diagonal
+
+	// Gas: rise into the cell above, then optional diagonal into the other top corner.
+	bool gasBottomLeft = gas(material(bottomLeft)), gasBottomRight = gas(material(bottomRight));
+
+	// Primary rise: bottom gas swaps upward into the cell directly above when the slot is open.
+	rise(bottomLeft, topLeft);
+	rise(bottomRight, topRight);
+
+	// Extra diagonal rise lets gas slip past a blocking top cell, similar to sand trickling around a corner.
+	if (gasBottomLeft)
+		rise(bottomLeft, topRight);
+	if (gasBottomRight)
+		rise(bottomRight, topLeft);
+
+	// Keep the edited four corners in a local copy before we decide what to write back.
+	Cell updated[4] = Cell[4](topLeft, topRight, bottomLeft, bottomRight);
+
+	// Walk all four slots in the 2×2 patch and push changes back into the world grid.
+	for (int cornerSlot = 0; cornerSlot < 4; ++cornerSlot)
+	{
+		// Visit each of the four corners in order: slot 0–3 maps to top-left, top-right, bottom-left, bottom-right.
+		// Implementation: gridPos = anchor + ivec2(cornerSlot & 1, cornerSlot >> 1)
+		ivec2 gridPos = anchor + ivec2(cornerSlot & 1, cornerSlot >> 1);
+
+		// Write back only corners whose material or liquid actually changed after the falls and rises.
+		// Implementation: compare updated vs original matter and liquid; any(notEqual) on liquid channels
+		if (inside(gridPos) && (updated[cornerSlot].matter != original[cornerSlot].matter ||
+		                        any(notEqual(updated[cornerSlot].liquid, original[cornerSlot].liquid))))
+		{ // full swap may move liquid
+
+			// Save this corner to the simulation grid at its flat buffer index.
+			// Implementation: writeCell(indexOf(gridPos), updated[cornerSlot])
+			writeCell(indexOf(gridPos), updated[cornerSlot]);
+		}
+	}
 }
-

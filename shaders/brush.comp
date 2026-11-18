@@ -1,47 +1,105 @@
+// Brush pass: each thread checks one grid square to see if the player's stroke or circle covers it.
+// It can place materials, pour liquids, or push existing water/oil along the stroke.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
-layout(local_size_x=16, local_size_y=8) in;
 
+// We launch a 16×8 rectangle of threads over the brush area — same pattern as other simulation steps.
+layout(local_size_x = 16, local_size_y = 8) in;
+
+// Each thread handles one world square that might sit under the current brush stroke.
 void main()
 {
-    float radius = pc.cursor.z;
-    vec2 origin = floor(min(pc.brush.xy, pc.brush.zw) - radius);
-    ivec2 p = ivec2(origin) + ivec2(gl_GlobalInvocationID.xy);
-    if (!inside(p)) return;
+	// Find the top-left corner of the brush box; each thread adds its offset to pick one square to test.
+	// Implementation: floor(min(pc.brush.xy, pc.brush.zw) - brushRadius) + gl_GlobalInvocationID.xy
+	float brushRadius = pc.cursor.z;
+	vec2 blockOrigin = floor(min(pc.brush.xy, pc.brush.zw) - brushRadius);
+	ivec2 gridPos = ivec2(blockOrigin) + ivec2(gl_GlobalInvocationID.xy);
 
-    vec2 segment = pc.brush.zw - pc.brush.xy;
-    vec2 fromStart = vec2(p) + 0.5 - pc.brush.xy;
-    float t = clamp(dot(fromStart, segment) / max(dot(segment, segment), 0.001), 0.0, 1.0);
-    if (length(fromStart - segment * t) > radius) return;
+	// This square is outside the world — ignore it.
+	if (!inside(gridPos))
+		return;
 
-    int i = indexOf(p);
-    uint id = pc.operation.z;
-    Cell c = readCell(i);
-    if (pc.operation.x == 1u) {
-        if (solid(c)) return;
-        vec2 impulse = clamp(segment * 0.24, vec2(-0.7), vec2(0.7));
-        velocity[i] = clamp(velocity[i] + impulse + vec2(0.02, -0.12),
-                            vec2(-0.9), vec2(0.9));
-        return;
-    }
-    if (id == WATER || id == OIL || id == LAVA) {
-        if (solid(c)) return;
-        int phase = id == WATER ? 0 : id == OIL ? 1 : 2;
-        c.liquid[phase] += 1.0 - volume(c);
-        if (id == LAVA) c.matter = packMatter(EMPTY, 0u, 1.0);
-    } else {
-        if (id == SAND && material(c) != EMPTY && !gas(material(c))) return;
-        if (id == SAND && volume(c) > 0.05) return;
-        float temperature = id == FIRE ? 0.92 : id == STEAM ? 0.46 : 0.0;
-        if (gas(id)) {
-            if (solid(c) || volume(c) > 0.35) return;
-            c.matter = packMatter(id, 0u, temperature);
-        } else {
-            c = Cell(vec3(0), packMatter(id, 0u, temperature));
-        }
-    }
-    writeCell(i, c);
-    if (solid(c) || id == EMPTY) velocity[i] = vec2(0);
+	// Direction and length of the brush segment from first click to second.
+	vec2 stroke = pc.brush.zw - pc.brush.xy;
+
+	// Vector from stroke start to the center of this grid square.
+	// Implementation: vec2(gridPos) + 0.5 - pc.brush.xy
+	vec2 fromStrokeStart = vec2(gridPos) + 0.5 - pc.brush.xy;
+
+	// Measure how far this square sits along the brush line from start (0) to end (1).
+	// Implementation: dot(fromStrokeStart, stroke) / max(dot(stroke, stroke), 0.001) then clamp to 0..1
+	float alongStroke = clamp(dot(fromStrokeStart, stroke) / max(dot(stroke, stroke), 0.001), 0.0, 1.0); // 0.001: avoid divide-by-zero on a dot-sized stroke
+
+	// Reject squares too far from the stroke centerline (round brush ends use the same radius).
+	// Implementation: length(fromStrokeStart - stroke * alongStroke) compared to brushRadius
+	if (length(fromStrokeStart - stroke * alongStroke) > brushRadius)
+		return;
+
+	// Look up this square in the world buffer and remember what is already here.
+	// Implementation: indexOf(gridPos) is flat cell index; readCell loads matter and liquid
+	int cellIndex = indexOf(gridPos);
+	uint brushMaterial = pc.operation.z;
+	Cell cell = readCell(cellIndex);
+
+	// Right-mouse "push" tool: shove liquid along the stroke instead of painting a new material.
+	if (pc.operation.x == 1u)
+	{
+		// Cannot push stone, wood, or settled sand — only free-flowing contents move.
+		if (solid(cell))
+			return;
+
+		// Add a shove in the stroke direction (plus a small fixed nudge), then clamp so the fluid cannot speed off too fast.
+		// Implementation: clamp(stroke * 0.24, ±0.7) on impulse; add vec2(0.02, -0.12); clamp velocity to ±0.9
+		vec2 impulse = clamp(stroke * 0.24, vec2(-0.7), vec2(0.7)); // 0.24: push strength along stroke; 0.7: cap per-axis impulse
+		velocity[cellIndex] = clamp(velocity[cellIndex] + impulse + vec2(0.02, -0.12), // 0.02, -0.12: slight sideways and upward nudge
+		                              vec2(-0.9), vec2(0.9)); // 0.9: max fluid speed after the push
+		return;
+	}
+
+	// Water, oil, and lava top up how full the square is; lava also leaves a hot "empty" cell for reactions.
+	if (brushMaterial == WATER || brushMaterial == OIL || brushMaterial == LAVA)
+	{
+		// Liquids do not replace solid terrain or packed grains.
+		if (solid(cell))
+			return;
+
+		// Pick water, oil, or lava storage, then pour until the square reads as full (lava also marks the cell hot for later chemistry).
+		// Implementation: liquidChannel 0/1/2 from brushMaterial; += 1.0 - volume(cell) tops up; LAVA uses packMatter(EMPTY, 0u, 1.0)
+		int liquidChannel = brushMaterial == WATER ? 0 : brushMaterial == OIL ? 1 : 2;
+		cell.liquid[liquidChannel] += 1.0 - volume(cell);
+		if (brushMaterial == LAVA)
+			cell.matter = packMatter(EMPTY, 0u, 1.0); // 1.0: as hot as we store in the cell data
+	}
+	else
+	{
+		// Sand, fire, steam, smoke, stone, erase, and the rest follow different placement rules.
+		if (brushMaterial == SAND && material(cell) != EMPTY && !gas(material(cell)))
+			return; // sand piles on empty space or on sand, not on unrelated stuff
+		if (brushMaterial == SAND && volume(cell) > 0.05) // 0.05: leave wet squares alone
+			return;
+
+		// Starting warmth for fire, steam, and anything else that cares about heat.
+		// Implementation: FIRE → 0.92, STEAM → 0.46, else 0.0 stored in packMatter heat slot
+		float temperature = brushMaterial == FIRE ? 0.92 : brushMaterial == STEAM ? 0.46 : 0.0;
+		if (gas(brushMaterial))
+		{
+			// Smoke and steam need a mostly empty square — not solid rock and not a full tub of water.
+			if (solid(cell) || volume(cell) > 0.35) // 0.35: cell must still be mostly empty
+				return;
+			cell.matter = packMatter(brushMaterial, 0u, temperature);
+		}
+		else
+		{
+			// Solid brush: clear liquids and set the chosen material from the palette.
+			cell = Cell(vec3(0), packMatter(brushMaterial, 0u, temperature));
+		}
+	}
+
+	// Write the new sand/water/fire (etc.) back into the world grid.
+	writeCell(cellIndex, cell);
+
+	// After placing stone, sand, or using erase, stop leftover liquid motion in that square.
+	if (solid(cell) || brushMaterial == EMPTY)
+		velocity[cellIndex] = vec2(0);
 }
-
