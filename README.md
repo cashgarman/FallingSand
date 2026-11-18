@@ -4,7 +4,7 @@ A Windows sandbox with ten paintable materials, three built-in experiments, and 
 
 ## Play
 
-Run **FallingSand.exe** with the accompanying **shaders** directory beside it. The game needs a Windows x64 PC with a Vulkan 1.3 driver. The installed build includes the compiled shaders and uses the statically linked MSVC runtime.
+Run **FallingSand.exe** with the accompanying **shaders** and **layouts** directories beside it. The game needs a Windows x64 PC with a Vulkan 1.3 driver. The installed build includes the compiled shaders and uses the statically linked MSVC runtime.
 
 | Control | Action |
 | --- | --- |

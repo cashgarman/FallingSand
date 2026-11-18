@@ -109,7 +109,7 @@ Options parse(std::span<char*> arguments)
             const auto scene = next();
 
             // string_view keys share the literal storage. find walks them in place.
-            constexpr std::array<std::string_view, sceneNames.size()> keys{"waterworks", "thermal",
+            constexpr std::array<std::string_view, sceneCount> keys{"waterworks", "thermal",
                                                                            "refinery", "empty"};
             const auto found = std::ranges::find(keys, scene);
             if (found == keys.end())
@@ -157,8 +157,16 @@ void simulationTests(bool validate)
 {
     // using enum so the test body can name sand, water, and the other materials directly.
     using enum Material;
+    const auto emptyWorld = [] {
+        auto made = makeScene(Scene::empty);
+        if (!made)
+        {
+            throw std::runtime_error(made.error());
+        }
+        return std::move(*made);
+    };
     VulkanGame game(nullptr, false, validate);
-    auto cells = makeScene(Scene::empty);
+    auto cells = emptyWorld();
 
     // index is capture-free. fill captures cells by reference and lives only in this test.
     const auto index = [](int x, int y) { return y * worldWidth + x; };
@@ -232,7 +240,7 @@ void simulationTests(bool validate)
     require(phaseCenter(result, 1, totals[1]) < phaseCenter(result, 0, totals[0]),
             "oil remains above denser water");
 
-    cells = makeScene(Scene::empty);
+    cells = emptyWorld();
     fill(51, 40, 60, 44, ice);
     fill(51, 44, 60, 48, lava);
     fill(62, 44, 72, 49, water);
@@ -286,15 +294,57 @@ class Sandbox
     // gpu_ borrows the device owner. Sandbox does not destroy it.
     Sandbox(VulkanGame& game, Scene scene) : gpu_(game)
     {
+        auto world = makeScene(scene);
+        if (!world)
+        {
+            throw std::runtime_error(world.error());
+        }
         state.scene = scene;
-        gpu_.replaceWorld(makeScene(scene));
+        gpu_.replaceWorld(*world);
     }
 
     UiState state;
     bool step{};
+    bool quit{};
+    std::optional<std::array<int, 2>> resize{};
 
     void input(const Input& inputs, const Layout& layout)
     {
+        if (inputs.pressed[VK_ESCAPE])
+        {
+            if (state.menu == Menu::settings)
+            {
+                retreat();
+            } else if (state.menu == Menu::pause)
+            {
+                closeMenu();
+            } else
+            {
+                openMenu(Menu::pause);
+            }
+        }
+        if (state.menu != Menu::none)
+        {
+            if (inputs.paintPressed)
+            {
+                if (layout.cog.contains(inputs.paintDown))
+                {
+                    openSettings(Menu::pause);
+                } else if (state.menu == Menu::pause)
+                {
+                    pressButtons(layout.pauseButtons, inputs.paintDown);
+                } else
+                {
+                    pressButtons(layout.settingsButtons, inputs.paintDown, layout.width,
+                                 layout.height);
+                }
+            }
+            if (Clock::now() >= statusUntil_)
+            {
+                state.status = {};
+            }
+            return;
+        }
         if (inputs.pressed[VK_SPACE])
             action(Action::play, 0);
         if (inputs.pressed['N'])
@@ -313,7 +363,7 @@ class Sandbox
             action(Action::sizeDown, 0);
         if (inputs.pressed[VK_OEM_PLUS])
             action(Action::sizeUp, 0);
-        for (int i = 0; i < static_cast<int>(materials.size()); ++i)
+        for (int i = 0; i < static_cast<int>(materialCount); ++i)
         {
             const auto key = i == 9 ? '0' : '1' + i;
             if (inputs.pressed[key])
@@ -327,6 +377,11 @@ class Sandbox
         }
         if (inputs.paintPressed)
         {
+            if (layout.cog.contains(inputs.paintDown))
+            {
+                openSettings(Menu::none);
+                return;
+            }
             drawDrag_ = layout.canvas.contains(inputs.paintDown);
             sliderDrag_ = false;
 
@@ -360,6 +415,11 @@ class Sandbox
 
     std::optional<Stroke> stroke(const Input& input, const Layout& layout)
     {
+        if (state.menu != Menu::none)
+        {
+            previous_.reset();
+            return std::nullopt;
+        }
         const bool paint = (input.paint || input.paintPressed) && drawDrag_;
         const bool erase = input.erase || input.erasePressed;
         const bool stir = input.stir || input.stirPressed;
@@ -398,8 +458,65 @@ class Sandbox
     Material previousMaterial_{};
     bool drawDrag_{};
     bool sliderDrag_{};
+    bool pausedBefore_{};
+    Menu settingsReturn_{Menu::pause};
     std::string status_;
     Clock::time_point statusUntil_{};
+
+    void openMenu(Menu menu)
+    {
+        if (state.menu == Menu::none)
+        {
+            pausedBefore_ = state.paused;
+            state.paused = true;
+            previous_.reset();
+            drawDrag_ = sliderDrag_ = false;
+        }
+        state.menu = menu;
+    }
+
+    void closeMenu()
+    {
+        state.menu = Menu::none;
+        state.paused = pausedBefore_;
+    }
+
+    void openSettings(Menu back)
+    {
+        settingsReturn_ = back;
+        openMenu(Menu::settings);
+    }
+
+    void retreat()
+    {
+        if (settingsReturn_ == Menu::none)
+        {
+            closeMenu();
+        } else
+        {
+            state.menu = settingsReturn_;
+        }
+    }
+
+    void pressButtons(std::span<const Button> buttons, Point point, int viewWidth = 0,
+                      int viewHeight = 0)
+    {
+        for (const Button& button : buttons)
+        {
+            if (!button.bounds.contains(point))
+            {
+                continue;
+            }
+            if (button.action == Action::resolution &&
+                resolutions[button.argument].width == viewWidth &&
+                resolutions[button.argument].height == viewHeight)
+            {
+                return;
+            }
+            action(button.action, button.argument);
+            return;
+        }
+    }
 
     void toggle(Tool tool)
     {
@@ -413,6 +530,24 @@ class Sandbox
         status_ = std::move(message);
         state.status = status_;
         statusUntil_ = Clock::now() + std::chrono::seconds(3);
+    }
+
+    bool adopt(Scene next, bool resetMessage)
+    {
+        auto world = makeScene(next);
+        if (!world)
+        {
+            showStatus(world.error());
+            return false;
+        }
+        state.scene = next;
+        gpu_.replaceWorld(*world);
+        previous_.reset();
+        if (resetMessage)
+        {
+            showStatus("SCENE RESET");
+        }
+        return true;
     }
 
     void adjustRadius(int amount)
@@ -430,9 +565,7 @@ class Sandbox
             state.tool = Tool::paint;
             break;
         case Action::scene:
-            state.scene = static_cast<Scene>(argument);
-            gpu_.replaceWorld(makeScene(state.scene));
-            previous_.reset();
+            adopt(static_cast<Scene>(argument), false);
             break;
         case Action::play:
             state.paused = !state.paused;
@@ -442,9 +575,7 @@ class Sandbox
             step = true;
             break;
         case Action::reset:
-            gpu_.replaceWorld(makeScene(state.scene));
-            previous_.reset();
-            showStatus("SCENE RESET");
+            adopt(state.scene, true);
             break;
         case Action::save: {
             // error_code keeps directory creation from throwing. expected then carries
@@ -483,6 +614,27 @@ class Sandbox
             break;
         case Action::brush:
             break;
+        case Action::openSettings:
+            openSettings(Menu::pause);
+            break;
+        case Action::resume:
+            closeMenu();
+            break;
+        case Action::back:
+            retreat();
+            break;
+        case Action::exit:
+            quit = true;
+            break;
+        case Action::resolution: {
+            const ResolutionChoice& choice = resolutions[argument];
+            if (adopt(state.scene, false))
+            {
+                resize = std::array{choice.width, choice.height};
+                showStatus("WORLD RESTARTED");
+            }
+            break;
+        }
         }
     }
 };
@@ -600,9 +752,22 @@ void play(const Options& options)
     float visualTime{};
     unsigned rendered = 0, statsFrames = 0;
     constexpr unsigned warmup = 60;
+    int probeX = -1;
+    int probeY = -1;
+    std::optional<std::size_t> canvasMaterial;
 
     while (window.poll())
     {
+        if (sandbox.quit)
+        {
+            break;
+        }
+        if (sandbox.resize)
+        {
+            window.clientSize((*sandbox.resize)[0], (*sandbox.resize)[1]);
+            sandbox.resize.reset();
+        }
+
         // Each pass finishes before the next. The bindings name the client size.
         const auto [clientW, clientH] = window.size();
         const auto [w, h] = gpu.prepare(clientW, clientH);
@@ -613,15 +778,15 @@ void play(const Options& options)
             continue;
         }
         const auto input = window.consumeInput();
-        if (input.pressed[VK_ESCAPE])
-        {
-            break;
-        }
         const auto now = Clock::now();
         const double elapsed = Seconds(now - previousTime).count();
         previousTime = now;
         const auto layout = makeLayout(w, h);
         sandbox.input(input, layout);
+        if (sandbox.quit)
+        {
+            break;
+        }
 
         unsigned ticks = 0;
         if (fast || !options.capture.empty())
@@ -650,7 +815,22 @@ void play(const Options& options)
             statsFrames = 0;
             statsTime = now;
         }
-        composeUi(quads, layout, sandbox.state, input.mouse, w, h);
+        if (cursor && input.mouse.x >= 0.0F && sandbox.state.menu == Menu::none)
+        {
+            const int gx = static_cast<int>(std::floor(worldMouse.x));
+            const int gy = static_cast<int>(std::floor(worldMouse.y));
+            if (gx != probeX || gy != probeY)
+            {
+                canvasMaterial = paletteIndex(displayMaterial(gpu.probeCell(gx, gy)));
+                probeX = gx;
+                probeY = gy;
+            }
+        } else
+        {
+            probeX = probeY = -1;
+            canvasMaterial = std::nullopt;
+        }
+        composeUi(quads, layout, sandbox.state, input.mouse, w, h, canvasMaterial);
         const auto capture =
             rendered == options.captureAfter ? options.capture : std::filesystem::path{};
         if (!gpu.draw({layout.canvas, worldMouse, static_cast<float>(sandbox.state.radius), cursor,

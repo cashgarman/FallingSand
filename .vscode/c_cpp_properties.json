@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": ["${workspaceFolder}/**"],
+            "defines": [
+                "WIN32_LEAN_AND_MEAN",
+                "NOMINMAX",
+                "UNICODE",
+                "_UNICODE",
+                "VK_USE_PLATFORM_WIN32_KHR"
+            ],
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "compilerArgs": ["/std:c++latest", "/Zc:__cplusplus", "/permissive-"],
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}

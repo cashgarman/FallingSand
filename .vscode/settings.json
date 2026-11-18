@@ -1,4 +1,12 @@
 {
+    "C_Cpp.default.cppStandard": "c++23",
+    "C_Cpp.default.compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+    "C_Cpp.default.compilerArgs": ["/std:c++latest", "/Zc:__cplusplus", "/permissive-"],
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": ["--compile-commands-dir=${workspaceFolder}/build"],
+    "cmake.configureSettings": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+    },
     "files.associations": {
         "bit": "cpp",
         "array": "cpp",
@@ -67,6 +75,7 @@
         "xmemory": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "variant": "cpp"
     }
 }

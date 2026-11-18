@@ -5,8 +5,18 @@
 #include <cmath>
 #include <format>
 #include <ranges>
+#include <span>
 
 namespace sand {
+
+// Settings-menu resolution presets defined once for the UI table.
+const std::array<ResolutionChoice, resolutionCount> resolutions{
+    ResolutionChoice{1280, 800, "1280 X 800"},
+    ResolutionChoice{1600, 900, "1600 X 900"},
+    ResolutionChoice{1920, 1080, "1920 X 1080"},
+    ResolutionChoice{2560, 1440, "2560 X 1440"},
+};
+
 namespace {
 
 // Shared HUD colors. constexpr keeps each channel value a constant expression.
@@ -68,7 +78,7 @@ constexpr Glyph glyph(char c)
     }
 }
 
-constexpr std::array<std::array<std::uint8_t, 8>, materials.size()> icons{{
+constexpr std::array<std::array<std::uint8_t, 8>, materialCount> icons{{
     {0, 0, 0x10, 0x28, 0x18, 0x54, 0x7e, 0xff},
     {0x10, 0x10, 0x28, 0x28, 0x44, 0x54, 0x7c, 0x38},
     {0x0c, 0x14, 0x18, 0x30, 0x68, 0x44, 0x7c, 0x38},
@@ -106,6 +116,7 @@ class Painter
         box(r, linear(color));
     }
 
+    // Draw a one-pixel border around an inset fill.
     void frame(Rect r, std::uint32_t line, std::uint32_t fill)
     {
         rect(r, line);
@@ -127,6 +138,7 @@ class Painter
         }
     }
 
+    // Stamp the 8x8 material bitmap for palette rows and tooltips.
     void icon(float x, float y, std::size_t material, float px, std::uint32_t color)
     {
         auto ink = linear(color);
@@ -150,6 +162,7 @@ class Painter
     void stripe(float x, float y, float px, unsigned bits, int columns,
                 const std::array<float, 4>& ink)
     {
+        // Merge adjacent one bits into a single quad per glyph row.
         for (int col = 0; col < columns;)
         {
             if ((bits & (1u << (columns - 1 - col))) == 0)
@@ -170,6 +183,7 @@ class Painter
 
 void button(Painter& p, Rect r, Point mouse, std::string_view name, float px, bool active = false)
 {
+    // Frame and label reflect hover and active selection.
     bool hover = r.contains(mouse);
     p.frame(r, active ? mint : hover ? muted : border, active ? mintDark : hover ? border : inset);
     const float textWidth = px * (6.0F * static_cast<float>(name.size()) - 1.0F);
@@ -177,6 +191,54 @@ void button(Painter& p, Rect r, Point mouse, std::string_view name, float px, bo
             active  ? mint
             : hover ? white
                     : muted);
+}
+
+void materialTooltip(Painter& p, Point mouse, std::size_t material, float s, float px, int width,
+                     int height)
+{
+    const auto& info = materials[material];
+    const float iconScale = std::max(1.0F, std::min(2.0F, std::round(1.5F * s)));
+    const float iconPx = 8.0F * iconScale;
+    const float pad = 6.0F * s;
+    const float textWidth = px * (6.0F * static_cast<float>(info.name.size()) - 1.0F);
+    const float boxW = pad + iconPx + pad + textWidth + pad;
+    const float boxH = std::max(iconPx, 7.0F * px) + 2.0F * pad;
+    const float offset = 14.0F * s;
+    float tx = mouse.x + offset;
+    float ty = mouse.y + offset;
+
+    // Flip the box to the left or above the cursor when it would leave the window.
+    if (tx + boxW > static_cast<float>(width))
+    {
+        tx = mouse.x - offset - boxW;
+    }
+    if (ty + boxH > static_cast<float>(height))
+    {
+        ty = mouse.y - offset - boxH;
+    }
+    tx = std::max(0.0F, tx);
+    ty = std::max(0.0F, ty);
+    const Rect box{tx, ty, boxW, boxH};
+    p.frame(box, mint, screen);
+    p.icon(tx + pad, ty + (boxH - iconPx) / 2.0F, material, iconScale, info.color);
+    p.label(tx + pad + iconPx + pad, ty + (boxH - 7.0F * px) / 2.0F, info.name, px, white);
+}
+
+// Procedural gear icon for the settings cog control.
+void cog(Painter& p, Rect r, Point mouse)
+{
+    const bool hover = r.contains(mouse);
+    p.frame(r, hover ? mint : border, hover ? mintDark : inset);
+    const float hub = std::max(3.0F, std::round(r.w * 0.22F));
+    const float tooth = std::max(2.0F, std::round(r.w * 0.14F));
+    const float cx = r.x + r.w / 2.0F;
+    const float cy = r.y + r.h / 2.0F;
+    const std::uint32_t ink = hover ? white : mint;
+    p.rect({cx - tooth / 2.0F, r.y + 4.0F, tooth, r.h - 8.0F}, ink);
+    p.rect({r.x + 4.0F, cy - tooth / 2.0F, r.w - 8.0F, tooth}, ink);
+    p.rect({cx - r.w * 0.22F, cy - tooth / 2.0F, r.w * 0.44F, tooth}, ink);
+    p.rect({cx - tooth / 2.0F, cy - r.h * 0.22F, tooth, r.h * 0.44F}, ink);
+    p.frame({cx - hub, cy - hub, hub * 2.0F, hub * 2.0F}, ink, hover ? mintDark : inset);
 }
 
 } // namespace
@@ -193,6 +255,7 @@ Layout makeLayout(int width, int height)
     const float bottom = h - 83 * s;
     const float availableWidth = w - rightWidth - 3 * l.gap;
     constexpr float aspect = static_cast<float>(worldWidth) / worldHeight;
+    // Fit the world viewport to the remaining width while preserving grid aspect.
     const float stageWidth = std::min(availableWidth, (bottom - top) * aspect);
     const float stageHeight = stageWidth / aspect;
     const float horizontalSpace = w - (stageWidth + l.gap + rightWidth);
@@ -202,12 +265,14 @@ Layout makeLayout(int width, int height)
     l.panel = {l.canvas.x + l.canvas.w + l.gap, y, rightWidth, l.canvas.h};
     l.footer = {x, l.canvas.y + l.canvas.h + 15 * s, l.canvas.w + l.gap + rightWidth, 41 * s};
 
-    const float rowStep = (l.panel.h - 76 * s) / static_cast<float>(materials.size());
+    // Divide the palette column evenly for one swatch row per material.
+    const float rowStep = (l.panel.h - 76 * s) / static_cast<float>(materialCount);
     for (std::size_t i = 0; i < l.swatches.size(); ++i)
     {
         l.swatches[i] = {l.panel.x + 11 * s, l.panel.y + 41 * s + rowStep * i, rightWidth - 22 * s,
                          rowStep - 3 * s};
     }
+    // Place scene tabs along the top edge of the canvas.
     constexpr std::array tabWidths{144, 155, 121, 91};
     float tabX = x;
     for (std::size_t i = 0; i < l.scenes.size(); ++i)
@@ -231,11 +296,51 @@ Layout makeLayout(int width, int height)
         Button{{x + 451 * s, f, 105 * s, row}, Action::cycleTool},
     };
     l.brushTrack = {x + 294 * s, f + row * 0.68F, 115 * s, 3 * s};
+
+    const float cogSize = std::max(22.0F, std::round(26 * s));
+    const float margin = std::max(10.0F, std::round(12 * s));
+    l.cog = {w - margin - cogSize, margin, cogSize, cogSize};
+    l.width = width;
+    l.height = height;
+
+    const float menuW = std::min(340.0F * s, w - 2 * margin);
+    const float buttonH = 28 * s;
+    const float menuGap = 6 * s;
+    const float pad = 14 * s;
+    const float title = 24 * s;
+    // Center a modal card and stack its buttons with uniform spacing.
+    const auto place = [&](Rect& card, std::span<Button> buttons) {
+        const float rows = static_cast<float>(buttons.size());
+        const float cardH = pad + title + rows * buttonH + (rows - 1) * menuGap + pad;
+        const float left = std::round((w - menuW) / 2.0F);
+        const float top = std::round((h - cardH) / 2.0F);
+        card = {left, top, menuW, cardH};
+        float by = top + pad + title;
+        for (Button& b : buttons)
+        {
+            b.bounds = {left + pad, by, menuW - 2 * pad, buttonH};
+            by += buttonH + menuGap;
+        }
+    };
+    l.pauseButtons = {
+        Button{{}, Action::resume},
+        Button{{}, Action::openSettings},
+        Button{{}, Action::exit},
+    };
+    place(l.pausePanel, l.pauseButtons);
+    for (std::size_t i = 0; i < resolutionCount; ++i)
+    {
+        l.settingsButtons[i] = Button{{}, Action::resolution, static_cast<int>(i)};
+    }
+    l.settingsButtons[resolutionCount] = Button{{}, Action::back};
+    l.settingsButtons[resolutionCount + 1] = Button{{}, Action::exit};
+    place(l.settingsPanel, l.settingsButtons);
     return l;
 }
 
 std::optional<Button> Layout::hit(Point mouse) const
 {
+    // Material rows beat scene tabs and footer controls.
     for (std::size_t i = 0; i < swatches.size(); ++i)
     {
         if (swatches[i].contains(mouse))
@@ -243,6 +348,8 @@ std::optional<Button> Layout::hit(Point mouse) const
             return Button{swatches[i], Action::choose, static_cast<int>(i)};
         }
     }
+
+    // Scene tabs are tested before the footer button row.
     for (std::size_t i = 0; i < scenes.size(); ++i)
     {
         if (scenes[i].contains(mouse))
@@ -261,12 +368,13 @@ std::optional<Button> Layout::hit(Point mouse) const
 
 Point Layout::worldPoint(Point pixel) const
 {
+    // Map client pixels through the canvas rect into continuous grid coordinates.
     return {(pixel.x - canvas.x) * worldWidth / canvas.w,
             (pixel.y - canvas.y) * worldHeight / canvas.h};
 }
 
 void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, Point mouse,
-               int width, int height)
+               int width, int height, std::optional<std::size_t> canvasMaterial)
 {
     Painter p(quads);
     const float s = l.scale;
@@ -296,6 +404,7 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     p.rect({badge.x + 9 * s, badge.y + 11 * s, 5 * s, 5 * s}, state.paused ? 0xe4b17d : mint);
     p.label(badge.x + 21 * s, badge.y + (28 * s - 7 * px) / 2, metric, px, white);
 
+    // Highlight the active scene tab; others respond to hover only.
     for (std::size_t i = 0; i < l.scenes.size(); ++i)
     {
         if (static_cast<Scene>(i) == state.scene)
@@ -307,6 +416,7 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
         }
     }
 
+    // One-pixel frame around the simulation viewport.
     p.rect({x - 1, y - 1, l.canvas.w + 2, 1}, border);
     p.rect({x - 1, y + l.canvas.h, l.canvas.w + 2, 1}, border);
     p.rect({x - 1, y, 1, l.canvas.h}, border);
@@ -316,6 +426,7 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     p.label(l.panel.x + 13 * s, y + 13 * s, "MATERIALS", px, white);
     p.label(end - 31 * s, y + 15 * s, "10", tiny, mint);
     p.rect({l.panel.x + 11 * s, y + 33 * s, l.panel.w - 22 * s, 1}, border);
+    // Draw each material row with icon, name, behavior hint, and hotkey cap.
     for (std::size_t i = 0; i < l.swatches.size(); ++i)
     {
         const auto& info = materials[i];
@@ -366,18 +477,72 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     const auto brush = l.controls[5].bounds;
     p.label(brush.x + 7 * s, brush.y + 6 * s, std::format("SIZE {:02}", state.radius), tiny, white);
     p.rect(l.brushTrack, border);
+
+    // Fill the brush track through the current radius.
     auto fill = l.brushTrack;
     fill.w *= static_cast<float>(state.radius - minRadius) / (maxRadius - minRadius);
     p.rect(fill, mint);
     p.rect({fill.x + fill.w - 1, fill.y - 2 * s, 3 * s, fill.h + 4 * s}, mint);
 
     const float foot = l.footer.y + l.footer.h + 8 * s;
-    p.label(x, foot, "SPACE PLAY/PAUSE   N STEP   RMB ERASE   MMB STIR   WHEEL SIZE", tiny, muted);
+    p.label(x, foot, "SPACE PLAY/PAUSE   N STEP   RMB ERASE   MMB STIR   WHEEL SIZE   ESC MENU",
+            tiny, muted);
     if (!state.status.empty())
     {
         const float textWidth = static_cast<float>(state.status.size()) * 6 * tiny - tiny;
         p.label(end - textWidth, foot, state.status, tiny, mint);
     }
+
+    cog(p, l.cog, mouse);
+
+    // Cursor-following material label: palette row wins over canvas probe.
+    std::optional<std::size_t> tooltipMaterial;
+    if (state.menu == Menu::none && mouse.x >= 0.0F)
+    {
+        for (std::size_t i = 0; i < l.swatches.size(); ++i)
+        {
+            if (l.swatches[i].contains(mouse))
+            {
+                tooltipMaterial = i;
+                break;
+            }
+        }
+        if (!tooltipMaterial)
+        {
+            tooltipMaterial = canvasMaterial;
+        }
+        if (tooltipMaterial)
+        {
+            materialTooltip(p, mouse, *tooltipMaterial, s, px, width, height);
+        }
+    }
+    // Skip pause and settings cards while the sandbox owns the frame.
+    if (state.menu == Menu::none)
+    {
+        return;
+    }
+
+    // Draw the centered pause or settings card on top of the HUD.
+    const bool settings = state.menu == Menu::settings;
+    const Rect card = settings ? l.settingsPanel : l.pausePanel;
+    p.frame(card, border, screen);
+    p.label(card.x + 14 * s, card.y + 12 * s, settings ? "SETTINGS" : "MENU", px, white);
+    if (!settings)
+    {
+        constexpr std::array names{"RESUME", "SETTINGS", "EXIT"};
+        for (std::size_t i = 0; i < l.pauseButtons.size(); ++i)
+        {
+            button(p, l.pauseButtons[i].bounds, mouse, names[i], px);
+        }
+        return;
+    }
+    for (std::size_t i = 0; i < resolutionCount; ++i)
+    {
+        const bool active = width == resolutions[i].width && height == resolutions[i].height;
+        button(p, l.settingsButtons[i].bounds, mouse, resolutions[i].label, px, active);
+    }
+    button(p, l.settingsButtons[resolutionCount].bounds, mouse, "BACK", px);
+    button(p, l.settingsButtons[resolutionCount + 1].bounds, mouse, "EXIT", px);
 }
 
 } // namespace sand

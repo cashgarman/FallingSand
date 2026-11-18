@@ -42,6 +42,8 @@ Window::Window(bool show)
         UnregisterClassW(className, instance);
         throw std::runtime_error("Could not create the Falling Sand window.");
     }
+
+    // Headless benchmark runs keep the HWND hidden.
     if (show)
     {
         ShowWindow(handle_, SW_SHOW);
@@ -106,6 +108,16 @@ void Window::wait() const
     WaitMessage();
 }
 
+void Window::clientSize(int width, int height)
+{
+    // Expand to window rect so the client area matches the requested size.
+    const UINT dpi = GetDpiForWindow(handle_);
+    RECT bounds{0, 0, width, height};
+    AdjustWindowRectExForDpi(&bounds, windowStyle, FALSE, 0, dpi);
+    SetWindowPos(handle_, nullptr, 0, 0, bounds.right - bounds.left, bounds.bottom - bounds.top,
+                 SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+}
+
 LRESULT CALLBACK Window::route(HWND handle, UINT message, WPARAM wparam, LPARAM lparam)
 {
     if (message == WM_NCCREATE)
@@ -120,6 +132,8 @@ LRESULT CALLBACK Window::route(HWND handle, UINT message, WPARAM wparam, LPARAM 
         SetWindowLongPtrW(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
     }
     auto* window = reinterpret_cast<Window*>(GetWindowLongPtrW(handle, GWLP_USERDATA));
+
+    // Before WM_NCCREATE finishes, forward to the default window procedure.
     return window ? window->process(message, wparam, lparam)
                   : DefWindowProcW(handle, message, wparam, lparam);
 }
@@ -155,6 +169,7 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
         }
         return 0;
     case WM_MOUSEWHEEL:
+        // Accumulate wheel delta so partial notches count toward one step.
         wheelRemainder_ += GET_WHEEL_DELTA_WPARAM(wparam);
         input_.wheel += wheelRemainder_ / WHEEL_DELTA;
         wheelRemainder_ %= WHEEL_DELTA;
@@ -176,6 +191,7 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
     case WM_LBUTTONDOWN:
     case WM_RBUTTONDOWN:
     case WM_MBUTTONDOWN:
+        // Latch paint, erase, or stir while capture keeps tracking outside the client.
         input_.mouse = {static_cast<float>(GET_X_LPARAM(lparam)),
                         static_cast<float>(GET_Y_LPARAM(lparam))};
         input_.paint |= message == WM_LBUTTONDOWN;
@@ -193,6 +209,7 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
     case WM_LBUTTONUP:
     case WM_RBUTTONUP:
     case WM_MBUTTONUP:
+        // Clear the matching button and release capture when none remain down.
         input_.paint &= message != WM_LBUTTONUP;
         input_.erase &= message != WM_RBUTTONUP;
         input_.stir &= message != WM_MBUTTONUP;
@@ -203,6 +220,7 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
         return 0;
     case WM_CAPTURECHANGED:
     case WM_KILLFOCUS:
+        // Dropping focus or capture cancels in-progress drags.
         input_.paint = input_.erase = input_.stir = false;
         return 0;
     default:

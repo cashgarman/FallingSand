@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
 project(FallingSand VERSION 1.0 LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 if(NOT WIN32)
     message(FATAL_ERROR "Falling Sand uses a native Win32 window.")
 endif()
@@ -45,6 +47,19 @@ add_custom_target(sand_shaders
     VERBATIM)
 add_dependencies(falling_sand sand_shaders)
 
+set(layout_files
+    "${CMAKE_CURRENT_SOURCE_DIR}/layouts/waterworks.json"
+    "${CMAKE_CURRENT_SOURCE_DIR}/layouts/thermal.json"
+    "${CMAKE_CURRENT_SOURCE_DIR}/layouts/refinery.json"
+    "${CMAKE_CURRENT_SOURCE_DIR}/layouts/empty.json")
+add_custom_target(sand_layouts
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:falling_sand>/layouts"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${layout_files} "$<TARGET_FILE_DIR:falling_sand>/layouts"
+    DEPENDS ${layout_files}
+    VERBATIM)
+add_dependencies(falling_sand sand_layouts)
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME gpu_simulation COMMAND falling_sand --test)
@@ -52,5 +67,6 @@ endif()
 
 install(TARGETS falling_sand RUNTIME DESTINATION ".")
 install(FILES ${shader_outputs} DESTINATION shaders)
+install(FILES ${layout_files} DESTINATION layouts)
 install(FILES README.md DESTINATION ".")
 

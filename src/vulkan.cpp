@@ -666,6 +666,7 @@ struct VulkanGame::Impl
     void readTiming(const FrameSlot& slot, std::uint32_t first);
     void finishImmediate();
     std::vector<Cell> snapshot();
+    Cell probeCell(int x, int y);
     FlowSnapshot flowSnapshot();
 };
 
@@ -692,6 +693,7 @@ VulkanGame::Impl::Impl(HWND window, bool validation)
 
     constexpr auto usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
                            VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+    // Allocate every simulation and auxiliary GPU buffer for this device.
     for (std::size_t i = 0; i < storage.size(); ++i)
     {
         storage[i].create(ctx, bufferSizes[i], usage);
@@ -727,6 +729,8 @@ VulkanGame::Impl::Impl(HWND window, bool validation)
     }
 
     setupDescriptors(window != nullptr);
+
+    // Build one compute pipeline per simulation kernel .spv module.
     for (std::size_t i = 0; i < compute.size(); ++i)
     {
         auto module = shader(kernelNames[i]);
@@ -1106,6 +1110,7 @@ void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
                  groups((worldHeight + 2) / 2, 8));
         dispatch(cmd, Kernel::predict, fullX, fullY);
         dispatch(cmd, Kernel::equation, fullX, fullY);
+        // Red-black pressure solves alternate parity each pass.
         for (unsigned pass = 0; pass < pressureBatches; ++pass)
         {
             push.operation[1] = pass & 1u;
@@ -1113,6 +1118,7 @@ void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
         }
         dispatch(cmd, Kernel::project, fullX, fullY);
         dispatch(cmd, Kernel::flux, fullX, fullY);
+        // Flux limiting runs an odd number of passes so the field settles.
         for (unsigned pass = 0; pass < fluxLimitPasses; ++pass)
         {
             push.operation = {pass, pass & 1u, 0, 0};
@@ -1120,6 +1126,8 @@ void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
         }
         dispatch(cmd, Kernel::advect, fullX, fullY);
         push.state ^= 1u;
+
+        // Separate liquid phases on two checkerboard passes.
         for (unsigned phase = 0; phase < 2; ++phase)
         {
             push.operation[1] = (phase + push.tick) & 1u;
@@ -1246,6 +1254,7 @@ bool VulkanGame::Impl::draw(const DrawFrame& params)
         .pSwapchains = &swapchain,
         .pImageIndices = &index,
     };
+    // Present the swapchain image and remember when the surface needs a resize.
     const auto displayed = vkQueuePresentKHR(ctx.queue, &present);
     if (displayed != VK_SUBOPTIMAL_KHR && displayed != VK_ERROR_OUT_OF_DATE_KHR)
     {
@@ -1299,6 +1308,8 @@ void VulkanGame::Impl::recordDraw(VkCommandBuffer cmd, unsigned imageIndex, cons
         {static_cast<unsigned>(p.canvas.w), static_cast<unsigned>(p.canvas.h)},
     };
     vkCmdSetScissor(cmd, 0, 1, &canvas);
+
+    // Push canvas, brush, and screen uniforms for both graphics passes.
     push.canvas = {p.canvas.x, p.canvas.y, p.canvas.w, p.canvas.h};
     push.cursor = {p.cursor.x, p.cursor.y, p.radius, p.cursorVisible ? 1.0F : 0.0F};
     push.screen = {width, height, p.visualTime, 0};
@@ -1308,6 +1319,8 @@ void VulkanGame::Impl::recordDraw(VkCommandBuffer cmd, unsigned imageIndex, cons
                             static_cast<std::uint32_t>(sets.size()), sets.data(), 0, nullptr);
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, worldPipeline.get());
     vkCmdDraw(cmd, 3, 1, 0, 0);
+
+    // Instanced UI quads cover the full swapchain image.
     vkCmdSetScissor(cmd, 0, 1, &bounds);
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, uiPipeline.get());
     vkCmdDraw(cmd, 6, static_cast<std::uint32_t>(p.ui.size()), 0, 0);
@@ -1375,8 +1388,29 @@ std::vector<Cell> VulkanGame::Impl::snapshot()
     return result;
 }
 
+Cell VulkanGame::Impl::probeCell(int x, int y)
+{
+    // Clamp to the grid, then copy one cell through the staging buffer.
+    x = std::clamp(x, 0, worldWidth - 1);
+    y = std::clamp(y, 0, worldHeight - 1);
+    const VkDeviceSize offset =
+        static_cast<VkDeviceSize>((static_cast<std::size_t>(y) * worldWidth + x) * sizeof(Cell));
+    startCommands(immediate);
+    dependency(immediate, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, VK_ACCESS_2_MEMORY_WRITE_BIT,
+               VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_READ_BIT);
+    const VkBufferCopy region{offset, 0, sizeof(Cell)};
+    vkCmdCopyBuffer(immediate, storage[push.state].buffer.get(), staging.buffer.get(), 1, &region);
+    dependency(immediate, VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_WRITE_BIT,
+               VK_PIPELINE_STAGE_2_HOST_BIT, VK_ACCESS_2_HOST_READ_BIT);
+    finishImmediate();
+    Cell cell{};
+    std::memcpy(&cell, staging.mapped, sizeof(Cell));
+    return cell;
+}
+
 FlowSnapshot VulkanGame::Impl::flowSnapshot()
 {
+    // Copy both flow buffers back-to-back into staging for host readback.
     startCommands(immediate);
     dependency(immediate, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, VK_ACCESS_2_MEMORY_WRITE_BIT,
                VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_READ_BIT);
@@ -1414,6 +1448,7 @@ std::array<int, 2> VulkanGame::prepare(int width, int height)
     if (self.outdated || static_cast<int>(self.swap.extent.width) != width ||
         static_cast<int>(self.swap.extent.height) != height)
     {
+        // Recreate the swapchain when the client size or surface status changes.
         self.resize(width, height);
     }
     return {static_cast<int>(self.swap.extent.width), static_cast<int>(self.swap.extent.height)};
@@ -1439,6 +1474,8 @@ void VulkanGame::replaceWorld(std::span<const Cell> cells)
                VK_PIPELINE_STAGE_2_ALL_TRANSFER_BIT, VK_ACCESS_2_TRANSFER_WRITE_BIT);
     const VkBufferCopy copy{0, 0, cellBytes};
     vkCmdCopyBuffer(cmd, self.staging.buffer.get(), self.storage[0].buffer.get(), 1, &copy);
+
+    // Clear flow and auxiliary buffers so the new scene starts from zeroed state.
     for (std::size_t index : {2u, 3u, 5u, 6u})
     {
         vkCmdFillBuffer(cmd, self.storage[index].buffer.get(), 0, VK_WHOLE_SIZE, 0);
@@ -1453,6 +1490,11 @@ std::vector<Cell> VulkanGame::snapshot()
     return impl_->snapshot();
 }
 
+Cell VulkanGame::probeCell(int x, int y)
+{
+    return impl_->probeCell(x, y);
+}
+
 FlowSnapshot VulkanGame::flowSnapshot()
 {
     return impl_->flowSnapshot();
@@ -1461,6 +1503,8 @@ FlowSnapshot VulkanGame::flowSnapshot()
 void VulkanGame::simulate(unsigned ticks)
 {
     auto& self = *impl_;
+
+    // Run simulation in bounded batches on the immediate command buffer.
     while (ticks != 0)
     {
         auto cmd = self.immediate;

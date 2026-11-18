@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - -std=c++23
+    - -DWIN32_LEAN_AND_MEAN
+    - -DNOMINMAX
+    - -DUNICODE
+    - -D_UNICODE
