@@ -10,25 +10,29 @@ layout(local_size_x = 16, local_size_y = 8) in;
 // Turn pressure differences on open faces into a corrected velocity for this cell.
 void main()
 {
-	// Map this thread to one grid square in the simulation.
-	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
-	if (!inside(gridPos))
-		return;
+    // Map this thread to one grid square in the simulation.
+    ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(gridPos))
+        return;
 
-	// Flat index and cell contents — face weights depend on solids and liquids here.
-	int cellIndex = indexOf(gridPos);
-	Cell cell = readCell(cellIndex);
+    // Flat index and cell contents — face weights depend on solids and liquids here.
+    int cellIndex = indexOf(gridPos);
+    Cell cell = readCell(cellIndex);
 
-	// Center pressure and samples to the right and below (zero past the world edge).
-	float centerPressure = pressureA[cellIndex];
-	float rightPressure = gridPos.x + 1 < pc.size.x ? pressureA[cellIndex + 1] : 0.0;
-	float downPressure = gridPos.y + 1 < pc.size.y ? pressureA[cellIndex + pc.size.x] : 0.0;
+    // Center pressure and samples to the right and below (zero past the world edge).
+    float centerPressure = pressureA[cellIndex];
+    float rightPressure = gridPos.x + 1 < pc.size.x ? pressureA[cellIndex + 1] : 0.0;
+    float downPressure = gridPos.y + 1 < pc.size.y ? pressureA[cellIndex + pc.size.x] : 0.0;
 
-	// Weight each axis by how easily fluid can cross that face, then subtract the pressure push.
-	// Implementation: w = faceWeight to right/down neighbors; velocity = clamp(prediction - w * (Δp), ±0.9)
-	vec2 faceWeights = vec2(faceWeight(cell, readCell(gridPos + RIGHT)), faceWeight(cell, readCell(gridPos + DOWN)));
+    // Weight each axis by how easily fluid can cross that face, then subtract the pressure push.
+    // Implementation: w = faceWeight to right/down neighbors; velocity = clamp(prediction - w *
+    // (Δp), ±0.9)
+    vec2 faceWeights = vec2(faceWeight(cell, readCell(gridPos + RIGHT)),
+                            faceWeight(cell, readCell(gridPos + DOWN)));
 
-	// Steer predicted flow downhill in pressure along each open face — that becomes the new velocity.
-	velocity[cellIndex] = clamp(prediction[cellIndex] - faceWeights * (vec2(rightPressure, downPressure) - centerPressure),
-	                          vec2(-0.90), vec2(0.90)); // 0.90: max speed after projection
+    // Steer predicted flow downhill in pressure along each open face — that becomes the new
+    // velocity.
+    velocity[cellIndex] = clamp(
+        prediction[cellIndex] - faceWeights * (vec2(rightPressure, downPressure) - centerPressure),
+        vec2(-0.90), vec2(0.90)); // 0.90: max speed after projection
 }

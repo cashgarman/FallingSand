@@ -8,53 +8,55 @@
 layout(local_size_x = 16, local_size_y = 8) in;
 
 // Move a little heavy liquid down and light liquid up between two stacked cells.
-void exchangePhase(inout vec3 upper, inout vec3 lower, int heavyChannel, int lightChannel, float speed)
+void exchangePhase(inout vec3 upper, inout vec3 lower, int heavyChannel, int lightChannel,
+                   float speed)
 {
-	// Swap only what both cells can spare, scaled by how fast this pairing mixes.
-	float exchange = min(upper[heavyChannel], lower[lightChannel]) * speed;
-	upper[heavyChannel] -= exchange;
-	lower[heavyChannel] += exchange;
-	upper[lightChannel] += exchange;
-	lower[lightChannel] -= exchange;
+    // Swap only what both cells can spare, scaled by how fast this pairing mixes.
+    float exchange = min(upper[heavyChannel], lower[lightChannel]) * speed;
+    upper[heavyChannel] -= exchange;
+    lower[heavyChannel] += exchange;
+    upper[lightChannel] += exchange;
+    lower[lightChannel] -= exchange;
 }
 
 // Compare upper and lower row in a pair; write back only if liquid channels changed.
 void main()
 {
-	// Map this thread to one grid square in the simulation.
-	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+    // Map this thread to one grid square in the simulation.
+    ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
 
-	// Alternate which stacked pairs run this tick — even vs odd rows by phase.
-	gridPos.y = gridPos.y * 2 + int(pc.operation.y);
-	ivec2 belowPos = gridPos + DOWN;
+    // Alternate which stacked pairs run this tick — even vs odd rows by phase.
+    gridPos.y = gridPos.y * 2 + int(pc.operation.y);
+    ivec2 belowPos = gridPos + DOWN;
 
-	// Need a valid cell below — top-edge threads have no pair to separate.
-	if (!inside(belowPos))
-		return;
+    // Need a valid cell below — top-edge threads have no pair to separate.
+    if (!inside(belowPos))
+        return;
 
-	// Upper and lower cells in this column pair.
-	int upperIndex = indexOf(gridPos);
-	int lowerIndex = indexOf(belowPos);
-	Cell upperCell = readCell(upperIndex);
-	Cell lowerCell = readCell(lowerIndex);
+    // Upper and lower cells in this column pair.
+    int upperIndex = indexOf(gridPos);
+    int lowerIndex = indexOf(belowPos);
+    Cell upperCell = readCell(upperIndex);
+    Cell lowerCell = readCell(lowerIndex);
 
-	// Nearly dry cells have nothing meaningful to separate.
-	if (volume(upperCell) < 0.03 || volume(lowerCell) < 0.03) // 0.03: skip nearly empty pairs
-		return;
+    // Nearly dry cells have nothing meaningful to separate.
+    if (volume(upperCell) < 0.03 || volume(lowerCell) < 0.03) // 0.03: skip nearly empty pairs
+        return;
 
-	// Remember liquids so we write back only when a swap actually changed them.
-	vec3 beforeUpper = upperCell.liquid, beforeLower = lowerCell.liquid;
+    // Remember liquids so we write back only when a swap actually changed them.
+    vec3 beforeUpper = upperCell.liquid, beforeLower = lowerCell.liquid;
 
-	// Oil–water and lava–water exchanges run at different speeds per channel pairing.
-	exchangePhase(upperCell.liquid, lowerCell.liquid, 0, 1, 0.25); // 0.25: oil vs water rate
-	exchangePhase(upperCell.liquid, lowerCell.liquid, 2, 1, 0.18); // 0.18: lava vs water (oil slot)
-	exchangePhase(upperCell.liquid, lowerCell.liquid, 2, 0, 0.16); // 0.16: lava vs water (water slot)
+    // Oil–water and lava–water exchanges run at different speeds per channel pairing.
+    exchangePhase(upperCell.liquid, lowerCell.liquid, 0, 1, 0.25); // 0.25: oil vs water rate
+    exchangePhase(upperCell.liquid, lowerCell.liquid, 2, 1, 0.18); // 0.18: lava vs water (oil slot)
+    exchangePhase(upperCell.liquid, lowerCell.liquid, 2, 0,
+                  0.16); // 0.16: lava vs water (water slot)
 
-	// Push changes only to the upper cell when its mix moved.
-	if (any(notEqual(beforeUpper, upperCell.liquid)))
-		writeCell(upperIndex, upperCell);
+    // Push changes only to the upper cell when its mix moved.
+    if (any(notEqual(beforeUpper, upperCell.liquid)))
+        writeCell(upperIndex, upperCell);
 
-	// Same for the lower cell when only it changed.
-	if (any(notEqual(beforeLower, lowerCell.liquid)))
-		writeCell(lowerIndex, lowerCell);
+    // Same for the lower cell when only it changed.
+    if (any(notEqual(beforeLower, lowerCell.liquid)))
+        writeCell(lowerIndex, lowerCell);
 }

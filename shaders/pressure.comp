@@ -1,5 +1,5 @@
-// Pressure solve: two Jacobi relaxation steps per dispatch using fast shared scratch per thread block.
-// A two-cell halo leaves a 12×12 exact interior update region inside each 16×16 work group.
+// Pressure solve: two Jacobi relaxation steps per dispatch using fast shared scratch per thread
+// block. A two-cell halo leaves a 12×12 exact interior update region inside each 16×16 work group.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
@@ -12,58 +12,61 @@ shared float second[256];
 // Relax pressure against neighbor values twice, then write back inside the safe interior.
 void main()
 {
-	// Where this thread sits inside its 16×16 tile.
-	ivec2 localPos = ivec2(gl_LocalInvocationID.xy);
+    // Where this thread sits inside its 16×16 tile.
+    ivec2 localPos = ivec2(gl_LocalInvocationID.xy);
 
-	// World square for this thread — work group steps by 12 with a two-cell halo.
-	ivec2 gridPos = ivec2(gl_WorkGroupID.xy) * 12 + localPos - 2;
+    // World square for this thread — work group steps by 12 with a two-cell halo.
+    ivec2 gridPos = ivec2(gl_WorkGroupID.xy) * 12 + localPos - 2;
 
-	// Row-major slot in the tile's shared scratch array.
-	uint sharedSlot = gl_LocalInvocationIndex;
+    // Row-major slot in the tile's shared scratch array.
+    uint sharedSlot = gl_LocalInvocationIndex;
 
-	// Halo threads can land outside the world; they still cooperate but never write back.
-	bool valid = inside(gridPos);
-	int cellIndex = valid ? indexOf(gridPos) : 0;
+    // Halo threads can land outside the world; they still cooperate but never write back.
+    bool valid = inside(gridPos);
+    int cellIndex = valid ? indexOf(gridPos) : 0;
 
-	// Per-cell pressure equation from the setup pass (weights + balance term).
-	Equation row = valid ? equation[cellIndex] : Equation(vec4(0), 0.0);
+    // Per-cell pressure equation from the setup pass (weights + balance term).
+    Equation row = valid ? equation[cellIndex] : Equation(vec4(0), 0.0);
 
-	// Wet cells with face links sum to a positive weight total.
-	float diagonal = dot(row.weights, vec4(1));
-	bool activeCell = diagonal > 0.0;
+    // Wet cells with face links sum to a positive weight total.
+    float diagonal = dot(row.weights, vec4(1));
+    bool activeCell = diagonal > 0.0;
 
-	// Jacobi divides by that total so neighbor averages replace the center fairly.
-	float scale = activeCell ? 1.0 / diagonal : 0.0;
+    // Jacobi divides by that total so neighbor averages replace the center fairly.
+    float scale = activeCell ? 1.0 / diagonal : 0.0;
 
-	// Seed shared memory with the current pressure guess for this tile slot.
-	first[sharedSlot] = activeCell ? (pc.operation.y == 0u ? pressureA[cellIndex] : pressureB[cellIndex]) : 0.0;
+    // Seed shared memory with the current pressure guess for this tile slot.
+    first[sharedSlot] =
+        activeCell ? (pc.operation.y == 0u ? pressureA[cellIndex] : pressureB[cellIndex]) : 0.0;
 
-	// Every thread must finish loading before anyone reads neighbor shared slots.
-	barrier();
+    // Every thread must finish loading before anyone reads neighbor shared slots.
+    barrier();
 
-	// First Jacobi pass: interior local threads only (avoid halo garbage at tile edges).
-	second[sharedSlot] = 0.0;
-	if (activeCell && all(greaterThan(localPos, ivec2(0))) && all(lessThan(localPos, ivec2(15))))
-	{
-		// Implementation: neighbors from shared first[] at ±1 and ±16 local indices
-		vec4 neighbors = vec4(first[sharedSlot - 1], first[sharedSlot + 1], first[sharedSlot - 16], first[sharedSlot + 16]);
-		second[sharedSlot] = (dot(row.weights, neighbors) + row.rhs) * scale;
-	}
-	barrier();
+    // First Jacobi pass: interior local threads only (avoid halo garbage at tile edges).
+    second[sharedSlot] = 0.0;
+    if (activeCell && all(greaterThan(localPos, ivec2(0))) && all(lessThan(localPos, ivec2(15))))
+    {
+        // Implementation: neighbors from shared first[] at ±1 and ±16 local indices
+        vec4 neighbors = vec4(first[sharedSlot - 1], first[sharedSlot + 1], first[sharedSlot - 16],
+                              first[sharedSlot + 16]);
+        second[sharedSlot] = (dot(row.weights, neighbors) + row.rhs) * scale;
+    }
+    barrier();
 
-	// Second Jacobi pass and writeback one cell inset from the tile border.
-	if (valid && all(greaterThan(localPos, ivec2(1))) && all(lessThan(localPos, ivec2(14))))
-	{
-		// Second pass: same stencil, now sampling from first-pass shared results.
-		vec4 neighbors = vec4(second[sharedSlot - 1], second[sharedSlot + 1], second[sharedSlot - 16], second[sharedSlot + 16]);
+    // Second Jacobi pass and writeback one cell inset from the tile border.
+    if (valid && all(greaterThan(localPos, ivec2(1))) && all(lessThan(localPos, ivec2(14))))
+    {
+        // Second pass: same stencil, now sampling from first-pass shared results.
+        vec4 neighbors = vec4(second[sharedSlot - 1], second[sharedSlot + 1],
+                              second[sharedSlot - 16], second[sharedSlot + 16]);
 
-		// Updated pressure after two relaxation steps for this wet cell.
-		float result = (dot(row.weights, neighbors) + row.rhs) * scale;
+        // Updated pressure after two relaxation steps for this wet cell.
+        float result = (dot(row.weights, neighbors) + row.rhs) * scale;
 
-		// Ping-pong write — opposite buffer from the one we read for Jacobi.
-		if (pc.operation.y == 0u)
-			pressureB[cellIndex] = result;
-		else
-			pressureA[cellIndex] = result;
-	}
+        // Ping-pong write — opposite buffer from the one we read for Jacobi.
+        if (pc.operation.y == 0u)
+            pressureB[cellIndex] = result;
+        else
+            pressureA[cellIndex] = result;
+    }
 }

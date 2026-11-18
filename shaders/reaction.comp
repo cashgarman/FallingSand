@@ -10,162 +10,181 @@ layout(local_size_x = 16, local_size_y = 8) in;
 // Apply neighbor-aware rules for lava, water, wood, fire, steam, and smoke.
 void main()
 {
-	// Map this thread to one grid square in the simulation.
-	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
-	if (!inside(gridPos))
-		return;
+    // Map this thread to one grid square in the simulation.
+    ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+    if (!inside(gridPos))
+        return;
 
-	// Flat index for reads and the ping-pong write at the end.
-	int cellIndex = indexOf(gridPos);
+    // Flat index for reads and the ping-pong write at the end.
+    int cellIndex = indexOf(gridPos);
 
-	// What's in the cell now before any chemistry runs this tick.
-	Cell cell = readCell(cellIndex);
+    // What's in the cell now before any chemistry runs this tick.
+    Cell cell = readCell(cellIndex);
 
-	// Kind of matter, smoke or fire age, and heat — everything chemistry can rewrite.
-	uint materialId = material(cell);
-	uint life = age(cell);
-	float temperature = heat(cell);
+    // Kind of matter, smoke or fire age, and heat — everything chemistry can rewrite.
+    uint materialId = material(cell);
+    uint life = age(cell);
+    float temperature = heat(cell);
 
-	// Sample the four face neighbors for shared water, lava, heat, and ignition cues.
-	Cell neighbors[4] = Cell[4](readCell(gridPos - RIGHT), readCell(gridPos + RIGHT),
-	                            readCell(gridPos - DOWN), readCell(gridPos + DOWN)); // one snapshot per face before the loop runs
+    // Sample the four face neighbors for shared water, lava, heat, and ignition cues.
+    Cell neighbors[4] =
+        Cell[4](readCell(gridPos - RIGHT), readCell(gridPos + RIGHT), readCell(gridPos - DOWN),
+                readCell(gridPos + DOWN)); // one snapshot per face before the loop runs
 
-	float water = cell.liquid.x;                    // water already sitting in this square
-	float nearbyLava = cell.liquid.z;               // lava here; neighbors may raise this in the loop
-	float adjacentHeat = 0.0;                       // running sum to average neighbor warmth
-	float adjacentWater = 0.0;                      // strongest water contact found on any face
-	bool ignition = false;                          // stays true if any neighbor can light fuel
+    float water = cell.liquid.x;      // water already sitting in this square
+    float nearbyLava = cell.liquid.z; // lava here; neighbors may raise this in the loop
+    float adjacentHeat = 0.0;         // running sum to average neighbor warmth
+    float adjacentWater = 0.0;        // strongest water contact found on any face
+    bool ignition = false;            // stays true if any neighbor can light fuel
 
-	// Fold each face's water, lava, heat, and sparks into the accumulators above.
-	for (int neighborSlot = 0; neighborSlot < 4; ++neighborSlot)
-	{
-		Cell other = neighbors[neighborSlot];                 // neighbor on this face
-		adjacentWater = max(adjacentWater, other.liquid.x);   // keep the wettest contact seen
-		nearbyLava = max(nearbyLava, other.liquid.z);         // keep the hottest lava seen
-		adjacentHeat += heat(other);                          // add this face's warmth to the sum
-		ignition = ignition || material(other) == FIRE || other.liquid.z > 0.25; // spark if fire or hot lava next door; 0.25: lava heat threshold
-	}
+    // Fold each face's water, lava, heat, and sparks into the accumulators above.
+    for (int neighborSlot = 0; neighborSlot < 4; ++neighborSlot)
+    {
+        Cell other = neighbors[neighborSlot];               // neighbor on this face
+        adjacentWater = max(adjacentWater, other.liquid.x); // keep the wettest contact seen
+        nearbyLava = max(nearbyLava, other.liquid.z);       // keep the hottest lava seen
+        adjacentHeat += heat(other);                        // add this face's warmth to the sum
+        ignition =
+            ignition || material(other) == FIRE ||
+            other.liquid.z > 0.25; // spark if fire or hot lava next door; 0.25: lava heat threshold
+    }
 
-	// Random roll and heat diffusion toward neighbor average, boosted by local lava.
-	// Implementation: random01(uint(cellIndex) ^ (pc.tick * 37199u)); clamp heat blend; smoothstep on lava channel
-	float chance = random01(uint(cellIndex) ^ (pc.tick * 37199u)); // quirky roll for quench and ignite; 37199u: salt constant for random01
-	temperature = clamp(temperature + 0.035 * (adjacentHeat - 4.0 * temperature) - 0.004, // pull toward neighbors, then nudge cooler; 0.035: heat mix; 0.004: cooling drift
-	                      0.0, 1.0);
-	temperature = max(temperature, 0.87 * smoothstep(0.0, 0.5, cell.liquid.z)); // sitting on lava keeps heat high; 0.87: lava floor on heat
+    // Random roll and heat diffusion toward neighbor average, boosted by local lava.
+    // Implementation: random01(uint(cellIndex) ^ (pc.tick * 37199u)); clamp heat blend; smoothstep
+    // on lava channel
+    float chance =
+        random01(uint(cellIndex) ^
+                 (pc.tick *
+                  37199u)); // quirky roll for quench and ignite; 37199u: salt constant for random01
+    temperature = clamp(temperature + 0.035 * (adjacentHeat - 4.0 * temperature) -
+                            0.004, // pull toward neighbors, then nudge cooler; 0.035: heat mix;
+                                   // 0.004: cooling drift
+                        0.0, 1.0);
+    temperature =
+        max(temperature,
+            0.87 * smoothstep(
+                       0.0, 0.5,
+                       cell.liquid.z)); // sitting on lava keeps heat high; 0.87: lava floor on heat
 
-	// Lava meets water — sometimes quench to stone and boil the interface.
-	if (cell.liquid.z > 0.04 && max(water, adjacentWater) > 0.17) // 0.04 / 0.17: lava–water contact thresholds
-	{
-		// Lucky roll turns the touch zone into solid stone instead of a prolonged boil.
-		if (chance < 0.30) // 0.30: quench chance per tick
-		{
-			// Quenching makes a solid crust and boils water on the opposite side of the interface.
-			cell.liquid = vec3(0);
-			materialId = STONE;
-			life = 0u;
-			temperature = 0.42; // 0.42: warm stone after quench
-		}
-	}
+    // Lava meets water — sometimes quench to stone and boil the interface.
+    if (cell.liquid.z > 0.04 &&
+        max(water, adjacentWater) > 0.17) // 0.04 / 0.17: lava–water contact thresholds
+    {
+        // Lucky roll turns the touch zone into solid stone instead of a prolonged boil.
+        if (chance < 0.30) // 0.30: quench chance per tick
+        {
+            // Quenching makes a solid crust and boils water on the opposite side of the interface.
+            cell.liquid = vec3(0);
+            materialId = STONE;
+            life = 0u;
+            temperature = 0.42; // 0.42: warm stone after quench
+        }
+    }
 
-	// Water beside hot lava can flash to steam without the quench path.
-	else if (water > 0.07 && nearbyLava > 0.15 && chance < 0.34) // 0.07 / 0.15 / 0.34: boil-to-steam gate
-	{
-		cell.liquid.x = max(0.0, water - 0.28); // 0.28: water consumed per boil step
-		materialId = STEAM;
-		life = 0u;
-		temperature = 0.65; // 0.65: steam burst heat
-	}
+    // Water beside hot lava can flash to steam without the quench path.
+    else if (water > 0.07 && nearbyLava > 0.15 &&
+             chance < 0.34) // 0.07 / 0.15 / 0.34: boil-to-steam gate
+    {
+        cell.liquid.x = max(0.0, water - 0.28); // 0.28: water consumed per boil step
+        materialId = STEAM;
+        life = 0u;
+        temperature = 0.65; // 0.65: steam burst heat
+    }
 
-	// Ice thaws when warm enough or when lava heat leaks in.
-	else if (materialId == ICE && (temperature > 0.10 || nearbyLava > 0.12)) // 0.10 / 0.12: melt thresholds
-	{
-		// Thawed ice becomes standing water in the cell.
-		cell.liquid.x = 1.0;
-		materialId = EMPTY;
-		temperature *= 0.28; // 0.28: cold meltwater fraction kept as heat
-	}
+    // Ice thaws when warm enough or when lava heat leaks in.
+    else if (materialId == ICE &&
+             (temperature > 0.10 || nearbyLava > 0.12)) // 0.10 / 0.12: melt thresholds
+    {
+        // Thawed ice becomes standing water in the cell.
+        cell.liquid.x = 1.0;
+        materialId = EMPTY;
+        temperature *= 0.28; // 0.28: cold meltwater fraction kept as heat
+    }
 
-	// Dry wood smolders, then catches when it has baked long enough.
-	else if (materialId == WOOD && max(water, adjacentWater) < 0.25 // 0.25: wood must be dry enough
-	         && (ignition || temperature > 0.28)) // 0.28: spontaneous smolder threshold
-	{
-		// One more tick of charring before wood can flash to fire.
-		++life;
-		temperature = max(temperature, 0.30); // 0.30: minimum smolder heat
+    // Dry wood smolders, then catches when it has baked long enough.
+    else if (materialId == WOOD && max(water, adjacentWater) < 0.25 // 0.25: wood must be dry enough
+             && (ignition || temperature > 0.28)) // 0.28: spontaneous smolder threshold
+    {
+        // One more tick of charring before wood can flash to fire.
+        ++life;
+        temperature = max(temperature, 0.30); // 0.30: minimum smolder heat
 
-		// Char time exceeded — the pile bursts into open flame.
-		if (life > 12u + uint(chance * 29.0)) // 12 / 29: random ignition delay
-		{
-			materialId = FIRE;
-			life = 0u;
-		}
-	}
+        // Char time exceeded — the pile bursts into open flame.
+        if (life > 12u + uint(chance * 29.0)) // 12 / 29: random ignition delay
+        {
+            materialId = FIRE;
+            life = 0u;
+        }
+    }
 
-	// Oil ignites when hot, sparked, or already burning and not soaked by water.
-	else if (cell.liquid.y > 0.09 && (ignition || temperature > 0.47 || materialId == FIRE) // 0.09 / 0.47: oil ignition
-	         && max(water, adjacentWater) < 0.35) // 0.35: oil won't light when soaked
-	{
-		// Burn off a little oil and treat the square as fresh flame.
-		cell.liquid.y = max(0.0, cell.liquid.y - 0.05); // 0.05: oil burned per step
-		materialId = FIRE;
-		life = 0u;
-	}
+    // Oil ignites when hot, sparked, or already burning and not soaked by water.
+    else if (cell.liquid.y > 0.09 &&
+             (ignition || temperature > 0.47 || materialId == FIRE) // 0.09 / 0.47: oil ignition
+             && max(water, adjacentWater) < 0.35) // 0.35: oil won't light when soaked
+    {
+        // Burn off a little oil and treat the square as fresh flame.
+        cell.liquid.y = max(0.0, cell.liquid.y - 0.05); // 0.05: oil burned per step
+        materialId = FIRE;
+        life = 0u;
+    }
 
-	// Open flame: age each tick, then douse or smolder into smoke.
-	else if (materialId == FIRE)
-	{
-		// Flame ages another tick while staying hot.
-		++life;
-		temperature = 0.92; // 0.92: sustained flame heat
+    // Open flame: age each tick, then douse or smolder into smoke.
+    else if (materialId == FIRE)
+    {
+        // Flame ages another tick while staying hot.
+        ++life;
+        temperature = 0.92; // 0.92: sustained flame heat
 
-		// Enough nearby water kills the flame into a steam puff.
-		if (max(water, adjacentWater) > 0.33) // 0.33: douse threshold
-		{
-			// Douse swaps flame for a new steam puff.
-			materialId = STEAM;
-			life = 0u;
+        // Enough nearby water kills the flame into a steam puff.
+        if (max(water, adjacentWater) > 0.33) // 0.33: douse threshold
+        {
+            // Douse swaps flame for a new steam puff.
+            materialId = STEAM;
+            life = 0u;
 
-			// Steam burst runs cooler than open flame.
-			temperature = 0.54;
+            // Steam burst runs cooler than open flame.
+            temperature = 0.54;
 
-			// Splash consumes a little stored water.
-			cell.liquid.x = max(0.0, water - 0.08); // 0.08: water lost to steam puff
-		}
+            // Splash consumes a little stored water.
+            cell.liquid.x = max(0.0, water - 0.08); // 0.08: water lost to steam puff
+        }
 
-		// Burned long enough — leftover fuel becomes smoke.
-		else if (life > 15u + uint(chance * 25.0)) // 15 / 25: fire to smoke lifetime
-		{
-			// Spent flame leaves a smoke plume instead of open fire.
-			materialId = SMOKE;
-			life = 0u;
-		}
-	}
+        // Burned long enough — leftover fuel becomes smoke.
+        else if (life > 15u + uint(chance * 25.0)) // 15 / 25: fire to smoke lifetime
+        {
+            // Spent flame leaves a smoke plume instead of open fire.
+            materialId = SMOKE;
+            life = 0u;
+        }
+    }
 
-	// Smoke and steam linger, condense, or fade away.
-	else if (materialId == SMOKE || materialId == STEAM)
-	{
-		++life;
+    // Smoke and steam linger, condense, or fade away.
+    else if (materialId == SMOKE || materialId == STEAM)
+    {
+        ++life;
 
-		// Cool old steam in a roomy cell can rain a little water back.
-		if (materialId == STEAM && life > 70u && temperature < 0.06 && chance < 0.07 // 70 / 0.06 / 0.07: condense gate
-		    && volume(cell) < 0.79) // 0.79: room to deposit condensate
-		{
-			// Drip condensed water back into the cell and clear the steam identity.
-			cell.liquid.x += 0.15; // 0.15: condensate returned as water
-			materialId = EMPTY;
-		}
+        // Cool old steam in a roomy cell can rain a little water back.
+        if (materialId == STEAM && life > 70u && temperature < 0.06 &&
+            chance < 0.07           // 70 / 0.06 / 0.07: condense gate
+            && volume(cell) < 0.79) // 0.79: room to deposit condensate
+        {
+            // Drip condensed water back into the cell and clear the steam identity.
+            cell.liquid.x += 0.15; // 0.15: condensate returned as water
+            materialId = EMPTY;
+        }
 
-		// Lifetime exceeded — puff clears and the square goes empty.
-		else if (life > (materialId == SMOKE ? 110u : 136u) + uint(chance * 90.0)) // 110 / 136 / 90: fade lifetimes
-		{
-			// Old puff disperses — nothing visible remains.
-			materialId = EMPTY;
-		}
-	}
+        // Lifetime exceeded — puff clears and the square goes empty.
+        else if (life > (materialId == SMOKE ? 110u : 136u) +
+                            uint(chance * 90.0)) // 110 / 136 / 90: fade lifetimes
+        {
+            // Old puff disperses — nothing visible remains.
+            materialId = EMPTY;
+        }
+    }
 
-	// Bake updated identity, age, and heat into the cell record.
-	cell.matter = packMatter(materialId, life, temperature);
+    // Bake updated identity, age, and heat into the cell record.
+    cell.matter = packMatter(materialId, life, temperature);
 
-	// Stage the result in the alternate buffer for this tick.
-	writeOther(cellIndex, cell);
+    // Stage the result in the alternate buffer for this tick.
+    writeOther(cellIndex, cell);
 }

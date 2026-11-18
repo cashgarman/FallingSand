@@ -3,21 +3,30 @@
 #version 460
 
 // Screen-space bounds (xy origin, zw size) and tint for one drawable.
-struct Item { vec4 bounds; vec4 color; };
-layout(std430, set=1, binding=0) readonly buffer Interface { Item items[]; };
-layout(push_constant) uniform Frame {
-    layout(offset=80) vec4 screen;
-} pc;
+struct Item
+{
+    vec4 bounds;
+    vec4 color;
+};
+layout(std430, set = 1, binding = 0) readonly buffer Interface
+{
+    Item items[];
+};
+layout(push_constant) uniform Frame
+{
+    layout(offset = 80) vec4 screen;
+}
+pc;
 
 // Per-vertex color forwarded to the fragment shader.
-layout(location=0) out vec4 color;
+layout(location = 0) out vec4 color;
 
 // Expand one UI rectangle instance into clip-space position and vertex color.
 void main()
 {
     // Two triangles worth of unit-square corners for this instance.
-    const vec2 corners[6] = vec2[6](vec2(0, 0), vec2(1, 0), vec2(0, 1),
-                                    vec2(0, 1), vec2(1, 0), vec2(1, 1));
+    const vec2 corners[6] =
+        vec2[6](vec2(0, 0), vec2(1, 0), vec2(0, 1), vec2(0, 1), vec2(1, 0), vec2(1, 1));
 
     // Which panel or widget this draw call belongs to.
     Item item = items[gl_InstanceIndex];
