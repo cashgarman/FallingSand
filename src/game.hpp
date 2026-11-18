@@ -72,7 +72,8 @@ constexpr std::size_t materialCount = 10;
 // Display names, behavior labels, and sRGB hex colors for all paintable materials.
 extern const std::array<MaterialInfo, materialCount> materials;
 
-/// <summary>Single grid cell stored on the GPU: three liquid fractions plus packed matter and heat.</summary>
+/// <summary>Single grid cell stored on the GPU: three liquid fractions plus packed matter and
+/// heat.</summary>
 struct Cell
 {
     std::array<float, 3> liquid{}; // Water, oil, and lava fill levels in [0, 1].
@@ -101,8 +102,9 @@ static_assert(offsetof(Cell, matter) == 12);
 
 /// <summary>Builds a default cell for a material with optional fill quantity.</summary>
 /// <param name="id">Material to encode.</param>
-/// <param name="quantity">Liquid fill in [0, 1] for water, oil, and lava; ignored for solids and gases.</param>
-/// <returns>A cell with liquid channels or matter and heat fields set for the shader and solver.</returns>
+/// <param name="quantity">Liquid fill in [0, 1] for water, oil, and lava; ignored for solids and
+/// gases.</param> <returns>A cell with liquid channels or matter and heat fields set for the shader
+/// and solver.</returns>
 [[nodiscard]] Cell makeCell(Material id, float quantity = 1.0F);
 
 /// <summary>Point in world or UI space using top-left pixel coordinates.</summary>
@@ -112,7 +114,8 @@ struct Point
     float y{}; // Vertical coordinate in pixels, origin at the top edge.
 };
 
-/// <summary>Axis-aligned rectangle with a minimum corner and size in the same units as Point.</summary>
+/// <summary>Axis-aligned rectangle with a minimum corner and size in the same units as
+/// Point.</summary>
 struct Rect
 {
     float x{}; // Left edge of the rectangle.
@@ -152,20 +155,23 @@ constexpr std::size_t sceneCount = 4;
 extern const std::array<std::string_view, sceneCount> sceneNames;
 
 /// <summary>Fills a new world buffer from the JSON layout for a scene preset.</summary>
-/// <param name="scene">Preset whose file is read from the layouts directory beside the executable.</param>
-/// <returns>A vector of worldCells cells, or an error when that layout is missing or invalid.</returns>
+/// <param name="scene">Preset whose file is read from the layouts directory beside the
+/// executable.</param> <returns>A vector of worldCells cells, or an error when that layout is
+/// missing or invalid.</returns>
 [[nodiscard]] std::expected<std::vector<Cell>, std::string> makeScene(Scene scene);
 
 /// <summary>Writes a validated world grid to a binary sandbox file.</summary>
 /// <param name="path">Destination file; written atomically via a sibling .tmp file.</param>
 /// <param name="cells">Full world grid; must match worldCells and pass cell validation.</param>
-/// <returns>Success, or an error message when validation or the filesystem operation fails.</returns>
+/// <returns>Success, or an error message when validation or the filesystem operation
+/// fails.</returns>
 [[nodiscard]] std::expected<void, std::string> saveWorld(const std::filesystem::path& path,
                                                          std::span<const Cell> cells);
 
 /// <summary>Reads a sandbox save into a world grid.</summary>
 /// <param name="path">Save file created by saveWorld.</param>
-/// <returns>The loaded cells, or an error message when the header, size, or payload is invalid.</returns>
+/// <returns>The loaded cells, or an error message when the header, size, or payload is
+/// invalid.</returns>
 [[nodiscard]] std::expected<std::vector<Cell>, std::string> loadWorld(
     const std::filesystem::path& path);
 

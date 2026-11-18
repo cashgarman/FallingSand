@@ -180,8 +180,8 @@ void beam(Grid cells, int x0, int y0, int x1, int y1, int thick, Material materi
         const int y =
             static_cast<int>(std::lerp(static_cast<float>(y0), static_cast<float>(y1), t));
 
-            // Stamp a one-cell-wide slab at the interpolated height.
-            block(cells, x, y, x + 1, y + thick, material);
+        // Stamp a one-cell-wide slab at the interpolated height.
+        block(cells, x, y, x + 1, y + thick, material);
     }
 }
 
@@ -318,21 +318,18 @@ void appendUtf8(std::string& out, char32_t code)
     if (code <= 0x7F)
     {
         out.push_back(static_cast<char>(code));
-    }
-    else if (code <= 0x7FF)
+    } else if (code <= 0x7FF)
     {
         // Two-byte sequence.
         out.push_back(static_cast<char>(0xC0 | (code >> 6)));
         out.push_back(static_cast<char>(0x80 | (code & 0x3F)));
-    }
-    else if (code <= 0xFFFF)
+    } else if (code <= 0xFFFF)
     {
         // Three-byte sequence.
         out.push_back(static_cast<char>(0xE0 | (code >> 12)));
         out.push_back(static_cast<char>(0x80 | ((code >> 6) & 0x3F)));
         out.push_back(static_cast<char>(0x80 | (code & 0x3F)));
-    }
-    else
+    } else
     {
         // Four-byte sequence.
         out.push_back(static_cast<char>(0xF0 | (code >> 18)));
@@ -441,8 +438,7 @@ class JsonParser
                 return std::unexpected(fault("BAD SURROGATE PAIR"));
             }
             point = 0x10000 + ((point - 0xD800) << 10) + (static_cast<char32_t>(*low) - 0xDC00);
-        }
-        else if (point >= 0xDC00 && point <= 0xDFFF)
+        } else if (point >= 0xDC00 && point <= 0xDFFF)
         {
             return std::unexpected(fault("LONE SURROGATE"));
         }
@@ -728,10 +724,9 @@ constexpr std::array materialNames{
 };
 
 // Palette order used only to verify materialNames at compile time.
-constexpr std::array paletteMaterialIds{Material::sand,  Material::water, Material::oil,
-                                        Material::stone, Material::wood, Material::fire,
-                                        Material::smoke, Material::steam, Material::lava,
-                                        Material::ice};
+constexpr std::array paletteMaterialIds{
+    Material::sand, Material::water, Material::oil,   Material::stone, Material::wood,
+    Material::fire, Material::smoke, Material::steam, Material::lava,  Material::ice};
 
 // A new palette entry has to gain a JSON name or this constant check fails.
 [[nodiscard]] constexpr bool paletteNamesCoverMaterials()
@@ -763,8 +758,8 @@ constexpr std::array paletteMaterialIds{Material::sand,  Material::water, Materi
 }
 static_assert(paletteNamesCoverMaterials());
 
-[[nodiscard]] std::expected<void, std::string>
-allowOnly(const Json::Object& object, std::initializer_list<std::string_view> keys)
+[[nodiscard]] std::expected<void, std::string> allowOnly(
+    const Json::Object& object, std::initializer_list<std::string_view> keys)
 {
     // Reject a field whose name is not in the allowlist for this shape.
     for (const auto& field : object.fields)
@@ -812,8 +807,8 @@ allowOnly(const Json::Object& object, std::initializer_list<std::string_view> ke
     {
         return std::unexpected("LAYOUT MATERIAL MUST BE A STRING");
     }
-    const auto found = std::ranges::find_if(
-        materialNames, [&](const auto& item) { return item.first == *name; });
+    const auto found =
+        std::ranges::find_if(materialNames, [&](const auto& item) { return item.first == *name; });
     if (found == materialNames.end())
     {
         return std::unexpected(std::format("UNKNOWN MATERIAL {}", *name));
@@ -1021,8 +1016,8 @@ struct Layer
     ColumnEdge bottom;
 };
 
-[[nodiscard]] std::expected<std::vector<Layer>, std::string>
-expectLayers(const Json::Object& object)
+[[nodiscard]] std::expected<std::vector<Layer>, std::string> expectLayers(
+    const Json::Object& object)
 {
     // Each layer names a material and the top and bottom edges of that band.
     const Json* field = object.find("layers");
@@ -1074,7 +1069,7 @@ expectLayers(const Json::Object& object)
 }
 
 [[nodiscard]] std::expected<void, std::string> paintBlockShape(Grid cells,
-                                                                 const Json::Object& object)
+                                                               const Json::Object& object)
 {
     // Read the rectangle fields, then hand the numbers to the bounds check.
     if (auto keys = allowOnly(object, {"op", "note", "x0", "y0", "x1", "y1", "material"}); !keys)
@@ -1146,7 +1141,7 @@ expectLayers(const Json::Object& object)
 }
 
 [[nodiscard]] std::expected<void, std::string> paintBeamShape(Grid cells,
-                                                                const Json::Object& object)
+                                                              const Json::Object& object)
 {
     // Read the beam endpoints, thickness, and material, then validate the span.
     if (auto keys = allowOnly(object, {"op", "note", "x0", "y0", "x1", "y1", "thick", "material"});
