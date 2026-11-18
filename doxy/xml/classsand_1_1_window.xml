@@ -1,0 +1,360 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="classsand_1_1_window" kind="class" language="C++" prot="public">
+    <compoundname>sand::Window</compoundname>
+    <includes refid="window_8hpp" local="no">window.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classsand_1_1_window_1a538ed036230208ccc39a3cdf2c7e3a2c" prot="private" static="no" mutable="no">
+        <type>HWND</type>
+        <definition>HWND sand::Window::handle_</definition>
+        <argsstring></argsstring>
+        <name>handle_</name>
+        <qualifiedname>sand::Window::handle_</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="71" column="10" bodyfile="I:/FallingSand/src/window.hpp" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="classsand_1_1_window_1a54405933bd17cfb8366039f83b998d89" prot="private" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_input" kindref="compound">Input</ref></type>
+        <definition>Input sand::Window::input_</definition>
+        <argsstring></argsstring>
+        <name>input_</name>
+        <qualifiedname>sand::Window::input_</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="72" column="11" bodyfile="I:/FallingSand/src/window.hpp" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="classsand_1_1_window_1af0724eee193cb6f60848430c6febcd58" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sand::Window::wheelRemainder_</definition>
+        <argsstring></argsstring>
+        <name>wheelRemainder_</name>
+        <qualifiedname>sand::Window::wheelRemainder_</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="73" column="9" bodyfile="I:/FallingSand/src/window.hpp" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="classsand_1_1_window_1a2652058b0147b5ab06a526edf90cfa3f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool sand::Window::running_</definition>
+        <argsstring></argsstring>
+        <name>running_</name>
+        <qualifiedname>sand::Window::running_</qualifiedname>
+        <initializer>{true}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="74" column="10" bodyfile="I:/FallingSand/src/window.hpp" bodystart="74" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>sand::Window::Window</definition>
+        <argsstring>(bool show)</argsstring>
+        <name>Window</name>
+        <qualifiedname>sand::Window::Window</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>show</declname>
+        </param>
+        <briefdescription>
+<para>Creates the sandbox window. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>show</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>When true, the window is shown on creation.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="36" column="14" bodyfile="I:/FallingSand/src/window.cpp" bodystart="15" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a6ca5005ddbbd575c168a5cdaee9d8c2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>sand::Window::~Window</definition>
+        <argsstring>()</argsstring>
+        <name>~Window</name>
+        <qualifiedname>sand::Window::~Window</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="37" column="5" bodyfile="I:/FallingSand/src/window.cpp" bodystart="60" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a4833f5ce3278bb14758179af08f786aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>sand::Window::Window</definition>
+        <argsstring>(const Window &amp;)=delete</argsstring>
+        <name>Window</name>
+        <qualifiedname>sand::Window::Window</qualifiedname>
+        <param>
+          <type>const Window &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="40" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a04f6d4c5eda7ee021a9e9bd16c3412f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref> &amp;</type>
+        <definition>Window &amp; sand::Window::operator=</definition>
+        <argsstring>(const Window &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>sand::Window::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="41" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a961ce4f2f11f5faf10fc245516efc408" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>HWND</type>
+        <definition>HWND sand::Window::handle</definition>
+        <argsstring>() const</argsstring>
+        <name>handle</name>
+        <qualifiedname>sand::Window::handle</qualifiedname>
+        <briefdescription>
+<para>Returns the underlying window handle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>HWND owned by this object.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="45" column="11" bodyfile="I:/FallingSand/src/window.cpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a2291339fb22bb9c1163e23b3ad9efae6" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::array&lt; int, 2 &gt;</type>
+        <definition>std::array&lt; int, 2 &gt; sand::Window::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>sand::Window::size</qualifiedname>
+        <briefdescription>
+<para>Returns the current client area size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Width and height in pixels.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="49" column="17" bodyfile="I:/FallingSand/src/window.cpp" bodystart="75" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1aed9e0a7530cbd6836551bb9a4aebdad3" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool sand::Window::poll</definition>
+        <argsstring>()</argsstring>
+        <name>poll</name>
+        <qualifiedname>sand::Window::poll</qualifiedname>
+        <briefdescription>
+<para>Pumps pending Win32 messages and updates running state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>False after WM_QUIT or destroy.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="53" column="11" bodyfile="I:/FallingSand/src/window.cpp" bodystart="87" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1ad25eff0d80cdce0f9726cb2ad1fb6ffe" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structsand_1_1_input" kindref="compound">Input</ref></type>
+        <definition>Input sand::Window::consumeInput</definition>
+        <argsstring>()</argsstring>
+        <name>consumeInput</name>
+        <qualifiedname>sand::Window::consumeInput</qualifiedname>
+        <briefdescription>
+<para>Returns the latest input and clears one-shot fields. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="structsand_1_1_input" kindref="compound">Input</ref> snapshot for the current frame.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="57" column="12" bodyfile="I:/FallingSand/src/window.cpp" bodystart="105" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a2efdb30742c4b14903290fcd7e82d4d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::Window::wait</definition>
+        <argsstring>() const</argsstring>
+        <name>wait</name>
+        <qualifiedname>sand::Window::wait</qualifiedname>
+        <briefdescription>
+<para>Blocks until a message arrives when the event queue is empty. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="60" column="10" bodyfile="I:/FallingSand/src/window.cpp" bodystart="115" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="classsand_1_1_window_1a493c965072b36ceb16d9c147053e2a89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::Window::clientSize</definition>
+        <argsstring>(int width, int height)</argsstring>
+        <name>clientSize</name>
+        <qualifiedname>sand::Window::clientSize</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Requests a client-area resize. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New client width in pixels.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New client height in pixels.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="65" column="10" bodyfile="I:/FallingSand/src/window.cpp" bodystart="120" bodyend="130"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="classsand_1_1_window_1aedaba8c247dd9e9d9a02de561a398179" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>LRESULT CALLBACK</type>
+        <definition>LRESULT CALLBACK sand::Window::route</definition>
+        <argsstring>(HWND handle, UINT message, WPARAM wparam, LPARAM lparam)</argsstring>
+        <name>route</name>
+        <qualifiedname>sand::Window::route</qualifiedname>
+        <param>
+          <type>HWND</type>
+          <declname>handle</declname>
+        </param>
+        <param>
+          <type>UINT</type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>WPARAM</type>
+          <declname>wparam</declname>
+        </param>
+        <param>
+          <type>LPARAM</type>
+          <declname>lparam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="68" column="29" bodyfile="I:/FallingSand/src/window.cpp" bodystart="132" bodyend="152"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classsand_1_1_window_1ae757e843d72f7dc0ce6f3e14873464b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>LRESULT</type>
+        <definition>LRESULT sand::Window::process</definition>
+        <argsstring>(UINT message, WPARAM wparam, LPARAM lparam)</argsstring>
+        <name>process</name>
+        <qualifiedname>sand::Window::process</qualifiedname>
+        <param>
+          <type>UINT</type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>WPARAM</type>
+          <declname>wparam</declname>
+        </param>
+        <param>
+          <type>LPARAM</type>
+          <declname>lparam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/window.hpp" line="69" column="13" bodyfile="I:/FallingSand/src/window.cpp" bodystart="154" bodyend="247"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Owns the Win32 HWND and translates messages into <ref refid="structsand_1_1_input" kindref="compound">Input</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/window.hpp" line="31" column="1" bodyfile="I:/FallingSand/src/window.hpp" bodystart="32" bodyend="75"/>
+    <listofallmembers>
+      <member refid="classsand_1_1_window_1a493c965072b36ceb16d9c147053e2a89" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>clientSize</name></member>
+      <member refid="classsand_1_1_window_1ad25eff0d80cdce0f9726cb2ad1fb6ffe" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>consumeInput</name></member>
+      <member refid="classsand_1_1_window_1a961ce4f2f11f5faf10fc245516efc408" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>handle</name></member>
+      <member refid="classsand_1_1_window_1a538ed036230208ccc39a3cdf2c7e3a2c" prot="private" virt="non-virtual"><scope>sand::Window</scope><name>handle_</name></member>
+      <member refid="classsand_1_1_window_1a54405933bd17cfb8366039f83b998d89" prot="private" virt="non-virtual"><scope>sand::Window</scope><name>input_</name></member>
+      <member refid="classsand_1_1_window_1a04f6d4c5eda7ee021a9e9bd16c3412f0" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>operator=</name></member>
+      <member refid="classsand_1_1_window_1aed9e0a7530cbd6836551bb9a4aebdad3" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>poll</name></member>
+      <member refid="classsand_1_1_window_1ae757e843d72f7dc0ce6f3e14873464b2" prot="private" virt="non-virtual"><scope>sand::Window</scope><name>process</name></member>
+      <member refid="classsand_1_1_window_1aedaba8c247dd9e9d9a02de561a398179" prot="private" virt="non-virtual"><scope>sand::Window</scope><name>route</name></member>
+      <member refid="classsand_1_1_window_1a2652058b0147b5ab06a526edf90cfa3f" prot="private" virt="non-virtual"><scope>sand::Window</scope><name>running_</name></member>
+      <member refid="classsand_1_1_window_1a2291339fb22bb9c1163e23b3ad9efae6" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>size</name></member>
+      <member refid="classsand_1_1_window_1a2efdb30742c4b14903290fcd7e82d4d0" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>wait</name></member>
+      <member refid="classsand_1_1_window_1af0724eee193cb6f60848430c6febcd58" prot="private" virt="non-virtual"><scope>sand::Window</scope><name>wheelRemainder_</name></member>
+      <member refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>Window</name></member>
+      <member refid="classsand_1_1_window_1a4833f5ce3278bb14758179af08f786aa" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>Window</name></member>
+      <member refid="classsand_1_1_window_1a6ca5005ddbbd575c168a5cdaee9d8c2d" prot="public" virt="non-virtual"><scope>sand::Window</scope><name>~Window</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

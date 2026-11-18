@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_point" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Point</compoundname>
+    <includes refid="game_8hpp" local="no">game.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_point_1a4a0361244daa0c31f1934603cf14cbdd" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Point::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>sand::Point::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="113" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_point_1aea065fef31f448cdd9bee3a472fa7efd" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Point::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>sand::Point::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="114" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="114" bodyend="114"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="structsand_1_1_point" kindref="compound">Point</ref> in world or UI space using top-left pixel coordinates. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/game.hpp" line="111" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="112" bodyend="115"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_point_1a4a0361244daa0c31f1934603cf14cbdd" prot="public" virt="non-virtual"><scope>sand::Point</scope><name>x</name></member>
+      <member refid="structsand_1_1_point_1aea065fef31f448cdd9bee3a472fa7efd" prot="public" virt="non-virtual"><scope>sand::Point</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

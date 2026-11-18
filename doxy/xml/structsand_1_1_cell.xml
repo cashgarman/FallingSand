@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_cell" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Cell</compoundname>
+    <includes refid="game_8hpp" local="no">game.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_cell_1a86f4771b81fe3c4c005a9819776f4630" prot="public" static="no" mutable="no">
+        <type>std::array&lt; float, 3 &gt;</type>
+        <definition>std::array&lt;float, 3&gt; sand::Cell::liquid</definition>
+        <argsstring></argsstring>
+        <name>liquid</name>
+        <qualifiedname>sand::Cell::liquid</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="79" column="16" bodyfile="I:/FallingSand/src/game.hpp" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_cell_1af5793bd0f5adb5e4713f2e062c7cf7b7" prot="public" static="no" mutable="no">
+        <type>std::uint32_t</type>
+        <definition>std::uint32_t sand::Cell::matter</definition>
+        <argsstring></argsstring>
+        <name>matter</name>
+        <qualifiedname>sand::Cell::matter</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="80" column="19" bodyfile="I:/FallingSand/src/game.hpp" bodystart="80" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Single grid cell stored on the GPU: three liquid fractions plus packed matter and heat. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/game.hpp" line="77" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="78" bodyend="81"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_cell_1a86f4771b81fe3c4c005a9819776f4630" prot="public" virt="non-virtual"><scope>sand::Cell</scope><name>liquid</name></member>
+      <member refid="structsand_1_1_cell_1af5793bd0f5adb5e4713f2e062c7cf7b7" prot="public" virt="non-virtual"><scope>sand::Cell</scope><name>matter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

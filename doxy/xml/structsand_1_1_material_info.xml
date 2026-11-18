@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_material_info" kind="struct" language="C++" prot="public">
+    <compoundname>sand::MaterialInfo</compoundname>
+    <includes refid="game_8hpp" local="no">game.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_material_info_1aeb261c97c5a40803fc6590d405be28a8" prot="public" static="no" mutable="no">
+        <type>Material</type>
+        <definition>Material sand::MaterialInfo::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>sand::MaterialInfo::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="63" column="14" bodyfile="I:/FallingSand/src/game.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_material_info_1a4f17317940ba46257ce6d6acc986adef" prot="public" static="no" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view sand::MaterialInfo::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>sand::MaterialInfo::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="64" column="22" bodyfile="I:/FallingSand/src/game.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_material_info_1a0750b078a797e7fae796f7403e1418db" prot="public" static="no" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view sand::MaterialInfo::behavior</definition>
+        <argsstring></argsstring>
+        <name>behavior</name>
+        <qualifiedname>sand::MaterialInfo::behavior</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="65" column="22" bodyfile="I:/FallingSand/src/game.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_material_info_1a3976e9b0a5361ff6fcae3704070049fc" prot="public" static="no" mutable="no">
+        <type>std::uint32_t</type>
+        <definition>std::uint32_t sand::MaterialInfo::color</definition>
+        <argsstring></argsstring>
+        <name>color</name>
+        <qualifiedname>sand::MaterialInfo::color</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="66" column="19" bodyfile="I:/FallingSand/src/game.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>UI metadata for a Material entry in the material palette. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/game.hpp" line="61" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="62" bodyend="67"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_material_info_1a0750b078a797e7fae796f7403e1418db" prot="public" virt="non-virtual"><scope>sand::MaterialInfo</scope><name>behavior</name></member>
+      <member refid="structsand_1_1_material_info_1a3976e9b0a5361ff6fcae3704070049fc" prot="public" virt="non-virtual"><scope>sand::MaterialInfo</scope><name>color</name></member>
+      <member refid="structsand_1_1_material_info_1aeb261c97c5a40803fc6590d405be28a8" prot="public" virt="non-virtual"><scope>sand::MaterialInfo</scope><name>id</name></member>
+      <member refid="structsand_1_1_material_info_1a4f17317940ba46257ce6d6acc986adef" prot="public" virt="non-virtual"><scope>sand::MaterialInfo</scope><name>name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

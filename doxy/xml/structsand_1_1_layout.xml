@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_layout" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Layout</compoundname>
+    <includes refid="ui_8hpp" local="no">ui.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_layout_1a068d1fe209fa3d8b747957d188efba51" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::canvas</definition>
+        <argsstring></argsstring>
+        <name>canvas</name>
+        <qualifiedname>sand::Layout::canvas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="85" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a10a8cbc8061438cc30e8765863c1925c" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::panel</definition>
+        <argsstring></argsstring>
+        <name>panel</name>
+        <qualifiedname>sand::Layout::panel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="86" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a367b74e0f5f61cc5da8f6b96ac464b84" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::footer</definition>
+        <argsstring></argsstring>
+        <name>footer</name>
+        <qualifiedname>sand::Layout::footer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="87" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a02f6a39de153c2e86ef27016192325de" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::brushTrack</definition>
+        <argsstring></argsstring>
+        <name>brushTrack</name>
+        <qualifiedname>sand::Layout::brushTrack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="88" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a4855669b43025d5f9969a5b9b5fe5bea" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Layout::gap</definition>
+        <argsstring></argsstring>
+        <name>gap</name>
+        <qualifiedname>sand::Layout::gap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="89" column="11" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1aec3b08fff2ea0f5a61af8779d5830a18" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Layout::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>sand::Layout::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="89" column="15" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1ae39a7d45acd93a39d339cd4d1e681963" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="structsand_1_1_rect" kindref="compound">Rect</ref>, materialCount &gt;</type>
+        <definition>std::array&lt;Rect, materialCount&gt; sand::Layout::swatches</definition>
+        <argsstring></argsstring>
+        <name>swatches</name>
+        <qualifiedname>sand::Layout::swatches</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="90" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a957aaea7a1b9e43cb95cdb7f9206783a" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="structsand_1_1_rect" kindref="compound">Rect</ref>, sceneCount &gt;</type>
+        <definition>std::array&lt;Rect, sceneCount&gt; sand::Layout::scenes</definition>
+        <argsstring></argsstring>
+        <name>scenes</name>
+        <qualifiedname>sand::Layout::scenes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="91" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a5696ab121a5be069f562e4cd6fee2570" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="structsand_1_1_button" kindref="compound">Button</ref>, 9 &gt;</type>
+        <definition>std::array&lt;Button, 9&gt; sand::Layout::controls</definition>
+        <argsstring></argsstring>
+        <name>controls</name>
+        <qualifiedname>sand::Layout::controls</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="92" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1ad55fab242ff3a0b03b3b4798526aea9c" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::cog</definition>
+        <argsstring></argsstring>
+        <name>cog</name>
+        <qualifiedname>sand::Layout::cog</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="93" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a6569df1c5e1b77f3a7637e42d760e867" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::pausePanel</definition>
+        <argsstring></argsstring>
+        <name>pausePanel</name>
+        <qualifiedname>sand::Layout::pausePanel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="94" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a670c6fbe21b2b1aa027f2e71ed200472" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Layout::settingsPanel</definition>
+        <argsstring></argsstring>
+        <name>settingsPanel</name>
+        <qualifiedname>sand::Layout::settingsPanel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="95" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1aa3785a1a65c26e61dac3cd05bfc2c133" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="structsand_1_1_button" kindref="compound">Button</ref>, 3 &gt;</type>
+        <definition>std::array&lt;Button, 3&gt; sand::Layout::pauseButtons</definition>
+        <argsstring></argsstring>
+        <name>pauseButtons</name>
+        <qualifiedname>sand::Layout::pauseButtons</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="96" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a2c6c164dbe690c440df3f82f45849a98" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="structsand_1_1_button" kindref="compound">Button</ref>, resolutionCount+2 &gt;</type>
+        <definition>std::array&lt;Button, resolutionCount + 2&gt; sand::Layout::settingsButtons</definition>
+        <argsstring></argsstring>
+        <name>settingsButtons</name>
+        <qualifiedname>sand::Layout::settingsButtons</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="97" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1a7515840f77a8fca97b57943af5626050" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sand::Layout::width</definition>
+        <argsstring></argsstring>
+        <name>width</name>
+        <qualifiedname>sand::Layout::width</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="98" column="9" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_layout_1ae8a04f30af2c00f14438a9009c0837f4" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sand::Layout::height</definition>
+        <argsstring></argsstring>
+        <name>height</name>
+        <qualifiedname>sand::Layout::height</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="99" column="9" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="99" bodyend="99"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structsand_1_1_layout_1a454ef9f35f025a1a7864c77bc2f819ba" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; <ref refid="structsand_1_1_button" kindref="compound">Button</ref> &gt;</type>
+        <definition>std::optional&lt; Button &gt; sand::Layout::hit</definition>
+        <argsstring>(Point mouse) const</argsstring>
+        <name>hit</name>
+        <qualifiedname>sand::Layout::hit</qualifiedname>
+        <param>
+          <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+          <declname>mouse</declname>
+        </param>
+        <briefdescription>
+<para>Finds the topmost control under the cursor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>mouse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cursor position in client pixels.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The activated button, or empty when nothing matched.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="104" column="20" bodyfile="I:/FallingSand/src/ui.cpp" bodystart="341" bodyend="367"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_layout_1a62b458271190c4f711267c44b522364d" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point sand::Layout::worldPoint</definition>
+        <argsstring>(Point pixel) const</argsstring>
+        <name>worldPoint</name>
+        <qualifiedname>sand::Layout::worldPoint</qualifiedname>
+        <param>
+          <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+          <declname>pixel</declname>
+        </param>
+        <briefdescription>
+<para>Maps a canvas pixel position to world grid coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="structsand_1_1_point" kindref="compound">Point</ref> in client pixels relative to the window origin.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Continuous grid coordinates before flooring for cell indices.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="109" column="12" bodyfile="I:/FallingSand/src/ui.cpp" bodystart="369" bodyend="374"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Screen rectangles and controls for one frame of HUD layout. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>sand::Layout</label>
+        <link refid="structsand_1_1_layout"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>brushTrack</edgelabel>
+          <edgelabel>canvas</edgelabel>
+          <edgelabel>cog</edgelabel>
+          <edgelabel>footer</edgelabel>
+          <edgelabel>panel</edgelabel>
+          <edgelabel>pausePanel</edgelabel>
+          <edgelabel>settingsPanel</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sand::Rect</label>
+        <link refid="structsand_1_1_rect"/>
+      </node>
+    </collaborationgraph>
+    <location file="I:/FallingSand/src/ui.hpp" line="83" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="84" bodyend="110"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_layout_1a02f6a39de153c2e86ef27016192325de" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>brushTrack</name></member>
+      <member refid="structsand_1_1_layout_1a068d1fe209fa3d8b747957d188efba51" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>canvas</name></member>
+      <member refid="structsand_1_1_layout_1ad55fab242ff3a0b03b3b4798526aea9c" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>cog</name></member>
+      <member refid="structsand_1_1_layout_1a5696ab121a5be069f562e4cd6fee2570" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>controls</name></member>
+      <member refid="structsand_1_1_layout_1a367b74e0f5f61cc5da8f6b96ac464b84" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>footer</name></member>
+      <member refid="structsand_1_1_layout_1a4855669b43025d5f9969a5b9b5fe5bea" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>gap</name></member>
+      <member refid="structsand_1_1_layout_1ae8a04f30af2c00f14438a9009c0837f4" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>height</name></member>
+      <member refid="structsand_1_1_layout_1a454ef9f35f025a1a7864c77bc2f819ba" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>hit</name></member>
+      <member refid="structsand_1_1_layout_1a10a8cbc8061438cc30e8765863c1925c" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>panel</name></member>
+      <member refid="structsand_1_1_layout_1aa3785a1a65c26e61dac3cd05bfc2c133" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>pauseButtons</name></member>
+      <member refid="structsand_1_1_layout_1a6569df1c5e1b77f3a7637e42d760e867" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>pausePanel</name></member>
+      <member refid="structsand_1_1_layout_1aec3b08fff2ea0f5a61af8779d5830a18" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>scale</name></member>
+      <member refid="structsand_1_1_layout_1a957aaea7a1b9e43cb95cdb7f9206783a" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>scenes</name></member>
+      <member refid="structsand_1_1_layout_1a2c6c164dbe690c440df3f82f45849a98" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>settingsButtons</name></member>
+      <member refid="structsand_1_1_layout_1a670c6fbe21b2b1aa027f2e71ed200472" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>settingsPanel</name></member>
+      <member refid="structsand_1_1_layout_1ae39a7d45acd93a39d339cd4d1e681963" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>swatches</name></member>
+      <member refid="structsand_1_1_layout_1a7515840f77a8fca97b57943af5626050" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>width</name></member>
+      <member refid="structsand_1_1_layout_1a62b458271190c4f711267c44b522364d" prot="public" virt="non-virtual"><scope>sand::Layout</scope><name>worldPoint</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

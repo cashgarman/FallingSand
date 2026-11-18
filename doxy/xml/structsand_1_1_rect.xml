@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_rect" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Rect</compoundname>
+    <includes refid="game_8hpp" local="no">game.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_rect_1a99c2c612102bfcc54eb30404e59fa627" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Rect::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>sand::Rect::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="121" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_rect_1a864a96a2f7d269828180251fede21262" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Rect::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>sand::Rect::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="122" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_rect_1a8510e74bd9ac0a6b91e190d213e8bd54" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Rect::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <qualifiedname>sand::Rect::w</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="123" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_rect_1a79c166f1b32b88570a3b9213a9680994" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Rect::h</definition>
+        <argsstring></argsstring>
+        <name>h</name>
+        <qualifiedname>sand::Rect::h</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="124" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="124" bodyend="124"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structsand_1_1_rect_1aa2e151f994d2be866ec2ea8418fbdaa2" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool sand::Rect::contains</definition>
+        <argsstring>(Point p) const</argsstring>
+        <name>contains</name>
+        <qualifiedname>sand::Rect::contains</qualifiedname>
+        <param>
+          <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+<para>Tests whether a point lies inside this rectangle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="structsand_1_1_point" kindref="compound">Point</ref> to test.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True when the point is inside [x, x + w) × [y, y + h).</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="129" column="11" bodyfile="I:/FallingSand/src/game.cpp" bodystart="123" bodyend="127"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Axis-aligned rectangle with a minimum corner and size in the same units as <ref refid="structsand_1_1_point" kindref="compound">Point</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/game.hpp" line="119" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="120" bodyend="130"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_rect_1aa2e151f994d2be866ec2ea8418fbdaa2" prot="public" virt="non-virtual"><scope>sand::Rect</scope><name>contains</name></member>
+      <member refid="structsand_1_1_rect_1a79c166f1b32b88570a3b9213a9680994" prot="public" virt="non-virtual"><scope>sand::Rect</scope><name>h</name></member>
+      <member refid="structsand_1_1_rect_1a8510e74bd9ac0a6b91e190d213e8bd54" prot="public" virt="non-virtual"><scope>sand::Rect</scope><name>w</name></member>
+      <member refid="structsand_1_1_rect_1a99c2c612102bfcc54eb30404e59fa627" prot="public" virt="non-virtual"><scope>sand::Rect</scope><name>x</name></member>
+      <member refid="structsand_1_1_rect_1a864a96a2f7d269828180251fede21262" prot="public" virt="non-virtual"><scope>sand::Rect</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

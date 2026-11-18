@@ -1,0 +1,768 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_vulkan_game_1_1_impl" kind="struct" language="C++" prot="public">
+    <compoundname>sand::VulkanGame::Impl</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a96f0e8692e13ec8ec0ecdd7eb83602c9" prot="public" static="no" mutable="no">
+        <type>Context</type>
+        <definition>Context sand::VulkanGame::Impl::ctx</definition>
+        <argsstring></argsstring>
+        <name>ctx</name>
+        <qualifiedname>sand::VulkanGame::Impl::ctx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="630" column="13" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="630" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1adeab897a1163cd6155abee46a1852989" prot="public" static="no" mutable="no">
+        <type>std::array&lt; Buffer, bufferSizes.size()&gt;</type>
+        <definition>std::array&lt;Buffer, bufferSizes.size()&gt; sand::VulkanGame::Impl::storage</definition>
+        <argsstring></argsstring>
+        <name>storage</name>
+        <qualifiedname>sand::VulkanGame::Impl::storage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="631" column="16" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="631" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a935898484b77506d938c11f273479887" prot="public" static="no" mutable="no">
+        <type>Buffer</type>
+        <definition>Buffer sand::VulkanGame::Impl::staging</definition>
+        <argsstring></argsstring>
+        <name>staging</name>
+        <qualifiedname>sand::VulkanGame::Impl::staging</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="632" column="12" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="632" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1ab426bae7d0f845db76fce98090681ddd" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkCommandPool, vkDestroyCommandPool &gt;</type>
+        <definition>DeviceOwner&lt;VkCommandPool, vkDestroyCommandPool&gt; sand::VulkanGame::Impl::commands</definition>
+        <argsstring></argsstring>
+        <name>commands</name>
+        <qualifiedname>sand::VulkanGame::Impl::commands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="633" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="633" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a5ba5e4994bbefca383dc59ac818b16d3" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkDescriptorSetLayout, vkDestroyDescriptorSetLayout &gt;</type>
+        <definition>DeviceOwner&lt;VkDescriptorSetLayout, vkDestroyDescriptorSetLayout&gt; sand::VulkanGame::Impl::worldLayout</definition>
+        <argsstring></argsstring>
+        <name>worldLayout</name>
+        <qualifiedname>sand::VulkanGame::Impl::worldLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="634" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="634" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1abc2a9ed29614df3c1e6e097b9c1266e9" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkDescriptorSetLayout, vkDestroyDescriptorSetLayout &gt;</type>
+        <definition>DeviceOwner&lt;VkDescriptorSetLayout, vkDestroyDescriptorSetLayout&gt; sand::VulkanGame::Impl::uiLayout</definition>
+        <argsstring></argsstring>
+        <name>uiLayout</name>
+        <qualifiedname>sand::VulkanGame::Impl::uiLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="634" column="29" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="634" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a41dc7960f7bbd218979dba2c3f02e3eb" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkDescriptorPool, vkDestroyDescriptorPool &gt;</type>
+        <definition>DeviceOwner&lt;VkDescriptorPool, vkDestroyDescriptorPool&gt; sand::VulkanGame::Impl::descriptors</definition>
+        <argsstring></argsstring>
+        <name>descriptors</name>
+        <qualifiedname>sand::VulkanGame::Impl::descriptors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="635" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="635" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1ab36e1c0a3799eecf272f18d4b5200703" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkPipelineLayout, vkDestroyPipelineLayout &gt;</type>
+        <definition>DeviceOwner&lt;VkPipelineLayout, vkDestroyPipelineLayout&gt; sand::VulkanGame::Impl::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>sand::VulkanGame::Impl::pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="636" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="636" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1aa7c4db5e1eb788b6302048a944942db4" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkQueryPool, vkDestroyQueryPool &gt;</type>
+        <definition>DeviceOwner&lt;VkQueryPool, vkDestroyQueryPool&gt; sand::VulkanGame::Impl::queries</definition>
+        <argsstring></argsstring>
+        <name>queries</name>
+        <qualifiedname>sand::VulkanGame::Impl::queries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="637" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="637" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a9f58e33777d8ee55d49a0786de68a5f9" prot="public" static="no" mutable="no">
+        <type>std::array&lt; Pipeline, kernelNames.size()&gt;</type>
+        <definition>std::array&lt;Pipeline, kernelNames.size()&gt; sand::VulkanGame::Impl::compute</definition>
+        <argsstring></argsstring>
+        <name>compute</name>
+        <qualifiedname>sand::VulkanGame::Impl::compute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="638" column="16" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="638" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a2ef5ceb3795a124ad5ef5b1463bdfd37" prot="public" static="no" mutable="no">
+        <type>Pipeline</type>
+        <definition>Pipeline sand::VulkanGame::Impl::worldPipeline</definition>
+        <argsstring></argsstring>
+        <name>worldPipeline</name>
+        <qualifiedname>sand::VulkanGame::Impl::worldPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="639" column="14" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="639" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a37df0180b38fcf8d53ae957b0f7e8c27" prot="public" static="no" mutable="no">
+        <type>Pipeline</type>
+        <definition>Pipeline sand::VulkanGame::Impl::uiPipeline</definition>
+        <argsstring></argsstring>
+        <name>uiPipeline</name>
+        <qualifiedname>sand::VulkanGame::Impl::uiPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="639" column="28" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="639" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a006e952421247d7b875b4129887f7cde" prot="public" static="no" mutable="no">
+        <type>Swapchain</type>
+        <definition>Swapchain sand::VulkanGame::Impl::swap</definition>
+        <argsstring></argsstring>
+        <name>swap</name>
+        <qualifiedname>sand::VulkanGame::Impl::swap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="640" column="15" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="640" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a4f2de8fb12c3a0f4899866bd8a68dcb8" prot="public" static="no" mutable="no">
+        <type>std::array&lt; FrameSlot, framesInFlight &gt;</type>
+        <definition>std::array&lt;FrameSlot, framesInFlight&gt; sand::VulkanGame::Impl::slots</definition>
+        <argsstring></argsstring>
+        <name>slots</name>
+        <qualifiedname>sand::VulkanGame::Impl::slots</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="641" column="16" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="641" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a879fcbcd2ce5efc01650048eb8d19d90" prot="public" static="no" mutable="no">
+        <type>VkDescriptorSet</type>
+        <definition>VkDescriptorSet sand::VulkanGame::Impl::worldSet</definition>
+        <argsstring></argsstring>
+        <name>worldSet</name>
+        <qualifiedname>sand::VulkanGame::Impl::worldSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="642" column="21" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="642" bodyend="642"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a5db54b118b291df08cb6defd92bbe362" prot="public" static="no" mutable="no">
+        <type>VkCommandBuffer</type>
+        <definition>VkCommandBuffer sand::VulkanGame::Impl::immediate</definition>
+        <argsstring></argsstring>
+        <name>immediate</name>
+        <qualifiedname>sand::VulkanGame::Impl::immediate</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="643" column="21" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="643" bodyend="643"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a14ace6ee06fd9566f20ac75ddc847729" prot="public" static="no" mutable="no">
+        <type>DeviceOwner&lt; VkFence, vkDestroyFence &gt;</type>
+        <definition>DeviceOwner&lt;VkFence, vkDestroyFence&gt; sand::VulkanGame::Impl::immediateFence</definition>
+        <argsstring></argsstring>
+        <name>immediateFence</name>
+        <qualifiedname>sand::VulkanGame::Impl::immediateFence</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="644" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="644" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a6fabd626067828a2dc671b4f4730686d" prot="public" static="no" mutable="no">
+        <type>std::filesystem::path</type>
+        <definition>std::filesystem::path sand::VulkanGame::Impl::shaders</definition>
+        <argsstring></argsstring>
+        <name>shaders</name>
+        <qualifiedname>sand::VulkanGame::Impl::shaders</qualifiedname>
+        <initializer>{shaderDirectory()}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="645" column="27" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="645" bodyend="645"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a10dd90dc39e8c7ec21e86cc35a52071e" prot="public" static="no" mutable="no">
+        <type>Push</type>
+        <definition>Push sand::VulkanGame::Impl::push</definition>
+        <argsstring></argsstring>
+        <name>push</name>
+        <qualifiedname>sand::VulkanGame::Impl::push</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="646" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="646" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a8a99dbf4cdad778c6d5dee9926a58bfa" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_timing" kindref="compound">Timing</ref></type>
+        <definition>Timing sand::VulkanGame::Impl::lastTiming</definition>
+        <argsstring></argsstring>
+        <name>lastTiming</name>
+        <qualifiedname>sand::VulkanGame::Impl::lastTiming</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="647" column="12" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="647" bodyend="647"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a72aeb17d90707ab35d10b24402911cec" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned sand::VulkanGame::Impl::frame</definition>
+        <argsstring></argsstring>
+        <name>frame</name>
+        <qualifiedname>sand::VulkanGame::Impl::frame</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="648" column="14" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="648" bodyend="648"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_vulkan_game_1_1_impl_1a956fbd183a137c20743f0ae074351552" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool sand::VulkanGame::Impl::outdated</definition>
+        <argsstring></argsstring>
+        <name>outdated</name>
+        <qualifiedname>sand::VulkanGame::Impl::outdated</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="649" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="649" bodyend="649"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a4712d73cc943d1960d5cb808c337ae87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>sand::VulkanGame::Impl::Impl</definition>
+        <argsstring>(HWND window, bool validation)</argsstring>
+        <name>Impl</name>
+        <qualifiedname>sand::VulkanGame::Impl::Impl</qualifiedname>
+        <param>
+          <type>HWND</type>
+          <declname>window</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>validation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="651" column="5" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="673" bodyend="751"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a431b423bbc0450f0dc2a8a0bf64695c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>sand::VulkanGame::Impl::~Impl</definition>
+        <argsstring>()</argsstring>
+        <name>~Impl</name>
+        <qualifiedname>sand::VulkanGame::Impl::~Impl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="652" column="5" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="753" bodyend="756"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1aa095481670ecc721af6cb8eb85bb9845" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::setupDescriptors</definition>
+        <argsstring>(bool windowed)</argsstring>
+        <name>setupDescriptors</name>
+        <qualifiedname>sand::VulkanGame::Impl::setupDescriptors</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>windowed</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="653" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="758" bodyend="836"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a6c513cf5f0165650ac48109953928a4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::resize</definition>
+        <argsstring>(int width, int height)</argsstring>
+        <name>resize</name>
+        <qualifiedname>sand::VulkanGame::Impl::resize</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="654" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="868" bodyend="980"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a17b0768934c3e4acb7852bccf258b860" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::makeGraphics</definition>
+        <argsstring>()</argsstring>
+        <name>makeGraphics</name>
+        <qualifiedname>sand::VulkanGame::Impl::makeGraphics</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="655" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="982" bodyend="986"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a13d07f58367c9d102205a8446ee999e0" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>DeviceOwner&lt; VkShaderModule, vkDestroyShaderModule &gt;</type>
+        <definition>DeviceOwner&lt; VkShaderModule, vkDestroyShaderModule &gt; sand::VulkanGame::Impl::shader</definition>
+        <argsstring>(std::string_view name) const</argsstring>
+        <name>shader</name>
+        <qualifiedname>sand::VulkanGame::Impl::shader</qualifiedname>
+        <param>
+          <type>std::string_view</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="656" column="18" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="838" bodyend="866"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a46a50be4fdc613bcde4fcb4f81c9d5fa" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Pipeline</type>
+        <definition>Pipeline sand::VulkanGame::Impl::graphics</definition>
+        <argsstring>(std::string_view vertex, std::string_view frag) const</argsstring>
+        <name>graphics</name>
+        <qualifiedname>sand::VulkanGame::Impl::graphics</qualifiedname>
+        <param>
+          <type>std::string_view</type>
+          <declname>vertex</declname>
+        </param>
+        <param>
+          <type>std::string_view</type>
+          <declname>frag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="658" column="15" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="988" bodyend="1067"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1ac24d668736e937fb009ab320857fcd99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::dispatch</definition>
+        <argsstring>(VkCommandBuffer cmd, Kernel kernel, unsigned x, unsigned y)</argsstring>
+        <name>dispatch</name>
+        <qualifiedname>sand::VulkanGame::Impl::dispatch</qualifiedname>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>cmd</declname>
+        </param>
+        <param>
+          <type>Kernel</type>
+          <declname>kernel</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="659" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1076" bodyend="1084"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a89b6c87d7c369d14ad3eff4d4d99f03f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::beginCompute</definition>
+        <argsstring>(VkCommandBuffer cmd)</argsstring>
+        <name>beginCompute</name>
+        <qualifiedname>sand::VulkanGame::Impl::beginCompute</qualifiedname>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>cmd</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="660" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1069" bodyend="1074"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a59396d851bf0604e82b1e6f850cafd1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::recordBrush</definition>
+        <argsstring>(VkCommandBuffer cmd, const Stroke &amp;stroke)</argsstring>
+        <name>recordBrush</name>
+        <qualifiedname>sand::VulkanGame::Impl::recordBrush</qualifiedname>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>cmd</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structsand_1_1_stroke" kindref="compound">Stroke</ref> &amp;</type>
+          <declname>stroke</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="661" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1086" bodyend="1098"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1acfd73994d97c1134250a433d1ec23e66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::recordSim</definition>
+        <argsstring>(VkCommandBuffer cmd, unsigned ticks)</argsstring>
+        <name>recordSim</name>
+        <qualifiedname>sand::VulkanGame::Impl::recordSim</qualifiedname>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>cmd</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>ticks</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="662" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1100" bodyend="1137"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a3a841d72b907c04f067d8d7a4f7af514" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool sand::VulkanGame::Impl::draw</definition>
+        <argsstring>(const DrawFrame &amp;params)</argsstring>
+        <name>draw</name>
+        <qualifiedname>sand::VulkanGame::Impl::draw</qualifiedname>
+        <param>
+          <type>const <ref refid="structsand_1_1_draw_frame" kindref="compound">DrawFrame</ref> &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="663" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1157" bodyend="1271"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a3cdda5ae6383dea31a97c80e40431bf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::recordDraw</definition>
+        <argsstring>(VkCommandBuffer cmd, unsigned imageIndex, const DrawFrame &amp;params, const FrameSlot &amp;slot, const Buffer *capture)</argsstring>
+        <name>recordDraw</name>
+        <qualifiedname>sand::VulkanGame::Impl::recordDraw</qualifiedname>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>cmd</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>imageIndex</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structsand_1_1_draw_frame" kindref="compound">DrawFrame</ref> &amp;</type>
+          <declname>params</declname>
+        </param>
+        <param>
+          <type>const FrameSlot &amp;</type>
+          <declname>slot</declname>
+        </param>
+        <param>
+          <type>const Buffer *</type>
+          <declname>capture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="664" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1274" bodyend="1352"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a3725946e5673f1664267e8d23aaa21fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::readTiming</definition>
+        <argsstring>(const FrameSlot &amp;slot, std::uint32_t first)</argsstring>
+        <name>readTiming</name>
+        <qualifiedname>sand::VulkanGame::Impl::readTiming</qualifiedname>
+        <param>
+          <type>const FrameSlot &amp;</type>
+          <declname>slot</declname>
+        </param>
+        <param>
+          <type>std::uint32_t</type>
+          <declname>first</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="666" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1139" bodyend="1155"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1ac92d873d7c0ddd04daa9ddc6e4e1df0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::VulkanGame::Impl::finishImmediate</definition>
+        <argsstring>()</argsstring>
+        <name>finishImmediate</name>
+        <qualifiedname>sand::VulkanGame::Impl::finishImmediate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="667" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1354" bodyend="1370"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1ad23917e2eaaa26ab40e7ea43867ecc66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> &gt;</type>
+        <definition>std::vector&lt; Cell &gt; sand::VulkanGame::Impl::snapshot</definition>
+        <argsstring>()</argsstring>
+        <name>snapshot</name>
+        <qualifiedname>sand::VulkanGame::Impl::snapshot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="668" column="17" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1372" bodyend="1389"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a2036b36b625b33bb89848d9f054bc5ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref></type>
+        <definition>Cell sand::VulkanGame::Impl::probeCell</definition>
+        <argsstring>(int x, int y)</argsstring>
+        <name>probeCell</name>
+        <qualifiedname>sand::VulkanGame::Impl::probeCell</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="669" column="10" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1391" bodyend="1409"/>
+      </memberdef>
+      <memberdef kind="function" id="structsand_1_1_vulkan_game_1_1_impl_1a71d2a3ae003a40e42bac0a876f1cde19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structsand_1_1_flow_snapshot" kindref="compound">FlowSnapshot</ref></type>
+        <definition>FlowSnapshot sand::VulkanGame::Impl::flowSnapshot</definition>
+        <argsstring>()</argsstring>
+        <name>flowSnapshot</name>
+        <qualifiedname>sand::VulkanGame::Impl::flowSnapshot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="670" column="18" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="1411" bodyend="1431"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>anonymous:ctx</label>
+      </node>
+      <node id="5">
+        <label>anonymous:push</label>
+      </node>
+      <node id="3">
+        <label>anonymous:staging</label>
+      </node>
+      <node id="4">
+        <label>anonymous:swap</label>
+      </node>
+      <node id="6">
+        <label>sand::Timing</label>
+        <link refid="structsand_1_1_timing"/>
+      </node>
+      <node id="1">
+        <label>sand::VulkanGame::Impl</label>
+        <link refid="structsand_1_1_vulkan_game_1_1_impl"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>ctx</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>staging</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>swap</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>push</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>lastTiming</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="I:/FallingSand/src/vulkan.cpp" line="628" column="1" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="629" bodyend="671"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a89b6c87d7c369d14ad3eff4d4d99f03f" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>beginCompute</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1ab426bae7d0f845db76fce98090681ddd" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>commands</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a9f58e33777d8ee55d49a0786de68a5f9" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>compute</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a96f0e8692e13ec8ec0ecdd7eb83602c9" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>ctx</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a41dc7960f7bbd218979dba2c3f02e3eb" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>descriptors</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1ac24d668736e937fb009ab320857fcd99" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>dispatch</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a3a841d72b907c04f067d8d7a4f7af514" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>draw</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1ac92d873d7c0ddd04daa9ddc6e4e1df0c" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>finishImmediate</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a71d2a3ae003a40e42bac0a876f1cde19" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>flowSnapshot</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a72aeb17d90707ab35d10b24402911cec" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>frame</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a46a50be4fdc613bcde4fcb4f81c9d5fa" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>graphics</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a5db54b118b291df08cb6defd92bbe362" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>immediate</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a14ace6ee06fd9566f20ac75ddc847729" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>immediateFence</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a4712d73cc943d1960d5cb808c337ae87" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>Impl</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a8a99dbf4cdad778c6d5dee9926a58bfa" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>lastTiming</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a17b0768934c3e4acb7852bccf258b860" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>makeGraphics</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a956fbd183a137c20743f0ae074351552" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>outdated</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1ab36e1c0a3799eecf272f18d4b5200703" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>pipelineLayout</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a2036b36b625b33bb89848d9f054bc5ed" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>probeCell</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a10dd90dc39e8c7ec21e86cc35a52071e" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>push</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1aa7c4db5e1eb788b6302048a944942db4" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>queries</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a3725946e5673f1664267e8d23aaa21fd" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>readTiming</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a59396d851bf0604e82b1e6f850cafd1c" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>recordBrush</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a3cdda5ae6383dea31a97c80e40431bf9" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>recordDraw</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1acfd73994d97c1134250a433d1ec23e66" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>recordSim</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a6c513cf5f0165650ac48109953928a4e" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>resize</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1aa095481670ecc721af6cb8eb85bb9845" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>setupDescriptors</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a13d07f58367c9d102205a8446ee999e0" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>shader</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a6fabd626067828a2dc671b4f4730686d" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>shaders</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a4f2de8fb12c3a0f4899866bd8a68dcb8" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>slots</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1ad23917e2eaaa26ab40e7ea43867ecc66" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>snapshot</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a935898484b77506d938c11f273479887" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>staging</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1adeab897a1163cd6155abee46a1852989" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>storage</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a006e952421247d7b875b4129887f7cde" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>swap</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1abc2a9ed29614df3c1e6e097b9c1266e9" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>uiLayout</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a37df0180b38fcf8d53ae957b0f7e8c27" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>uiPipeline</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a5ba5e4994bbefca383dc59ac818b16d3" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>worldLayout</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a2ef5ceb3795a124ad5ef5b1463bdfd37" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>worldPipeline</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a879fcbcd2ce5efc01650048eb8d19d90" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>worldSet</name></member>
+      <member refid="structsand_1_1_vulkan_game_1_1_impl_1a431b423bbc0450f0dc2a8a0bf64695c5" prot="public" virt="non-virtual"><scope>sand::VulkanGame::Impl</scope><name>~Impl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

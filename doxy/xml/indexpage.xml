@@ -1,0 +1,636 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>Falling Sand</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="index_1md__i_1_2_falling_sand_2_r_e_a_d_m_e"/></para>
+<para><bold>Falling Sand</bold> is a real-time <bold>2D falling-sand / cellular automata</bold> sandbox for Windows. You paint ten materials onto a <bold>384×224</bold> cell grid; <bold>granular solids</bold> fall, <bold>gases</bold> rise, <bold>liquids</bold> are solved with a GPU pressure–flux pipeline, and <bold>thermal chemistry</bold> drives fire, smoke, steam, melting, and quenching. The simulation and renderer run almost entirely on the <bold>Vulkan 1.3</bold> device via <bold>GLSL 460</bold> compute and graphics shaders; the host is <bold>C++23</bold> with a native <bold>Win32</bold> window and an immediate-mode pixel UI composited in a second draw pass.</para>
+<para>Default startup scene is <bold>Thermal</bold> (<computeroutput>Scene::thermal</computeroutput>). The intro blurb in older docs referred to “Thermal Vent” — that preset matches <computeroutput>layouts/thermal.json</computeroutput>.</para>
+<para><hruler/>
+</para>
+<sect1 id="index_1table-of-contents">
+<title>Table of contents</title><para><orderedlist>
+<listitem>
+<para><ulink url="#features">Features</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#requirements">Requirements</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#repository-layout">Repository layout</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#build-and-run">Build and run</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#command-line-options">Command-line options</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#controls-and-ui">Controls and UI</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#scenes-and-layouts">Scenes and layouts</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#save-format">Save format</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#data-model">Data model</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#gpu-buffers-and-ping-pong">GPU buffers and ping-pong</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#frame-pipeline-host">Frame pipeline (host)</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#simulation-tick-compute">Simulation tick (compute)</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#rendering-path-graphics">Rendering path (graphics)</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#shared-shader-library-worldglsl">Shared shader library (<computeroutput>world.glsl</computeroutput>)</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#testing-and-benchmarks">Testing and benchmarks</ulink> </para>
+</listitem>
+<listitem>
+<para><ulink url="#further-reading">Further reading</ulink> </para>
+</listitem>
+</orderedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1features">
+<title>Features</title><para><itemizedlist>
+<listitem><para><bold>Ten paintable materials</bold> (sand, water, oil, stone, wood, fire, smoke, steam, lava, ice) plus empty cells for erase.</para>
+</listitem><listitem><para><bold>Four built-in scenes</bold> loaded from JSON (<computeroutput>waterworks</computeroutput>, <computeroutput>thermal</computeroutput>, <computeroutput>refinery</computeroutput>, <computeroutput>empty</computeroutput>).</para>
+</listitem><listitem><para><bold>GPU simulation</bold> at <bold>90 Hz</bold> during play (fixed <computeroutput>simulationHz</computeroutput>), with pause and single-step.</para>
+</listitem><listitem><para><bold>Brush painting</bold>, <bold>erase</bold> (right mouse), and <bold>stir</bold> (middle mouse) implemented in <computeroutput>brush.comp</computeroutput>.</para>
+</listitem><listitem><para><bold>Instanced HUD</bold>: material palette, scene tabs, transport controls, FPS/GPU badge, brush size track, pause/settings overlays (<computeroutput><ref refid="ui_8cpp_source" kindref="compound">ui.cpp</ref></computeroutput> → <computeroutput>ui.vert</computeroutput> / <computeroutput>ui.frag</computeroutput>).</para>
+</listitem><listitem><para><bold>Save/load</bold> of cell state to a binary sandbox file under <computeroutput>LOCALAPPDATA%\FallingSand\world.sandbox</computeroutput> (or current-directory fallback).</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1requirements">
+<title>Requirements</title><para><table rows="6" cols="2"><row>
+<entry thead="yes"><para>Component  </para>
+</entry><entry thead="yes"><para>Version / notes  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>OS  </para>
+</entry><entry thead="no"><para><bold>Windows x64</bold> only (<computeroutput>CMakeLists.txt</computeroutput> rejects non-Win32).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>CMake  </para>
+</entry><entry thead="no"><para><bold>3.28+</bold>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>Compiler  </para>
+</entry><entry thead="no"><para><bold>Visual Studio 2022</bold> (x64), C++23 (<computeroutput>/W4</computeroutput>, static MSVC runtime in Release)  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>Vulkan  </para>
+</entry><entry thead="no"><para><bold>1.3</bold> instance/device, <computeroutput>glslc</computeroutput> from the Vulkan SDK (<computeroutput>Vulkan::Vulkan</computeroutput> + <computeroutput>glslc</computeroutput> target)  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>GPU  </para>
+</entry><entry thead="no"><para>Compute workgroups up to <bold>16×16</bold>, <bold>≥10</bold> storage buffers per stage, timestamp queries optional  </para>
+</entry></row>
+</table>
+</para>
+<para>Runtime: place <bold><computeroutput>FallingSand.exe</computeroutput></bold> next to copied <bold><computeroutput>shaders/</computeroutput></bold> (SPIR-V) and <bold><computeroutput>layouts/</computeroutput></bold> (JSON). CMake target <computeroutput>sand_shaders</computeroutput> and <computeroutput>sand_layouts</computeroutput> copy these into <computeroutput>build/&lt;Config&gt;/</computeroutput> automatically.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1repository-layout">
+<title>Repository layout</title><para><programlisting><codeline><highlight class="normal">FallingSand/</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>CMakeLists.txt<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Executable,<sp/>shader<sp/>compile<sp/>(glslc),<sp/>layout<sp/>copy,<sp/>CTest</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>build-and-run.bat<sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Configure<sp/>(VS<sp/>2022<sp/>x64),<sp/>build,<sp/>launch<sp/>exe</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>README.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>This<sp/>file</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>STYLE.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Shader<sp/>comment/style<sp/>guide<sp/>(not<sp/>installed<sp/>by<sp/>CMake)</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>src/</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>main.cpp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Entry,<sp/>CLI,<sp/>game<sp/>loop,<sp/>Sandbox<sp/>input/actions</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>window.cpp/.hpp<sp/><sp/><sp/><sp/><sp/>#<sp/>Win32<sp/>window<sp/>+<sp/>Input<sp/>(mouse<sp/>buttons,<sp/>keys,<sp/>wheel)</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>game.cpp/.hpp<sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Cell/Material/Scene,<sp/>layouts,<sp/>save/load,<sp/>makeScene</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>ui.cpp/.hpp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>HUD<sp/>layout,<sp/>hit<sp/>tests,<sp/>composeUi<sp/>→<sp/>Quad<sp/>list</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>vulkan.cpp/.hpp<sp/><sp/><sp/><sp/><sp/>#<sp/>Device,<sp/>swapchain,<sp/>compute<sp/>+<sp/>graphics<sp/>pipelines,<sp/>draw()</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>shaders/</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>world.glsl<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Shared<sp/>buffers,<sp/>Cell,<sp/>push<sp/>constants,<sp/>helpers</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>*.comp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Simulation<sp/>+<sp/>brush<sp/>compute<sp/>kernels</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>fullscreen.vert<sp/><sp/><sp/><sp/><sp/>#<sp/>Full-screen<sp/>triangle<sp/>for<sp/>world<sp/>pass</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>world.frag<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>World<sp/>visualization<sp/>(read-only<sp/>world.glsl)</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>ui.vert<sp/>/<sp/>ui.frag<sp/><sp/><sp/>#<sp/>Instanced<sp/>UI<sp/>quads</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>…<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Sources<sp/>compiled<sp/>to<sp/>.spv<sp/>beside<sp/>the<sp/>exe</highlight></codeline>
+<codeline><highlight class="normal">└──<sp/>layouts/</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>├──<sp/>waterworks.json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>├──<sp/>thermal.json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>├──<sp/>refinery.json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>└──<sp/>empty.json</highlight></codeline>
+</programlisting></para>
+<para>Other local folders (<computeroutput>build/</computeroutput>, <computeroutput>build-ninja/</computeroutput>, <computeroutput>dist/</computeroutput>) are build or install outputs and are not part of the source tree.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1build-and-run">
+<title>Build and run</title><sect2 id="index_1autotoc_md6">
+<title>Quick script</title><para><programlisting filename=".bat"><codeline><highlight class="normal">build-and-run.bat</highlight></codeline>
+<codeline><highlight class="normal">build-and-run.bat<sp/>Debug</highlight></codeline>
+<codeline><highlight class="normal">build-and-run.bat<sp/>Release<sp/>--scene<sp/>empty<sp/>--validate</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="index_1autotoc_md7">
+<title>Manual (PowerShell)</title><para><programlisting filename=".powershell"><codeline><highlight class="normal">cmake<sp/>-S<sp/>.<sp/>-B<sp/>build<sp/>-G<sp/>&quot;Visual<sp/>Studio<sp/>17<sp/>2022&quot;<sp/>-A<sp/>x64</highlight></codeline>
+<codeline><highlight class="normal">cmake<sp/>--build<sp/>build<sp/>--config<sp/>Release<sp/>--parallel</highlight></codeline>
+<codeline><highlight class="normal">ctest<sp/>--test-dir<sp/>build<sp/>-C<sp/>Release<sp/>--output-on-failure</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe</highlight></codeline>
+</programlisting></para>
+<para>Shaders are compiled with:</para>
+<para><computeroutput>glslc --target-env=vulkan1.3 -O &lt;shader&gt; -o &lt;shader&gt;.spv</computeroutput></para>
+<para>and depend on <computeroutput>shaders/world.glsl</computeroutput> where included.</para>
+<para>Install layout (optional):</para>
+<para><programlisting filename=".powershell"><codeline><highlight class="normal">cmake<sp/>--install<sp/>build<sp/>--config<sp/>Release<sp/>--prefix<sp/>dist/FallingSand</highlight></codeline>
+</programlisting></para>
+<para><computeroutput>cmake --install</computeroutput> copies the executable, SPIR-V under <computeroutput>shaders/</computeroutput>, layouts, and <computeroutput>README.md</computeroutput>.</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="index_1command-line-options">
+<title>Command-line options</title><para>Parsed in <computeroutput><ref refid="main_8cpp_source" kindref="compound">main.cpp</ref></computeroutput> (<computeroutput>parseOptions</computeroutput>):</para>
+<para><table rows="8" cols="2"><row>
+<entry thead="yes"><para>Flag  </para>
+</entry><entry thead="yes"><para>Meaning  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--validate</computeroutput>  </para>
+</entry><entry thead="no"><para>Enable Khronos validation (and sync validation where supported).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--test</computeroutput>  </para>
+</entry><entry thead="no"><para>Headless GPU simulation tests (CTest <computeroutput>gpu_simulation</computeroutput>).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--window-test</computeroutput>  </para>
+</entry><entry thead="no"><para>Automated UI/window tests (paint, step, resize, save/load).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--benchmark N</computeroutput>  </para>
+</entry><entry thead="no"><para>Run <bold>N</bold> frames at <bold>1 tick/frame</bold> after warm-up; print FPS and GPU timings.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--capture PATH</computeroutput>  </para>
+</entry><entry thead="no"><para>After <computeroutput>--after F</computeroutput> frames, write a BMP of the swapchain image to <computeroutput>PATH</computeroutput>.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--after F</computeroutput>  </para>
+</entry><entry thead="no"><para>Frame index for <computeroutput>--capture</computeroutput> (required with capture).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>--scene NAME</computeroutput>  </para>
+</entry><entry thead="no"><para>Initial scene: <computeroutput>waterworks</computeroutput>, <computeroutput>thermal</computeroutput>, <computeroutput>refinery</computeroutput>, <computeroutput>empty</computeroutput>. Default: <bold>thermal</bold>.  </para>
+</entry></row>
+</table>
+</para>
+<para>Unknown options throw <computeroutput>std::runtime_error</computeroutput>.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1controls-and-ui">
+<title>Controls and UI</title><sect2 id="index_1autotoc_md10">
+<title>Mouse</title><para><table rows="5" cols="2"><row>
+<entry thead="yes"><para>Input  </para>
+</entry><entry thead="yes"><para>Effect  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Left button</bold>  </para>
+</entry><entry thead="no"><para>Paint on canvas (selected material) or click HUD controls.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Right button</bold>  </para>
+</entry><entry thead="no"><para>Erase to empty on canvas.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Middle button</bold>  </para>
+</entry><entry thead="no"><para><bold>Stir</bold> — <computeroutput>brush.comp</computeroutput> mixes liquids along the stroke (<computeroutput>Stroke::stir</computeroutput>).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Wheel</bold>  </para>
+</entry><entry thead="no"><para>Adjust brush radius (<computeroutput>minRadius</computeroutput> 2 … <computeroutput>maxRadius</computeroutput> 32).  </para>
+</entry></row>
+</table>
+</para>
+</sect2>
+<sect2 id="index_1autotoc_md11">
+<title>Keyboard</title><para><table rows="11" cols="2"><row>
+<entry thead="yes"><para>Key  </para>
+</entry><entry thead="yes"><para>Effect  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>1</computeroutput>–<computeroutput>9</computeroutput>, <computeroutput>0</computeroutput>  </para>
+</entry><entry thead="no"><para>Select materials (palette order in <computeroutput>materials</computeroutput> table).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>E</computeroutput>  </para>
+</entry><entry thead="no"><para>Toggle <bold>erase</bold> tool (same as holding right mouse for painting mode).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>G</computeroutput>  </para>
+</entry><entry thead="no"><para>Toggle <bold>stir</bold> tool.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>-</computeroutput> / <computeroutput>+</computeroutput> (<computeroutput>VK_OEM_MINUS</computeroutput> / <computeroutput>VK_OEM_PLUS</computeroutput>)  </para>
+</entry><entry thead="no"><para>Decrease / increase brush size.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Space</bold>  </para>
+</entry><entry thead="no"><para>Pause / resume simulation.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>N</computeroutput>  </para>
+</entry><entry thead="no"><para>Advance <bold>one</bold> simulation tick while paused.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>R</computeroutput>  </para>
+</entry><entry thead="no"><para>Reset world to current scene preset.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>F5</bold>  </para>
+</entry><entry thead="no"><para>Save to sandbox file.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>F9</bold>  </para>
+</entry><entry thead="no"><para>Load sandbox file (clears velocity, pressure, and other flow buffers on GPU).  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Esc</bold>  </para>
+</entry><entry thead="no"><para>Open <bold>pause</bold> menu; from pause open <bold>settings</bold> (resolution). Esc backs out of menus.  </para>
+</entry></row>
+</table>
+</para>
+<para>Quit is via the pause/settings <bold>Exit</bold> button (<computeroutput>Action::exit</computeroutput>), not Esc alone.</para>
+</sect2>
+<sect2 id="index_1autotoc_md12">
+<title>HUD structure (<computeroutput>makeLayout</computeroutput> / <computeroutput>composeUi</computeroutput>)</title><para><itemizedlist>
+<listitem><para><bold>Canvas</bold> — letterboxed region mapping client pixels to world coordinates (<computeroutput>Layout::worldPoint</computeroutput>).</para>
+</listitem><listitem><para><bold>Panel</bold> — material swatches and scene tabs.</para>
+</listitem><listitem><para><bold>Footer</bold> — play/pause, step, reset, save/load, tool cycle, brush size track.</para>
+</listitem><listitem><para><bold>Cog</bold> — settings while running; in pause menu, settings for resolution presets (1280×800 … 2560×1440).</para>
+</listitem><listitem><para><bold>Status line</bold> — short messages after save/load/errors.</para>
+</listitem><listitem><para><bold>Tooltip</bold> — hovering the canvas probes GPU cell and shows dominant material.</para>
+</listitem></itemizedlist>
+</para>
+<para>UI geometry is rebuilt each frame from window size; draw records are up to <bold><computeroutput>maxQuads</computeroutput> (16384)</bold> <computeroutput>Quad</computeroutput> structs (32 bytes, <computeroutput>alignas(16)</computeroutput>) uploaded to a per-frame storage buffer.</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="index_1scenes-and-layouts">
+<title>Scenes and layouts</title><para><computeroutput>Scene</computeroutput> enum (<computeroutput><ref refid="game_8hpp_source" kindref="compound">game.hpp</ref></computeroutput>):</para>
+<para><table rows="5" cols="3"><row>
+<entry thead="yes"><para>ID  </para>
+</entry><entry thead="yes"><para>Tab name  </para>
+</entry><entry thead="yes"><para>Layout file  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>waterworks</computeroutput>  </para>
+</entry><entry thead="no"><para>Waterworks preset  </para>
+</entry><entry thead="no"><para><computeroutput>layouts/waterworks.json</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>thermal</computeroutput>  </para>
+</entry><entry thead="no"><para>Thermal vent  </para>
+</entry><entry thead="no"><para><computeroutput>layouts/thermal.json</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>refinery</computeroutput>  </para>
+</entry><entry thead="no"><para>Refinery  </para>
+</entry><entry thead="no"><para><computeroutput>layouts/refinery.json</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>empty</computeroutput>  </para>
+</entry><entry thead="no"><para>Blank canvas  </para>
+</entry><entry thead="no"><para><computeroutput>layouts/empty.json</computeroutput>  </para>
+</entry></row>
+</table>
+</para>
+<para><computeroutput>makeScene</computeroutput> reads JSON beside the executable, validates dimensions, and fills a <computeroutput>worldCells</computeroutput> vector. Switching scenes from the UI <bold>replaces</bold> the grid (save first if you care about the current world).</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1save-format">
+<title>Save format</title><para><computeroutput>saveWorld</computeroutput> / <computeroutput>loadWorld</computeroutput> (<computeroutput><ref refid="game_8cpp_source" kindref="compound">game.cpp</ref></computeroutput>):</para>
+<para><itemizedlist>
+<listitem><para>Magic: <bold><computeroutput>SAND0001</computeroutput></bold> (8 bytes).</para>
+</listitem><listitem><para><computeroutput>uint32_t</computeroutput> width, height — must match <computeroutput>worldWidth</computeroutput> (384) and <computeroutput>worldHeight</computeroutput> (224).</para>
+</listitem><listitem><para><computeroutput>worldCells</computeroutput> × <bold>16-byte <computeroutput>Cell</computeroutput></bold> records (trivially copyable, GPU-matched layout).</para>
+</listitem></itemizedlist>
+</para>
+<para>Writes use a <computeroutput>.tmp</computeroutput> sibling file when possible. Load does not restore velocity or pressure; <computeroutput>VulkanGame::replaceWorld</computeroutput> uploads cells and <bold>zero-fills</bold> flow/auxiliary buffers (indices 2, 3, 5, 6 in storage).</para>
+<para>Default path: <computeroutput>LOCALAPPDATA%\FallingSand\world.sandbox</computeroutput>, else <computeroutput>./world.sandbox</computeroutput> (<computeroutput>saveLocation()</computeroutput> in <computeroutput><ref refid="main_8cpp_source" kindref="compound">main.cpp</ref></computeroutput>).</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1data-model">
+<title>Data model</title><sect2 id="index_1autotoc_md16">
+<title><computeroutput>Cell</computeroutput> (CPU and GPU, 16 bytes)</title><para><programlisting filename=".cpp"><codeline><highlight class="keyword">struct<sp/></highlight><highlight class="normal">Cell<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;float,<sp/>3&gt;<sp/>liquid;<sp/><sp/></highlight><highlight class="comment">//<sp/>x=water,<sp/>y=oil,<sp/>z=lava<sp/>—<sp/>fill<sp/>in<sp/>[0,<sp/>1]</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::uint32_t<sp/>matter;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>packed<sp/>id,<sp/>age,<sp/>heat</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>Shader-side mirror in <computeroutput>world.glsl</computeroutput> (<computeroutput>vec3 liquid</computeroutput>, <computeroutput>uint matter</computeroutput>).</para>
+</sect2>
+<sect2 id="index_1autotoc_md17">
+<title>Packed <computeroutput>matter</computeroutput> word</title><para><table rows="5" cols="3"><row>
+<entry thead="yes"><para>Bits  </para>
+</entry><entry thead="yes"><para>Field  </para>
+</entry><entry thead="yes"><para>Access  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>0–7  </para>
+</entry><entry thead="no"><para>Material id  </para>
+</entry><entry thead="no"><para><computeroutput>material(c)</computeroutput> → <computeroutput>c.matter &amp; 255u</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>8–15  </para>
+</entry><entry thead="no"><para>Age (e.g. smoke/fire lifetime)  </para>
+</entry><entry thead="no"><para><computeroutput>age(c)</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>16–25  </para>
+</entry><entry thead="no"><para>Heat (0…1023 → 0…1)  </para>
+</entry><entry thead="no"><para><computeroutput>heat(c)</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(upper)  </para>
+</entry><entry thead="no"><para>Remaining bits unused in helpers  </para>
+</entry><entry thead="no"><para><computeroutput>packMatter(id, life, temperature)</computeroutput>  </para>
+</entry></row>
+</table>
+</para>
+<para>Material constants (shader and logic): <computeroutput>EMPTY</computeroutput>, <computeroutput>SAND</computeroutput>, <computeroutput>WATER</computeroutput>, <computeroutput>OIL</computeroutput>, <computeroutput>STONE</computeroutput>, <computeroutput>WOOD</computeroutput>, <computeroutput>FIRE</computeroutput>, <computeroutput>SMOKE</computeroutput>, <computeroutput>STEAM</computeroutput>, <computeroutput>LAVA</computeroutput>, <computeroutput>ICE</computeroutput> (0–10).</para>
+</sect2>
+<sect2 id="index_1autotoc_md18">
+<title>Liquids</title><para><itemizedlist>
+<listitem><para>Three <bold>immiscible fill channels</bold> share one velocity field; <bold>separate.comp</bold> slowly exchanges oil/lava vs water between staggered row pairs.</para>
+</listitem><listitem><para><computeroutput>wet(c)</computeroutput> when total liquid <computeroutput>volume(c) &gt; 0.028</computeroutput>.</para>
+</listitem><listitem><para><bold>Inverse density</bold> for pressure face weights uses channel weights <computeroutput>(1.0, 0.78, 2.3)</computeroutput> in <computeroutput>inverseDensity</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="index_1autotoc_md19">
+<title>Solids and gases</title><para><itemizedlist>
+<listitem><para><computeroutput>solid(c)</computeroutput>: stone, wood, ice, sand — block face connections via <computeroutput>faceWeight</computeroutput>.</para>
+</listitem><listitem><para><computeroutput>gas(id)</computeroutput>: fire, smoke, steam — handled in <bold>grains</bold> (rise) and <bold>reaction</bold>.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="index_1autotoc_md20">
+<title>Host helpers</title><para><itemizedlist>
+<listitem><para><computeroutput>makeCell(Material, quantity)</computeroutput> — initial paint/scene values.</para>
+</listitem><listitem><para><computeroutput>displayMaterial</computeroutput> / <computeroutput>kind</computeroutput> — UI and tooltips from liquid + matter.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="index_1gpu-buffers-and-ping-pong">
+<title>GPU buffers and ping-pong</title><para>From <computeroutput>world.glsl</computeroutput> (compute; read-only subset in <computeroutput>world.frag</computeroutput> via <computeroutput>WORLD_READ_ONLY</computeroutput>):</para>
+<para><table rows="8" cols="3"><row>
+<entry thead="yes"><para>Binding  </para>
+</entry><entry thead="yes"><para>Buffer  </para>
+</entry><entry thead="yes"><para>Role  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>0–1  </para>
+</entry><entry thead="no"><para><computeroutput>CellsA</computeroutput>, <computeroutput>CellsB</computeroutput>  </para>
+</entry><entry thead="no"><para>Cell ping-pong (<computeroutput>pc.state</computeroutput> selects read; writes use <computeroutput>writeCell</computeroutput> / <computeroutput>writeOther</computeroutput>)  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>2  </para>
+</entry><entry thead="no"><para><computeroutput>Velocity</computeroutput>  </para>
+</entry><entry thead="no"><para>Staggered-style face flow used by flux/advect/project  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>3  </para>
+</entry><entry thead="no"><para><computeroutput>Prediction</computeroutput>  </para>
+</entry><entry thead="no"><para>Predicted velocity (predict pass)  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>4  </para>
+</entry><entry thead="no"><para><computeroutput>Equations</computeroutput>  </para>
+</entry><entry thead="no"><para>Pressure network row per cell (<computeroutput>Equation</computeroutput>: <computeroutput>vec4 weights</computeroutput>, <computeroutput>float rhs</computeroutput>)  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>5–6  </para>
+</entry><entry thead="no"><para><computeroutput>PressureA</computeroutput>, <computeroutput>PressureB</computeroutput>  </para>
+</entry><entry thead="no"><para>Pressure ping-pong for Jacobi  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>7  </para>
+</entry><entry thead="no"><para><computeroutput>Flux</computeroutput>  </para>
+</entry><entry thead="no"><para>Outward liquid flux per cell  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>8–9  </para>
+</entry><entry thead="no"><para><computeroutput>LimitA</computeroutput>, <computeroutput>LimitB</computeroutput>  </para>
+</entry><entry thead="no"><para>Inflow capacity ping-pong for limit/advect  </para>
+</entry></row>
+</table>
+</para>
+<para><bold>Push constant <computeroutput>Frame</computeroutput></bold> (<computeroutput>world.glsl</computeroutput>): grid <computeroutput>size</computeroutput>, ping-pong <computeroutput>state</computeroutput>, <computeroutput>tick</computeroutput>, <computeroutput>operation</computeroutput> (<computeroutput>mode</computeroutput>, <computeroutput>phase</computeroutput>, <computeroutput>material</computeroutput>, spare), <computeroutput>brush</computeroutput> segment, <computeroutput>canvas</computeroutput> rect, <computeroutput>cursor</computeroutput> (world xy, radius, visibility), <computeroutput>screen</computeroutput> (width, height, visual time).</para>
+<para><computeroutput><ref refid="vulkan_8cpp_source" kindref="compound">vulkan.cpp</ref></computeroutput> constants:</para>
+<para><itemizedlist>
+<listitem><para><bold><computeroutput>pressureBatches = 12</computeroutput></bold> — 12 pressure dispatches per tick (red-black <computeroutput>operation[1] = pass &amp; 1</computeroutput>).</para>
+</listitem><listitem><para><bold><computeroutput>fluxLimitPasses = 5</computeroutput></bold> — odd count so limit field settles before advection.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1frame-pipeline-host">
+<title>Frame pipeline (host)</title><para>Each frame (<computeroutput>VulkanGame::draw</computeroutput>):</para>
+<para><orderedlist>
+<listitem><para>Wait on frame-in-flight fence; optional timestamp readback.</para>
+</listitem><listitem><para>Acquire swapchain image.</para>
+</listitem><listitem><para>Upload <bold>UI quads</bold> to the slot’s storage buffer.</para>
+</listitem><listitem><para><bold>Compute</bold> (if stroke and/or <computeroutput>ticks &gt; 0</computeroutput>):<itemizedlist>
+<listitem><para>Optional <bold><computeroutput>brush.comp</computeroutput></bold> for the current stroke.</para>
+</listitem><listitem><para><bold><computeroutput>recordSim</computeroutput></bold>: <computeroutput>ticks</computeroutput> iterations of the simulation chain (below).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Graphics</bold> (<computeroutput>recordDraw</computeroutput>):<itemizedlist>
+<listitem><para>Barrier: compute writes → fragment shader read.</para>
+</listitem><listitem><para>Dynamic rendering: clear → <bold>world</bold> pass (scissored to canvas) → <bold>UI</bold> pass (full window).</para>
+</listitem><listitem><para>Present (or capture BMP via transfer).</para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+<para>Play loop (<computeroutput><ref refid="main_8cpp_source" kindref="compound">main.cpp</ref></computeroutput>): when not paused, accumulates real time and runs <computeroutput>floor(accumulator / tickSeconds)</computeroutput> ticks per frame (<computeroutput>tickSeconds = 1/90</computeroutput>). Paused runs 0 ticks unless <bold>N</bold> or UI <bold>step</bold> sets a one-shot tick. Benchmark/capture modes force <bold>1 tick/frame</bold>.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1simulation-tick-compute">
+<title>Simulation tick (compute)</title><para>Order inside <bold>one tick</bold> (<computeroutput>VulkanGame::Impl::recordSim</computeroutput> in <computeroutput><ref refid="vulkan_8cpp_source" kindref="compound">vulkan.cpp</ref></computeroutput>). Brush is <bold>outside</bold> this loop and runs once per frame when the user strokes.</para>
+<para><table rows="13" cols="4"><row>
+<entry thead="yes" align='right'><para>Step  </para>
+</entry><entry thead="yes"><para>Kernel  </para>
+</entry><entry thead="yes"><para>Workgroup layout  </para>
+</entry><entry thead="yes"><para>What it does  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>1  </para>
+</entry><entry thead="no"><para><bold>reaction.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para>Chemistry: heat, fire, quenching, melting, smoke/steam lifetimes; updates <computeroutput>matter</computeroutput> and liquid mix.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>—  </para>
+</entry><entry thead="no"><para><computeroutput>state ^= 1</computeroutput>  </para>
+</entry><entry thead="no"><para>—  </para>
+</entry><entry thead="no"><para>Toggle cell buffer ping-pong.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>2  </para>
+</entry><entry thead="no"><para><bold>grains.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8 over 2×2 blocks  </para>
+</entry><entry thead="no"><para>Sand <bold>falls</bold>, gas <bold>rises</bold>; local 2×2 updates to reduce races.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>3  </para>
+</entry><entry thead="no"><para><bold>predict.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para>Semi-Lagrangian <bold>velocity prediction</bold> from neighbors, viscosity, gravity.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>4  </para>
+</entry><entry thead="no"><para><bold>equation.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para>Build <bold>pressure network row</bold> per wet, non-solid cell (<computeroutput>faceWeight</computeroutput> on neighbors).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>5  </para>
+</entry><entry thead="no"><para><bold>pressure.comp</bold> ×12  </para>
+</entry><entry thead="no"><para>16×16, shared mem  </para>
+</entry><entry thead="no"><para><bold>Jacobi</bold> relaxation on pressure (two iterations per dispatch, halo tile); red-black phases via <computeroutput>operation[1]</computeroutput>.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>6  </para>
+</entry><entry thead="no"><para><bold>project.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para><bold>Project</bold> predicted velocity with pressure gradients (divergence reduction).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>7  </para>
+</entry><entry thead="no"><para><bold>flux.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para>Face <bold>outward liquid flux</bold> from velocity; negative flow pulls from neighbors.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>8  </para>
+</entry><entry thead="no"><para><bold>limit.comp</bold> ×5  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para><bold>Inflow limits</bold> ping-pong (<computeroutput>limitA</computeroutput>/<computeroutput>limitB</computeroutput>); how much each cell can accept.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>9  </para>
+</entry><entry thead="no"><para><bold>advect.comp</bold>  </para>
+</entry><entry thead="no"><para>16×8  </para>
+</entry><entry thead="no"><para>Move <bold>water/oil/lava</bold> along flux subject to limits; writes other cell buffer.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>—  </para>
+</entry><entry thead="no"><para><computeroutput>state ^= 1</computeroutput>  </para>
+</entry><entry thead="no"><para>—  </para>
+</entry><entry thead="no"><para>Toggle cell ping-pong after advection.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='right'><para>10  </para>
+</entry><entry thead="no"><para><bold>separate.comp</bold> ×2  </para>
+</entry><entry thead="no"><para>16×8, half height dispatch  </para>
+</entry><entry thead="no"><para><bold>Phase separation</bold> oil/lava vs water on staggered rows; <computeroutput>operation[1]</computeroutput> checkerboard with <computeroutput>tick</computeroutput>.  </para>
+</entry></row>
+</table>
+</para>
+<para><bold>brush.comp</bold> (when painting): dispatches over a bounding box of the stroke; modes — deposit material/liquid, erase, or stir (<computeroutput>pc.operation</computeroutput> mode + <computeroutput>pc.brush</computeroutput> + radius).</para>
+<para>This design is a <bold>bounded, real-time 2D fluid approximation</bold>: shared velocity, finite pressure iterations, finite-volume transport with donor/receiver limits — suited for gameplay rather than offline CFD accuracy.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1rendering-path-graphics">
+<title>Rendering path (graphics)</title><para><table rows="3" cols="3"><row>
+<entry thead="yes"><para>Stage  </para>
+</entry><entry thead="yes"><para>Shader  </para>
+</entry><entry thead="yes"><para>Notes  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>World  </para>
+</entry><entry thead="no"><para><bold>fullscreen.vert</bold> + <bold>world.frag</bold>  </para>
+</entry><entry thead="no"><para>Single large triangle; fragment shader maps canvas pixels → grid coords; includes <computeroutput>world.glsl</computeroutput> read-only. Shading: material/liquid reconstruction, absorption, highlights, Fresnel, refraction, lava glow, procedural noise.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>UI  </para>
+</entry><entry thead="no"><para><bold>ui.vert</bold> + <bold>ui.frag</bold>  </para>
+</entry><entry thead="no"><para>Instanced quads (<computeroutput>6</computeroutput> vertices × <computeroutput>quadCount</computeroutput>); per-quad bounds + RGBA from CPU <computeroutput>Quad</computeroutput> list. Bitmap font and panels drawn entirely on CPU in <computeroutput><ref refid="ui_8cpp_source" kindref="compound">ui.cpp</ref></computeroutput>.  </para>
+</entry></row>
+</table>
+</para>
+<para>Push constants for both passes share <computeroutput>canvas</computeroutput>, <computeroutput>cursor</computeroutput>, <computeroutput>screen</computeroutput> (and simulation uses the same layout block).</para>
+<para>Pipeline: <bold>Vulkan dynamic rendering</bold> (no classic render pass object), swapchain format color attachment, scissor for world letterboxing.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1shared-shader-library-worldglsl">
+<title>Shared shader library (<computeroutput>world.glsl</computeroutput>)</title><para>Included by every <computeroutput>.comp</computeroutput> and by <computeroutput>world.frag</computeroutput> (with <computeroutput>WORLD_READ_ONLY</computeroutput>).</para>
+<para><itemizedlist>
+<listitem><para><bold>Coordinate helpers</bold>: <computeroutput>inside</computeroutput>, <computeroutput>indexOf</computeroutput>, <computeroutput>readCell</computeroutput>, <computeroutput>writeCell</computeroutput>, <computeroutput>writeOther</computeroutput>.</para>
+</listitem><listitem><para><bold>Material/thermo helpers</bold>: <computeroutput>packMatter</computeroutput>, <computeroutput>solid</computeroutput>, <computeroutput>wet</computeroutput>, <computeroutput>gas</computeroutput>, <computeroutput>faceWeight</computeroutput>, <computeroutput>inverseDensity</computeroutput>.</para>
+</listitem><listitem><para><bold>RNG</bold>: <computeroutput>hash32</computeroutput> / <computeroutput>random01</computeroutput> for stochastic grain motion.</para>
+</listitem></itemizedlist>
+</para>
+<para>Compute shaders use <computeroutput>#extension GL_GOOGLE_include_directive</computeroutput> and are compiled as Vulkan 1.3 SPIR-V.</para>
+<para>Host code does not parse GLSL; keeping <computeroutput>Cell</computeroutput> layout and material IDs in sync is enforced by shared constants and static asserts in <computeroutput><ref refid="game_8hpp_source" kindref="compound">game.hpp</ref></computeroutput>.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1testing-and-benchmarks">
+<title>Testing and benchmarks</title><para><programlisting filename=".powershell"><codeline><highlight class="normal">.\build\Release\FallingSand.exe<sp/>--test<sp/>--validate</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe<sp/>--window-test<sp/>--validate</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe<sp/>--benchmark<sp/>1200<sp/>--scene<sp/>thermal</highlight></codeline>
+</programlisting></para>
+<para><itemizedlist>
+<listitem><para><bold><computeroutput>--test</computeroutput></bold>: GPU checks (walls, divergence reduction, phase conservation, sand, thermal reactions, brush) without a visible window loop.</para>
+</listitem><listitem><para><bold><computeroutput>--window-test</computeroutput></bold>: Scene buttons, paint, step, resize, present, save/load.</para>
+</listitem><listitem><para><bold><computeroutput>--benchmark</computeroutput></bold>: 60-frame warmup, then mean/p95 GPU ms and simulation ms; device name in header.</para>
+</listitem></itemizedlist>
+</para>
+<para><computeroutput>--validate</computeroutput> enables validation layers for debugging synchronization and API usage.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1further-reading">
+<title>Further reading</title><para><itemizedlist>
+<listitem><para>Liquid solver inspiration: semi-Lagrangian advection, pressure projection, bounded Jacobi — see <ulink url="https://www.cs.ubc.ca/~rbridson/fluidsimulation/">Bridson &amp; Müller-Fischer, SIGGRAPH fluids course notes</ulink>.</para>
+</listitem><listitem><para>Swapchain synchronization: <ulink url="https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html">Khronos Vulkan Guide — swapchain semaphore reuse</ulink>.</para>
+</listitem><listitem><para>Shader authorship conventions in this repo: <computeroutput>STYLE.md</computeroutput> (optional reference for contributors).</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md29">
+<title>License</title><para>No license file is present in the repository root; treat usage as unspecified unless your organization adds one. </para>
+</sect1>
+    </detaileddescription>
+    <location file="I:/FallingSand/README.md"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,387 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="_r_e_a_d_m_e_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Falling<sp/>Sand</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Falling<sp/>Sand**<sp/>is<sp/>a<sp/>real-time<sp/>**2D<sp/>falling-sand<sp/>/<sp/>cellular<sp/>automata**<sp/>sandbox<sp/>for<sp/>Windows.<sp/>You<sp/>paint<sp/>ten<sp/>materials<sp/>onto<sp/>a<sp/>**384×224**<sp/>cell<sp/>grid;<sp/>**granular<sp/>solids**<sp/>fall,<sp/>**gases**<sp/>rise,<sp/>**liquids**<sp/>are<sp/>solved<sp/>with<sp/>a<sp/>GPU<sp/>pressure–flux<sp/>pipeline,<sp/>and<sp/>**thermal<sp/>chemistry**<sp/>drives<sp/>fire,<sp/>smoke,<sp/>steam,<sp/>melting,<sp/>and<sp/>quenching.<sp/>The<sp/>simulation<sp/>and<sp/>renderer<sp/>run<sp/>almost<sp/>entirely<sp/>on<sp/>the<sp/>**Vulkan<sp/>1.3**<sp/>device<sp/>via<sp/>**GLSL<sp/>460**<sp/>compute<sp/>and<sp/>graphics<sp/>shaders;<sp/>the<sp/>host<sp/>is<sp/>**C++23**<sp/>with<sp/>a<sp/>native<sp/>**Win32**<sp/>window<sp/>and<sp/>an<sp/>immediate-mode<sp/>pixel<sp/>UI<sp/>composited<sp/>in<sp/>a<sp/>second<sp/>draw<sp/>pass.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Default<sp/>startup<sp/>scene<sp/>is<sp/>**Thermal**<sp/>(`Scene::thermal`).<sp/>The<sp/>intro<sp/>blurb<sp/>in<sp/>older<sp/>docs<sp/>referred<sp/>to<sp/>“Thermal<sp/>Vent”<sp/>—<sp/>that<sp/>preset<sp/>matches<sp/>`layouts/thermal.json`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Table<sp/>of<sp/>contents<sp/>{#table-of-contents}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&lt;ol&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#features&quot;&gt;Features&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#requirements&quot;&gt;Requirements&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#repository-layout&quot;&gt;Repository<sp/>layout&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#build-and-run&quot;&gt;Build<sp/>and<sp/>run&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#command-line-options&quot;&gt;Command-line<sp/>options&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#controls-and-ui&quot;&gt;Controls<sp/>and<sp/>UI&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#scenes-and-layouts&quot;&gt;Scenes<sp/>and<sp/>layouts&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#save-format&quot;&gt;Save<sp/>format&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#data-model&quot;&gt;Data<sp/>model&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#gpu-buffers-and-ping-pong&quot;&gt;GPU<sp/>buffers<sp/>and<sp/>ping-pong&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#frame-pipeline-host&quot;&gt;Frame<sp/>pipeline<sp/>(host)&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#simulation-tick-compute&quot;&gt;Simulation<sp/>tick<sp/>(compute)&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#rendering-path-graphics&quot;&gt;Rendering<sp/>path<sp/>(graphics)&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#shared-shader-library-worldglsl&quot;&gt;Shared<sp/>shader<sp/>library<sp/>(&lt;code&gt;world.glsl&lt;/code&gt;)&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#testing-and-benchmarks&quot;&gt;Testing<sp/>and<sp/>benchmarks&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;li&gt;&lt;a<sp/>href=&quot;#further-reading&quot;&gt;Further<sp/>reading&lt;/a&gt;&lt;/li&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;/ol&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Features<sp/>{#features}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Ten<sp/>paintable<sp/>materials**<sp/>(sand,<sp/>water,<sp/>oil,<sp/>stone,<sp/>wood,<sp/>fire,<sp/>smoke,<sp/>steam,<sp/>lava,<sp/>ice)<sp/>plus<sp/>empty<sp/>cells<sp/>for<sp/>erase.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Four<sp/>built-in<sp/>scenes**<sp/>loaded<sp/>from<sp/>JSON<sp/>(`waterworks`,<sp/>`thermal`,<sp/>`refinery`,<sp/>`empty`).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**GPU<sp/>simulation**<sp/>at<sp/>**90<sp/>Hz**<sp/>during<sp/>play<sp/>(fixed<sp/>`simulationHz`),<sp/>with<sp/>pause<sp/>and<sp/>single-step.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Brush<sp/>painting**,<sp/>**erase**<sp/>(right<sp/>mouse),<sp/>and<sp/>**stir**<sp/>(middle<sp/>mouse)<sp/>implemented<sp/>in<sp/>`brush.comp`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Instanced<sp/>HUD**:<sp/>material<sp/>palette,<sp/>scene<sp/>tabs,<sp/>transport<sp/>controls,<sp/>FPS/GPU<sp/>badge,<sp/>brush<sp/>size<sp/>track,<sp/>pause/settings<sp/>overlays<sp/>(`ui.cpp`<sp/>→<sp/>`ui.vert`<sp/>/<sp/>`ui.frag`).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Save/load**<sp/>of<sp/>cell<sp/>state<sp/>to<sp/>a<sp/>binary<sp/>sandbox<sp/>file<sp/>under<sp/>`%LOCALAPPDATA%\FallingSand\world.sandbox`<sp/>(or<sp/>current-directory<sp/>fallback).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Requirements<sp/>{#requirements}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Component<sp/>|<sp/>Version<sp/>/<sp/>notes<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>OS<sp/>|<sp/>**Windows<sp/>x64**<sp/>only<sp/>(`CMakeLists.txt`<sp/>rejects<sp/>non-Win32).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>CMake<sp/>|<sp/>**3.28+**<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>Compiler<sp/>|<sp/>**Visual<sp/>Studio<sp/>2022**<sp/>(x64),<sp/>C++23<sp/>(`/W4`,<sp/>static<sp/>MSVC<sp/>runtime<sp/>in<sp/>Release)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>Vulkan<sp/>|<sp/>**1.3**<sp/>instance/device,<sp/>`glslc`<sp/>from<sp/>the<sp/>Vulkan<sp/>SDK<sp/>(`Vulkan::Vulkan`<sp/>+<sp/>`glslc`<sp/>target)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>GPU<sp/>|<sp/>Compute<sp/>workgroups<sp/>up<sp/>to<sp/>**16×16**,<sp/>**≥10**<sp/>storage<sp/>buffers<sp/>per<sp/>stage,<sp/>timestamp<sp/>queries<sp/>optional<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Runtime:<sp/>place<sp/>**`FallingSand.exe`**<sp/>next<sp/>to<sp/>copied<sp/>**`shaders/`**<sp/>(SPIR-V)<sp/>and<sp/>**`layouts/`**<sp/>(JSON).<sp/>CMake<sp/>target<sp/>`sand_shaders`<sp/>and<sp/>`sand_layouts`<sp/>copy<sp/>these<sp/>into<sp/>`build/&lt;Config&gt;/`<sp/>automatically.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Repository<sp/>layout<sp/>{#repository-layout}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">FallingSand/</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>CMakeLists.txt<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Executable,<sp/>shader<sp/>compile<sp/>(glslc),<sp/>layout<sp/>copy,<sp/>CTest</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>build-and-run.bat<sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Configure<sp/>(VS<sp/>2022<sp/>x64),<sp/>build,<sp/>launch<sp/>exe</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>README.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>This<sp/>file</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>STYLE.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Shader<sp/>comment/style<sp/>guide<sp/>(not<sp/>installed<sp/>by<sp/>CMake)</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>src/</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>main.cpp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Entry,<sp/>CLI,<sp/>game<sp/>loop,<sp/>Sandbox<sp/>input/actions</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>window.cpp/.hpp<sp/><sp/><sp/><sp/><sp/>#<sp/>Win32<sp/>window<sp/>+<sp/>Input<sp/>(mouse<sp/>buttons,<sp/>keys,<sp/>wheel)</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>game.cpp/.hpp<sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Cell/Material/Scene,<sp/>layouts,<sp/>save/load,<sp/>makeScene</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>ui.cpp/.hpp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>HUD<sp/>layout,<sp/>hit<sp/>tests,<sp/>composeUi<sp/>→<sp/>Quad<sp/>list</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>vulkan.cpp/.hpp<sp/><sp/><sp/><sp/><sp/>#<sp/>Device,<sp/>swapchain,<sp/>compute<sp/>+<sp/>graphics<sp/>pipelines,<sp/>draw()</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>shaders/</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>world.glsl<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Shared<sp/>buffers,<sp/>Cell,<sp/>push<sp/>constants,<sp/>helpers</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>*.comp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Simulation<sp/>+<sp/>brush<sp/>compute<sp/>kernels</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>fullscreen.vert<sp/><sp/><sp/><sp/><sp/>#<sp/>Full-screen<sp/>triangle<sp/>for<sp/>world<sp/>pass</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>world.frag<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>World<sp/>visualization<sp/>(read-only<sp/>world.glsl)</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>ui.vert<sp/>/<sp/>ui.frag<sp/><sp/><sp/>#<sp/>Instanced<sp/>UI<sp/>quads</highlight></codeline>
+<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>…<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Sources<sp/>compiled<sp/>to<sp/>.spv<sp/>beside<sp/>the<sp/>exe</highlight></codeline>
+<codeline><highlight class="normal">└──<sp/>layouts/</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>├──<sp/>waterworks.json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>├──<sp/>thermal.json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>├──<sp/>refinery.json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>└──<sp/>empty.json</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Other<sp/>local<sp/>folders<sp/>(`build/`,<sp/>`build-ninja/`,<sp/>`dist/`)<sp/>are<sp/>build<sp/>or<sp/>install<sp/>outputs<sp/>and<sp/>are<sp/>not<sp/>part<sp/>of<sp/>the<sp/>source<sp/>tree.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Build<sp/>and<sp/>run<sp/>{#build-and-run}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Quick<sp/>script</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bat</highlight></codeline>
+<codeline><highlight class="normal">build-and-run.bat</highlight></codeline>
+<codeline><highlight class="normal">build-and-run.bat<sp/>Debug</highlight></codeline>
+<codeline><highlight class="normal">build-and-run.bat<sp/>Release<sp/>--scene<sp/>empty<sp/>--validate</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Manual<sp/>(PowerShell)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```powershell</highlight></codeline>
+<codeline><highlight class="normal">cmake<sp/>-S<sp/>.<sp/>-B<sp/>build<sp/>-G<sp/>&quot;Visual<sp/>Studio<sp/>17<sp/>2022&quot;<sp/>-A<sp/>x64</highlight></codeline>
+<codeline><highlight class="normal">cmake<sp/>--build<sp/>build<sp/>--config<sp/>Release<sp/>--parallel</highlight></codeline>
+<codeline><highlight class="normal">ctest<sp/>--test-dir<sp/>build<sp/>-C<sp/>Release<sp/>--output-on-failure</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Shaders<sp/>are<sp/>compiled<sp/>with:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`glslc<sp/>--target-env=vulkan1.3<sp/>-O<sp/>&lt;shader&gt;<sp/>-o<sp/>&lt;shader&gt;.spv`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">and<sp/>depend<sp/>on<sp/>`shaders/world.glsl`<sp/>where<sp/>included.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Install<sp/>layout<sp/>(optional):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```powershell</highlight></codeline>
+<codeline><highlight class="normal">cmake<sp/>--install<sp/>build<sp/>--config<sp/>Release<sp/>--prefix<sp/>dist/FallingSand</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`cmake<sp/>--install`<sp/>copies<sp/>the<sp/>executable,<sp/>SPIR-V<sp/>under<sp/>`shaders/`,<sp/>layouts,<sp/>and<sp/>`README.md`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Command-line<sp/>options<sp/>{#command-line-options}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parsed<sp/>in<sp/>`main.cpp`<sp/>(`parseOptions`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Flag<sp/>|<sp/>Meaning<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--validate`<sp/>|<sp/>Enable<sp/>Khronos<sp/>validation<sp/>(and<sp/>sync<sp/>validation<sp/>where<sp/>supported).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--test`<sp/>|<sp/>Headless<sp/>GPU<sp/>simulation<sp/>tests<sp/>(CTest<sp/>`gpu_simulation`).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--window-test`<sp/>|<sp/>Automated<sp/>UI/window<sp/>tests<sp/>(paint,<sp/>step,<sp/>resize,<sp/>save/load).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--benchmark<sp/>N`<sp/>|<sp/>Run<sp/>**N**<sp/>frames<sp/>at<sp/>**1<sp/>tick/frame**<sp/>after<sp/>warm-up;<sp/>print<sp/>FPS<sp/>and<sp/>GPU<sp/>timings.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--capture<sp/>PATH`<sp/>|<sp/>After<sp/>`--after<sp/>F`<sp/>frames,<sp/>write<sp/>a<sp/>BMP<sp/>of<sp/>the<sp/>swapchain<sp/>image<sp/>to<sp/>`PATH`.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--after<sp/>F`<sp/>|<sp/>Frame<sp/>index<sp/>for<sp/>`--capture`<sp/>(required<sp/>with<sp/>capture).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`--scene<sp/>NAME`<sp/>|<sp/>Initial<sp/>scene:<sp/>`waterworks`,<sp/>`thermal`,<sp/>`refinery`,<sp/>`empty`.<sp/>Default:<sp/>**thermal**.<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Unknown<sp/>options<sp/>throw<sp/>`std::runtime_error`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Controls<sp/>and<sp/>UI<sp/>{#controls-and-ui}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Mouse</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Input<sp/>|<sp/>Effect<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Left<sp/>button**<sp/>|<sp/>Paint<sp/>on<sp/>canvas<sp/>(selected<sp/>material)<sp/>or<sp/>click<sp/>HUD<sp/>controls.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Right<sp/>button**<sp/>|<sp/>Erase<sp/>to<sp/>empty<sp/>on<sp/>canvas.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Middle<sp/>button**<sp/>|<sp/>**Stir**<sp/>—<sp/>`brush.comp`<sp/>mixes<sp/>liquids<sp/>along<sp/>the<sp/>stroke<sp/>(`Stroke::stir`).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Wheel**<sp/>|<sp/>Adjust<sp/>brush<sp/>radius<sp/>(`minRadius`<sp/>2<sp/>…<sp/>`maxRadius`<sp/>32).<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Keyboard</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Key<sp/>|<sp/>Effect<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`1`–`9`,<sp/>`0`<sp/>|<sp/>Select<sp/>materials<sp/>(palette<sp/>order<sp/>in<sp/>`materials`<sp/>table).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`E`<sp/>|<sp/>Toggle<sp/>**erase**<sp/>tool<sp/>(same<sp/>as<sp/>holding<sp/>right<sp/>mouse<sp/>for<sp/>painting<sp/>mode).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`G`<sp/>|<sp/>Toggle<sp/>**stir**<sp/>tool.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`-`<sp/>/<sp/>`+`<sp/>(`VK_OEM_MINUS`<sp/>/<sp/>`VK_OEM_PLUS`)<sp/>|<sp/>Decrease<sp/>/<sp/>increase<sp/>brush<sp/>size.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Space**<sp/>|<sp/>Pause<sp/>/<sp/>resume<sp/>simulation.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`N`<sp/>|<sp/>Advance<sp/>**one**<sp/>simulation<sp/>tick<sp/>while<sp/>paused.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`R`<sp/>|<sp/>Reset<sp/>world<sp/>to<sp/>current<sp/>scene<sp/>preset.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**F5**<sp/>|<sp/>Save<sp/>to<sp/>sandbox<sp/>file.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**F9**<sp/>|<sp/>Load<sp/>sandbox<sp/>file<sp/>(clears<sp/>velocity,<sp/>pressure,<sp/>and<sp/>other<sp/>flow<sp/>buffers<sp/>on<sp/>GPU).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Esc**<sp/>|<sp/>Open<sp/>**pause**<sp/>menu;<sp/>from<sp/>pause<sp/>open<sp/>**settings**<sp/>(resolution).<sp/>Esc<sp/>backs<sp/>out<sp/>of<sp/>menus.<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Quit<sp/>is<sp/>via<sp/>the<sp/>pause/settings<sp/>**Exit**<sp/>button<sp/>(`Action::exit`),<sp/>not<sp/>Esc<sp/>alone.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>HUD<sp/>structure<sp/>(`makeLayout`<sp/>/<sp/>`composeUi`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Canvas**<sp/>—<sp/>letterboxed<sp/>region<sp/>mapping<sp/>client<sp/>pixels<sp/>to<sp/>world<sp/>coordinates<sp/>(`Layout::worldPoint`).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Panel**<sp/>—<sp/>material<sp/>swatches<sp/>and<sp/>scene<sp/>tabs.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Footer**<sp/>—<sp/>play/pause,<sp/>step,<sp/>reset,<sp/>save/load,<sp/>tool<sp/>cycle,<sp/>brush<sp/>size<sp/>track.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Cog**<sp/>—<sp/>settings<sp/>while<sp/>running;<sp/>in<sp/>pause<sp/>menu,<sp/>settings<sp/>for<sp/>resolution<sp/>presets<sp/>(1280×800<sp/>…<sp/>2560×1440).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Status<sp/>line**<sp/>—<sp/>short<sp/>messages<sp/>after<sp/>save/load/errors.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Tooltip**<sp/>—<sp/>hovering<sp/>the<sp/>canvas<sp/>probes<sp/>GPU<sp/>cell<sp/>and<sp/>shows<sp/>dominant<sp/>material.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">UI<sp/>geometry<sp/>is<sp/>rebuilt<sp/>each<sp/>frame<sp/>from<sp/>window<sp/>size;<sp/>draw<sp/>records<sp/>are<sp/>up<sp/>to<sp/>**`maxQuads`<sp/>(16384)**<sp/>`Quad`<sp/>structs<sp/>(32<sp/>bytes,<sp/>`alignas(16)`)<sp/>uploaded<sp/>to<sp/>a<sp/>per-frame<sp/>storage<sp/>buffer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Scenes<sp/>and<sp/>layouts<sp/>{#scenes-and-layouts}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Scene`<sp/>enum<sp/>(`game.hpp`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>ID<sp/>|<sp/>Tab<sp/>name<sp/>|<sp/>Layout<sp/>file<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`waterworks`<sp/>|<sp/>Waterworks<sp/>preset<sp/>|<sp/>`layouts/waterworks.json`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`thermal`<sp/>|<sp/>Thermal<sp/>vent<sp/>|<sp/>`layouts/thermal.json`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`refinery`<sp/>|<sp/>Refinery<sp/>|<sp/>`layouts/refinery.json`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`empty`<sp/>|<sp/>Blank<sp/>canvas<sp/>|<sp/>`layouts/empty.json`<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`makeScene`<sp/>reads<sp/>JSON<sp/>beside<sp/>the<sp/>executable,<sp/>validates<sp/>dimensions,<sp/>and<sp/>fills<sp/>a<sp/>`worldCells`<sp/>vector.<sp/>Switching<sp/>scenes<sp/>from<sp/>the<sp/>UI<sp/>**replaces**<sp/>the<sp/>grid<sp/>(save<sp/>first<sp/>if<sp/>you<sp/>care<sp/>about<sp/>the<sp/>current<sp/>world).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Save<sp/>format<sp/>{#save-format}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`saveWorld`<sp/>/<sp/>`loadWorld`<sp/>(`game.cpp`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>Magic:<sp/>**`SAND0001`**<sp/>(8<sp/>bytes).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`uint32_t`<sp/>width,<sp/>height<sp/>—<sp/>must<sp/>match<sp/>`worldWidth`<sp/>(384)<sp/>and<sp/>`worldHeight`<sp/>(224).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`worldCells`<sp/>×<sp/>**16-byte<sp/>`Cell`**<sp/>records<sp/>(trivially<sp/>copyable,<sp/>GPU-matched<sp/>layout).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Writes<sp/>use<sp/>a<sp/>`.tmp`<sp/>sibling<sp/>file<sp/>when<sp/>possible.<sp/>Load<sp/>does<sp/>not<sp/>restore<sp/>velocity<sp/>or<sp/>pressure;<sp/>`VulkanGame::replaceWorld`<sp/>uploads<sp/>cells<sp/>and<sp/>**zero-fills**<sp/>flow/auxiliary<sp/>buffers<sp/>(indices<sp/>2,<sp/>3,<sp/>5,<sp/>6<sp/>in<sp/>storage).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Default<sp/>path:<sp/>`%LOCALAPPDATA%\FallingSand\world.sandbox`,<sp/>else<sp/>`./world.sandbox`<sp/>(`saveLocation()`<sp/>in<sp/>`main.cpp`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Data<sp/>model<sp/>{#data-model}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>`Cell`<sp/>(CPU<sp/>and<sp/>GPU,<sp/>16<sp/>bytes)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```cpp</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>Cell<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;float,<sp/>3&gt;<sp/>liquid;<sp/><sp/>//<sp/>x=water,<sp/>y=oil,<sp/>z=lava<sp/>—<sp/>fill<sp/>in<sp/>[0,<sp/>1]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::uint32_t<sp/>matter;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>packed<sp/>id,<sp/>age,<sp/>heat</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Shader-side<sp/>mirror<sp/>in<sp/>`world.glsl`<sp/>(`vec3<sp/>liquid`,<sp/>`uint<sp/>matter`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Packed<sp/>`matter`<sp/>word</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Bits<sp/>|<sp/>Field<sp/>|<sp/>Access<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>0–7<sp/>|<sp/>Material<sp/>id<sp/>|<sp/>`material(c)`<sp/>→<sp/>`c.matter<sp/>&amp;<sp/>255u`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>8–15<sp/>|<sp/>Age<sp/>(e.g.<sp/>smoke/fire<sp/>lifetime)<sp/>|<sp/>`age(c)`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>16–25<sp/>|<sp/>Heat<sp/>(0…1023<sp/>→<sp/>0…1)<sp/>|<sp/>`heat(c)`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(upper)<sp/>|<sp/>Remaining<sp/>bits<sp/>unused<sp/>in<sp/>helpers<sp/>|<sp/>`packMatter(id,<sp/>life,<sp/>temperature)`<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Material<sp/>constants<sp/>(shader<sp/>and<sp/>logic):<sp/>`EMPTY`,<sp/>`SAND`,<sp/>`WATER`,<sp/>`OIL`,<sp/>`STONE`,<sp/>`WOOD`,<sp/>`FIRE`,<sp/>`SMOKE`,<sp/>`STEAM`,<sp/>`LAVA`,<sp/>`ICE`<sp/>(0–10).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Liquids</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>Three<sp/>**immiscible<sp/>fill<sp/>channels**<sp/>share<sp/>one<sp/>velocity<sp/>field;<sp/>**separate.comp**<sp/>slowly<sp/>exchanges<sp/>oil/lava<sp/>vs<sp/>water<sp/>between<sp/>staggered<sp/>row<sp/>pairs.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`wet(c)`<sp/>when<sp/>total<sp/>liquid<sp/>`volume(c)<sp/>&gt;<sp/>0.028`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Inverse<sp/>density**<sp/>for<sp/>pressure<sp/>face<sp/>weights<sp/>uses<sp/>channel<sp/>weights<sp/>`(1.0,<sp/>0.78,<sp/>2.3)`<sp/>in<sp/>`inverseDensity`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Solids<sp/>and<sp/>gases</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>`solid(c)`:<sp/>stone,<sp/>wood,<sp/>ice,<sp/>sand<sp/>—<sp/>block<sp/>face<sp/>connections<sp/>via<sp/>`faceWeight`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`gas(id)`:<sp/>fire,<sp/>smoke,<sp/>steam<sp/>—<sp/>handled<sp/>in<sp/>**grains**<sp/>(rise)<sp/>and<sp/>**reaction**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Host<sp/>helpers</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>`makeCell(Material,<sp/>quantity)`<sp/>—<sp/>initial<sp/>paint/scene<sp/>values.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`displayMaterial`<sp/>/<sp/>`kind`<sp/>—<sp/>UI<sp/>and<sp/>tooltips<sp/>from<sp/>liquid<sp/>+<sp/>matter.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>GPU<sp/>buffers<sp/>and<sp/>ping-pong<sp/>{#gpu-buffers-and-ping-pong}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">From<sp/>`world.glsl`<sp/>(compute;<sp/>read-only<sp/>subset<sp/>in<sp/>`world.frag`<sp/>via<sp/>`WORLD_READ_ONLY`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Binding<sp/>|<sp/>Buffer<sp/>|<sp/>Role<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>0–1<sp/>|<sp/>`CellsA`,<sp/>`CellsB`<sp/>|<sp/>Cell<sp/>ping-pong<sp/>(`pc.state`<sp/>selects<sp/>read;<sp/>writes<sp/>use<sp/>`writeCell`<sp/>/<sp/>`writeOther`)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>2<sp/>|<sp/>`Velocity`<sp/>|<sp/>Staggered-style<sp/>face<sp/>flow<sp/>used<sp/>by<sp/>flux/advect/project<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>3<sp/>|<sp/>`Prediction`<sp/>|<sp/>Predicted<sp/>velocity<sp/>(predict<sp/>pass)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>4<sp/>|<sp/>`Equations`<sp/>|<sp/>Pressure<sp/>network<sp/>row<sp/>per<sp/>cell<sp/>(`Equation`:<sp/>`vec4<sp/>weights`,<sp/>`float<sp/>rhs`)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>5–6<sp/>|<sp/>`PressureA`,<sp/>`PressureB`<sp/>|<sp/>Pressure<sp/>ping-pong<sp/>for<sp/>Jacobi<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>7<sp/>|<sp/>`Flux`<sp/>|<sp/>Outward<sp/>liquid<sp/>flux<sp/>per<sp/>cell<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>8–9<sp/>|<sp/>`LimitA`,<sp/>`LimitB`<sp/>|<sp/>Inflow<sp/>capacity<sp/>ping-pong<sp/>for<sp/>limit/advect<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Push<sp/>constant<sp/>`Frame`**<sp/>(`world.glsl`):<sp/>grid<sp/>`size`,<sp/>ping-pong<sp/>`state`,<sp/>`tick`,<sp/>`operation`<sp/>(`mode`,<sp/>`phase`,<sp/>`material`,<sp/>spare),<sp/>`brush`<sp/>segment,<sp/>`canvas`<sp/>rect,<sp/>`cursor`<sp/>(world<sp/>xy,<sp/>radius,<sp/>visibility),<sp/>`screen`<sp/>(width,<sp/>height,<sp/>visual<sp/>time).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`vulkan.cpp`<sp/>constants:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**`pressureBatches<sp/>=<sp/>12`**<sp/>—<sp/>12<sp/>pressure<sp/>dispatches<sp/>per<sp/>tick<sp/>(red-black<sp/>`operation[1]<sp/>=<sp/>pass<sp/>&amp;<sp/>1`).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`fluxLimitPasses<sp/>=<sp/>5`**<sp/>—<sp/>odd<sp/>count<sp/>so<sp/>limit<sp/>field<sp/>settles<sp/>before<sp/>advection.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Frame<sp/>pipeline<sp/>(host)<sp/>{#frame-pipeline-host}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Each<sp/>frame<sp/>(`VulkanGame::draw`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>Wait<sp/>on<sp/>frame-in-flight<sp/>fence;<sp/>optional<sp/>timestamp<sp/>readback.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>Acquire<sp/>swapchain<sp/>image.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Upload<sp/>**UI<sp/>quads**<sp/>to<sp/>the<sp/>slot’s<sp/>storage<sp/>buffer.</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>**Compute**<sp/>(if<sp/>stroke<sp/>and/or<sp/>`ticks<sp/>&gt;<sp/>0`):</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Optional<sp/>**`brush.comp`**<sp/>for<sp/>the<sp/>current<sp/>stroke.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>**`recordSim`**:<sp/>`ticks`<sp/>iterations<sp/>of<sp/>the<sp/>simulation<sp/>chain<sp/>(below).</highlight></codeline>
+<codeline><highlight class="normal">5.<sp/>**Graphics**<sp/>(`recordDraw`):</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Barrier:<sp/>compute<sp/>writes<sp/>→<sp/>fragment<sp/>shader<sp/>read.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Dynamic<sp/>rendering:<sp/>clear<sp/>→<sp/>**world**<sp/>pass<sp/>(scissored<sp/>to<sp/>canvas)<sp/>→<sp/>**UI**<sp/>pass<sp/>(full<sp/>window).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Present<sp/>(or<sp/>capture<sp/>BMP<sp/>via<sp/>transfer).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Play<sp/>loop<sp/>(`main.cpp`):<sp/>when<sp/>not<sp/>paused,<sp/>accumulates<sp/>real<sp/>time<sp/>and<sp/>runs<sp/>`floor(accumulator<sp/>/<sp/>tickSeconds)`<sp/>ticks<sp/>per<sp/>frame<sp/>(`tickSeconds<sp/>=<sp/>1/90`).<sp/>Paused<sp/>runs<sp/>0<sp/>ticks<sp/>unless<sp/>**N**<sp/>or<sp/>UI<sp/>**step**<sp/>sets<sp/>a<sp/>one-shot<sp/>tick.<sp/>Benchmark/capture<sp/>modes<sp/>force<sp/>**1<sp/>tick/frame**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Simulation<sp/>tick<sp/>(compute)<sp/>{#simulation-tick-compute}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Order<sp/>inside<sp/>**one<sp/>tick**<sp/>(`VulkanGame::Impl::recordSim`<sp/>in<sp/>`vulkan.cpp`).<sp/>Brush<sp/>is<sp/>**outside**<sp/>this<sp/>loop<sp/>and<sp/>runs<sp/>once<sp/>per<sp/>frame<sp/>when<sp/>the<sp/>user<sp/>strokes.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Step<sp/>|<sp/>Kernel<sp/>|<sp/>Workgroup<sp/>layout<sp/>|<sp/>What<sp/>it<sp/>does<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---:<sp/>|<sp/>---<sp/>|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>1<sp/>|<sp/>**reaction.comp**<sp/>|<sp/>16×8<sp/>|<sp/>Chemistry:<sp/>heat,<sp/>fire,<sp/>quenching,<sp/>melting,<sp/>smoke/steam<sp/>lifetimes;<sp/>updates<sp/>`matter`<sp/>and<sp/>liquid<sp/>mix.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>—<sp/>|<sp/>`state<sp/>^=<sp/>1`<sp/>|<sp/>—<sp/>|<sp/>Toggle<sp/>cell<sp/>buffer<sp/>ping-pong.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>2<sp/>|<sp/>**grains.comp**<sp/>|<sp/>16×8<sp/>over<sp/>2×2<sp/>blocks<sp/>|<sp/>Sand<sp/>**falls**,<sp/>gas<sp/>**rises**;<sp/>local<sp/>2×2<sp/>updates<sp/>to<sp/>reduce<sp/>races.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>3<sp/>|<sp/>**predict.comp**<sp/>|<sp/>16×8<sp/>|<sp/>Semi-Lagrangian<sp/>**velocity<sp/>prediction**<sp/>from<sp/>neighbors,<sp/>viscosity,<sp/>gravity.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>4<sp/>|<sp/>**equation.comp**<sp/>|<sp/>16×8<sp/>|<sp/>Build<sp/>**pressure<sp/>network<sp/>row**<sp/>per<sp/>wet,<sp/>non-solid<sp/>cell<sp/>(`faceWeight`<sp/>on<sp/>neighbors).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>5<sp/>|<sp/>**pressure.comp**<sp/>×12<sp/>|<sp/>16×16,<sp/>shared<sp/>mem<sp/>|<sp/>**Jacobi**<sp/>relaxation<sp/>on<sp/>pressure<sp/>(two<sp/>iterations<sp/>per<sp/>dispatch,<sp/>halo<sp/>tile);<sp/>red-black<sp/>phases<sp/>via<sp/>`operation[1]`.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>6<sp/>|<sp/>**project.comp**<sp/>|<sp/>16×8<sp/>|<sp/>**Project**<sp/>predicted<sp/>velocity<sp/>with<sp/>pressure<sp/>gradients<sp/>(divergence<sp/>reduction).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>7<sp/>|<sp/>**flux.comp**<sp/>|<sp/>16×8<sp/>|<sp/>Face<sp/>**outward<sp/>liquid<sp/>flux**<sp/>from<sp/>velocity;<sp/>negative<sp/>flow<sp/>pulls<sp/>from<sp/>neighbors.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>8<sp/>|<sp/>**limit.comp**<sp/>×5<sp/>|<sp/>16×8<sp/>|<sp/>**Inflow<sp/>limits**<sp/>ping-pong<sp/>(`limitA`/`limitB`);<sp/>how<sp/>much<sp/>each<sp/>cell<sp/>can<sp/>accept.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>9<sp/>|<sp/>**advect.comp**<sp/>|<sp/>16×8<sp/>|<sp/>Move<sp/>**water/oil/lava**<sp/>along<sp/>flux<sp/>subject<sp/>to<sp/>limits;<sp/>writes<sp/>other<sp/>cell<sp/>buffer.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>—<sp/>|<sp/>`state<sp/>^=<sp/>1`<sp/>|<sp/>—<sp/>|<sp/>Toggle<sp/>cell<sp/>ping-pong<sp/>after<sp/>advection.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>10<sp/>|<sp/>**separate.comp**<sp/>×2<sp/>|<sp/>16×8,<sp/>half<sp/>height<sp/>dispatch<sp/>|<sp/>**Phase<sp/>separation**<sp/>oil/lava<sp/>vs<sp/>water<sp/>on<sp/>staggered<sp/>rows;<sp/>`operation[1]`<sp/>checkerboard<sp/>with<sp/>`tick`.<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**brush.comp**<sp/>(when<sp/>painting):<sp/>dispatches<sp/>over<sp/>a<sp/>bounding<sp/>box<sp/>of<sp/>the<sp/>stroke;<sp/>modes<sp/>—<sp/>deposit<sp/>material/liquid,<sp/>erase,<sp/>or<sp/>stir<sp/>(`pc.operation`<sp/>mode<sp/>+<sp/>`pc.brush`<sp/>+<sp/>radius).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>design<sp/>is<sp/>a<sp/>**bounded,<sp/>real-time<sp/>2D<sp/>fluid<sp/>approximation**:<sp/>shared<sp/>velocity,<sp/>finite<sp/>pressure<sp/>iterations,<sp/>finite-volume<sp/>transport<sp/>with<sp/>donor/receiver<sp/>limits<sp/>—<sp/>suited<sp/>for<sp/>gameplay<sp/>rather<sp/>than<sp/>offline<sp/>CFD<sp/>accuracy.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Rendering<sp/>path<sp/>(graphics)<sp/>{#rendering-path-graphics}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Stage<sp/>|<sp/>Shader<sp/>|<sp/>Notes<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>---<sp/>|<sp/>---<sp/>|<sp/>---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>World<sp/>|<sp/>**fullscreen.vert**<sp/>+<sp/>**world.frag**<sp/>|<sp/>Single<sp/>large<sp/>triangle;<sp/>fragment<sp/>shader<sp/>maps<sp/>canvas<sp/>pixels<sp/>→<sp/>grid<sp/>coords;<sp/>includes<sp/>`world.glsl`<sp/>read-only.<sp/>Shading:<sp/>material/liquid<sp/>reconstruction,<sp/>absorption,<sp/>highlights,<sp/>Fresnel,<sp/>refraction,<sp/>lava<sp/>glow,<sp/>procedural<sp/>noise.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>UI<sp/>|<sp/>**ui.vert**<sp/>+<sp/>**ui.frag**<sp/>|<sp/>Instanced<sp/>quads<sp/>(`6`<sp/>vertices<sp/>×<sp/>`quadCount`);<sp/>per-quad<sp/>bounds<sp/>+<sp/>RGBA<sp/>from<sp/>CPU<sp/>`Quad`<sp/>list.<sp/>Bitmap<sp/>font<sp/>and<sp/>panels<sp/>drawn<sp/>entirely<sp/>on<sp/>CPU<sp/>in<sp/>`ui.cpp`.<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Push<sp/>constants<sp/>for<sp/>both<sp/>passes<sp/>share<sp/>`canvas`,<sp/>`cursor`,<sp/>`screen`<sp/>(and<sp/>simulation<sp/>uses<sp/>the<sp/>same<sp/>layout<sp/>block).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Pipeline:<sp/>**Vulkan<sp/>dynamic<sp/>rendering**<sp/>(no<sp/>classic<sp/>render<sp/>pass<sp/>object),<sp/>swapchain<sp/>format<sp/>color<sp/>attachment,<sp/>scissor<sp/>for<sp/>world<sp/>letterboxing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Shared<sp/>shader<sp/>library<sp/>(`world.glsl`)<sp/>{#shared-shader-library-worldglsl}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Included<sp/>by<sp/>every<sp/>`.comp`<sp/>and<sp/>by<sp/>`world.frag`<sp/>(with<sp/>`WORLD_READ_ONLY`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Coordinate<sp/>helpers**:<sp/>`inside`,<sp/>`indexOf`,<sp/>`readCell`,<sp/>`writeCell`,<sp/>`writeOther`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Material/thermo<sp/>helpers**:<sp/>`packMatter`,<sp/>`solid`,<sp/>`wet`,<sp/>`gas`,<sp/>`faceWeight`,<sp/>`inverseDensity`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**RNG**:<sp/>`hash32`<sp/>/<sp/>`random01`<sp/>for<sp/>stochastic<sp/>grain<sp/>motion.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Compute<sp/>shaders<sp/>use<sp/>`#extension<sp/>GL_GOOGLE_include_directive`<sp/>and<sp/>are<sp/>compiled<sp/>as<sp/>Vulkan<sp/>1.3<sp/>SPIR-V.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Host<sp/>code<sp/>does<sp/>not<sp/>parse<sp/>GLSL;<sp/>keeping<sp/>`Cell`<sp/>layout<sp/>and<sp/>material<sp/>IDs<sp/>in<sp/>sync<sp/>is<sp/>enforced<sp/>by<sp/>shared<sp/>constants<sp/>and<sp/>static<sp/>asserts<sp/>in<sp/>`game.hpp`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Testing<sp/>and<sp/>benchmarks<sp/>{#testing-and-benchmarks}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```powershell</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe<sp/>--test<sp/>--validate</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe<sp/>--window-test<sp/>--validate</highlight></codeline>
+<codeline><highlight class="normal">.\build\Release\FallingSand.exe<sp/>--benchmark<sp/>1200<sp/>--scene<sp/>thermal</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**`--test`**:<sp/>GPU<sp/>checks<sp/>(walls,<sp/>divergence<sp/>reduction,<sp/>phase<sp/>conservation,<sp/>sand,<sp/>thermal<sp/>reactions,<sp/>brush)<sp/>without<sp/>a<sp/>visible<sp/>window<sp/>loop.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`--window-test`**:<sp/>Scene<sp/>buttons,<sp/>paint,<sp/>step,<sp/>resize,<sp/>present,<sp/>save/load.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`--benchmark`**:<sp/>60-frame<sp/>warmup,<sp/>then<sp/>mean/p95<sp/>GPU<sp/>ms<sp/>and<sp/>simulation<sp/>ms;<sp/>device<sp/>name<sp/>in<sp/>header.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`--validate`<sp/>enables<sp/>validation<sp/>layers<sp/>for<sp/>debugging<sp/>synchronization<sp/>and<sp/>API<sp/>usage.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Further<sp/>reading<sp/>{#further-reading}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>Liquid<sp/>solver<sp/>inspiration:<sp/>semi-Lagrangian<sp/>advection,<sp/>pressure<sp/>projection,<sp/>bounded<sp/>Jacobi<sp/>—<sp/>see<sp/>[Bridson<sp/>&amp;<sp/>Müller-Fischer,<sp/>SIGGRAPH<sp/>fluids<sp/>course<sp/>notes](https://www.cs.ubc.ca/~rbridson/fluidsimulation/).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Swapchain<sp/>synchronization:<sp/>[Khronos<sp/>Vulkan<sp/>Guide<sp/>—<sp/>swapchain<sp/>semaphore<sp/>reuse](https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Shader<sp/>authorship<sp/>conventions<sp/>in<sp/>this<sp/>repo:<sp/>`STYLE.md`<sp/>(optional<sp/>reference<sp/>for<sp/>contributors).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>License</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">No<sp/>license<sp/>file<sp/>is<sp/>present<sp/>in<sp/>the<sp/>repository<sp/>root;<sp/>treat<sp/>usage<sp/>as<sp/>unspecified<sp/>unless<sp/>your<sp/>organization<sp/>adds<sp/>one.</highlight></codeline>
+    </programlisting>
+    <location file="I:/FallingSand/README.md"/>
+  </compounddef>
+</doxygen>

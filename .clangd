@@ -5,3 +5,5 @@ CompileFlags:
     - -DNOMINMAX
     - -DUNICODE
     - -D_UNICODE
+    - -DVK_USE_PLATFORM_WIN32_KHR
+    - -IC:/VulkanSDK/1.4.350.0/Include

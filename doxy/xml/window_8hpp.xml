@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="window_8hpp" kind="file" language="C++">
+    <compoundname>window.hpp</compoundname>
+    <includes refid="game_8hpp" local="yes">game.hpp</includes>
+    <includes local="no">array</includes>
+    <includes local="no">windows.h</includes>
+    <includedby refid="main_8cpp" local="yes">I:/FallingSand/src/main.cpp</includedby>
+    <includedby refid="window_8cpp" local="yes">I:/FallingSand/src/window.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>game.hpp</label>
+        <link refid="game_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>I:/FallingSand/src/window.hpp</label>
+        <link refid="window_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>array</label>
+      </node>
+      <node id="4">
+        <label>cstddef</label>
+      </node>
+      <node id="5">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>expected</label>
+      </node>
+      <node id="7">
+        <label>filesystem</label>
+      </node>
+      <node id="8">
+        <label>optional</label>
+      </node>
+      <node id="9">
+        <label>span</label>
+      </node>
+      <node id="10">
+        <label>string</label>
+      </node>
+      <node id="11">
+        <label>string_view</label>
+      </node>
+      <node id="12">
+        <label>type_traits</label>
+      </node>
+      <node id="13">
+        <label>vector</label>
+      </node>
+      <node id="14">
+        <label>windows.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>I:/FallingSand/src/main.cpp</label>
+        <link refid="main_8cpp_source"/>
+      </node>
+      <node id="3">
+        <label>I:/FallingSand/src/window.cpp</label>
+        <link refid="window_8cpp_source"/>
+      </node>
+      <node id="1">
+        <label>I:/FallingSand/src/window.hpp</label>
+        <link refid="window_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structsand_1_1_input" prot="public">sand::Input</innerclass>
+    <innerclass refid="classsand_1_1_window" prot="public">sand::Window</innerclass>
+    <innernamespace refid="namespacesand">sand</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;game.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;array&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;windows.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Win32<sp/>window<sp/>owner.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>class<sp/>acquires<sp/>an<sp/>HWND<sp/>and<sp/>releases<sp/>it<sp/>in<sp/>the<sp/>destructor.<sp/>Copying<sp/>is<sp/>deleted</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="comment">//<sp/>because<sp/>two<sp/>objects<sp/>would<sp/>destroy<sp/>the<sp/>same<sp/>window.<sp/>Declaring<sp/>the<sp/>destructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>suppresses<sp/>the<sp/>implicit<sp/>move<sp/>operations,<sp/>so<sp/>a<sp/>Window<sp/>stays<sp/>where<sp/>it<sp/>was<sp/>created.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>handle()<sp/>and<sp/>the<sp/>other<sp/>observers<sp/>are<sp/>const<sp/>because<sp/>they<sp/>do<sp/>not<sp/>change<sp/>that<sp/>ownership.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="comment">//<sp/>nodiscard<sp/>flags<sp/>results<sp/>the<sp/>caller<sp/>needs.<sp/>The<sp/>constructor<sp/>is<sp/>explicit<sp/>so<sp/>a<sp/>bool</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>cannot<sp/>become<sp/>a<sp/>Window<sp/>through<sp/>an<sp/>implicit<sp/>conversion.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">sand<sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="structsand_1_1_input" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_input" kindref="compound">Input</ref></highlight></codeline>
+<codeline lineno="21"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_point" kindref="compound">Point</ref><sp/>mouse{-1,<sp/>-1};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Cursor<sp/>in<sp/>client<sp/>pixels;<sp/>(-1,<sp/>-1)<sp/>when<sp/>outside.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;bool,<sp/>256&gt;<sp/>pressed{};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Edge-triggered<sp/>key<sp/>down<sp/>events<sp/>for<sp/>this<sp/>frame.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>wheel{};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Mouse<sp/>wheel<sp/>delta<sp/>for<sp/>this<sp/>frame.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>paint{},<sp/>erase{},<sp/>stir{};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Buttons<sp/>currently<sp/>held.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_point" kindref="compound">Point</ref><sp/>paintDown{};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Client<sp/>position<sp/>where<sp/>the<sp/>primary<sp/>button<sp/>went<sp/>down.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>paintPressed{},<sp/>erasePressed{},<sp/>stirPressed{};<sp/></highlight><highlight class="comment">//<sp/>Edge-triggered<sp/>button<sp/>downs.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="classsand_1_1_window" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref></highlight></codeline>
+<codeline lineno="32"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>show);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">~Window</ref>();</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Copy<sp/>is<sp/>deleted.<sp/>A<sp/>second<sp/>owner<sp/>would<sp/>destroy<sp/>the<sp/>same<sp/>HWND.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref>&amp;)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref>&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kindref="member">Window</ref>&amp;)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/>HWND<sp/><ref refid="classsand_1_1_window_1a961ce4f2f11f5faf10fc245516efc408" kindref="member">handle</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/>std::array&lt;int,<sp/>2&gt;<sp/><ref refid="classsand_1_1_window_1a2291339fb22bb9c1163e23b3ad9efae6" kindref="member">size</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_window_1aed9e0a7530cbd6836551bb9a4aebdad3" kindref="member">poll</ref>();</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structsand_1_1_input" kindref="compound">Input</ref><sp/><ref refid="classsand_1_1_window_1ad25eff0d80cdce0f9726cb2ad1fb6ffe" kindref="member">consumeInput</ref>();</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_window_1a2efdb30742c4b14903290fcd7e82d4d0" kindref="member">wait</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_window_1a493c965072b36ceb16d9c147053e2a89" kindref="member">clientSize</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>LRESULT<sp/>CALLBACK<sp/>route(HWND<sp/><ref refid="classsand_1_1_window_1a961ce4f2f11f5faf10fc245516efc408" kindref="member">handle</ref>,<sp/>UINT<sp/>message,<sp/>WPARAM<sp/>wparam,<sp/>LPARAM<sp/>lparam);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>LRESULT<sp/>process(UINT<sp/>message,<sp/>WPARAM<sp/>wparam,<sp/>LPARAM<sp/>lparam);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>HWND<sp/>handle_{};</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_input" kindref="compound">Input</ref><sp/>input_{};</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>wheelRemainder_{};</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>running_{</highlight><highlight class="keyword">true</highlight><highlight class="normal">};</highlight></codeline>
+<codeline lineno="75"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>sand</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="I:/FallingSand/src/window.hpp"/>
+  </compounddef>
+</doxygen>

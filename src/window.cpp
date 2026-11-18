@@ -16,6 +16,8 @@ Window::Window(bool show)
 {
     // Per-monitor DPI so client pixels match the swapchain extent.
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+    // Module instance used when registering the class and creating the HWND.
     HINSTANCE instance = GetModuleHandleW(nullptr);
 
     // Value-initialize the window class so unused Win32 fields stay zero.
@@ -32,14 +34,19 @@ Window::Window(bool show)
         throw std::runtime_error("Could not register the Falling Sand window.");
     }
 
+    // Default client size before converting to outer window dimensions.
     RECT bounds{0, 0, 1280, 800};
     AdjustWindowRectExForDpi(&bounds, windowStyle, FALSE, 0, GetDpiForSystem());
+
+    // Create the HWND and bind it to this Window through WM_NCCREATE.
     handle_ = CreateWindowExW(0, className, L"Falling Sand", windowStyle, CW_USEDEFAULT,
                               CW_USEDEFAULT, bounds.right - bounds.left, bounds.bottom - bounds.top,
                               nullptr, nullptr, instance, this);
     if (!handle_)
     {
+        // Undo class registration when CreateWindowExW fails.
         UnregisterClassW(className, instance);
+
         throw std::runtime_error("Could not create the Falling Sand window.");
     }
 
@@ -87,6 +94,8 @@ bool Window::poll()
         {
             return false;
         }
+
+        // Route keyboard state through TranslateMessage before dispatch.
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
     }
@@ -114,6 +123,8 @@ void Window::clientSize(int width, int height)
     const UINT dpi = GetDpiForWindow(handle_);
     RECT bounds{0, 0, width, height};
     AdjustWindowRectExForDpi(&bounds, windowStyle, FALSE, 0, dpi);
+
+    // Resize the outer window so the client rectangle matches the request.
     SetWindowPos(handle_, nullptr, 0, 0, bounds.right - bounds.left, bounds.bottom - bounds.top,
                  SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
@@ -131,6 +142,8 @@ LRESULT CALLBACK Window::route(HWND handle, UINT message, WPARAM wparam, LPARAM 
         // Store the Window* as an integer-sized slot, then read that same pointer back.
         SetWindowLongPtrW(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
     }
+
+    // Resolve the Window instance stored during WM_NCCREATE.
     auto* window = reinterpret_cast<Window*>(GetWindowLongPtrW(handle, GWLP_USERDATA));
 
     // Before WM_NCCREATE finishes, forward to the default window procedure.
@@ -144,17 +157,21 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
     switch (message)
     {
     case WM_CLOSE:
+        // User close stops the frame loop; WM_DESTROY follows from DefWindowProc.
         running_ = false;
         return 0;
     case WM_DESTROY:
+        // Posted quit ends poll() on the next WM_QUIT.
         PostQuitMessage(0);
         return 0;
     case WM_GETMINMAXINFO: {
+        // Keep the sandbox HUD usable on small displays.
         auto* info = reinterpret_cast<MINMAXINFO*>(lparam);
         info->ptMinTrackSize = {930, 620};
         return 0;
     }
     case WM_DPICHANGED: {
+        // Apply the suggested frame when DPI changes on this monitor.
         const auto& r = *reinterpret_cast<const RECT*>(lparam);
         SetWindowPos(handle_, nullptr, r.left, r.top, r.right - r.left, r.bottom - r.top,
                      SWP_NOZORDER | SWP_NOACTIVATE);
@@ -183,6 +200,7 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
         return 0;
     }
     case WM_MOUSELEAVE:
+        // Ignore leave events while capture still owns the pointer for a drag.
         if (GetCapture() != handle_)
         {
             input_.mouse = {-1, -1};

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_quad" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Quad</compoundname>
+    <includes refid="ui_8hpp" local="no">ui.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_quad_1a5ebe28f5105d579f11c5a351f298da50" prot="public" static="no" mutable="no">
+        <type>std::array&lt; float, 4 &gt;</type>
+        <definition>std::array&lt;float, 4&gt; sand::Quad::bounds</definition>
+        <argsstring></argsstring>
+        <name>bounds</name>
+        <qualifiedname>sand::Quad::bounds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="129" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_quad_1a4f87167ad443538d7f27e1c4a03bed37" prot="public" static="no" mutable="no">
+        <type>std::array&lt; float, 4 &gt;</type>
+        <definition>std::array&lt;float, 4&gt; sand::Quad::color</definition>
+        <argsstring></argsstring>
+        <name>color</name>
+        <qualifiedname>sand::Quad::color</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="130" column="16" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>One axis-aligned colored rectangle for the instanced UI draw pass. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/ui.hpp" line="127" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="128" bodyend="131"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_quad_1a5ebe28f5105d579f11c5a351f298da50" prot="public" virt="non-virtual"><scope>sand::Quad</scope><name>bounds</name></member>
+      <member refid="structsand_1_1_quad_1a4f87167ad443538d7f27e1c4a03bed37" prot="public" virt="non-virtual"><scope>sand::Quad</scope><name>color</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

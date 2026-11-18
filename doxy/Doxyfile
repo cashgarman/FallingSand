@@ -1,0 +1,27 @@
+# Generated for one-shot local API docs (not committed with source).
+PROJECT_NAME         = "FallingSand"
+OUTPUT_DIRECTORY     = .
+CREATE_SUBDIRS       = NO
+INPUT                = ../src ../README.md
+USE_MDFILE_AS_MAINPAGE = ../README.md
+FILE_PATTERNS        = *.cpp *.hpp *.md
+MARKDOWN_SUPPORT     = YES
+RECURSIVE            = NO
+GENERATE_HTML        = YES
+HTML_OUTPUT          = html
+GENERATE_XML         = YES
+XML_OUTPUT           = xml
+GENERATE_LATEX       = NO
+EXTRACT_ALL          = NO
+EXTRACT_PRIVATE      = NO
+EXTRACT_STATIC       = NO
+HIDE_UNDOC_MEMBERS   = YES
+JAVADOC_AUTOBRIEF    = YES
+QT_AUTOBRIEF         = YES
+MULTILINE_CPP_IS_BRIEF = YES
+OPTIMIZE_OUTPUT_FOR_C = YES
+SOURCE_BROWSER       = YES
+GENERATE_TREEVIEW    = YES
+WARN_IF_UNDOCUMENTED = NO
+WARN_IF_DOC_ERROR    = YES
+QUIET                = NO

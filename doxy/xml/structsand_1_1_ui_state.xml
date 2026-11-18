@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_ui_state" kind="struct" language="C++" prot="public">
+    <compoundname>sand::UiState</compoundname>
+    <includes refid="ui_8hpp" local="no">ui.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1a864993df470ba994d53c719032835cdd" prot="public" static="no" mutable="no">
+        <type>Scene</type>
+        <definition>Scene sand::UiState::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>sand::UiState::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="115" column="11" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1a2c775d4f96c355a77cb314780dc48560" prot="public" static="no" mutable="no">
+        <type>Material</type>
+        <definition>Material sand::UiState::material</definition>
+        <argsstring></argsstring>
+        <name>material</name>
+        <qualifiedname>sand::UiState::material</qualifiedname>
+        <initializer>{Material::water}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="116" column="14" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1a10fcf8790f490aef8905b197fcdf3737" prot="public" static="no" mutable="no">
+        <type>Tool</type>
+        <definition>Tool sand::UiState::tool</definition>
+        <argsstring></argsstring>
+        <name>tool</name>
+        <qualifiedname>sand::UiState::tool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="117" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1a125bcce651496b520e91b035a5d7d5bd" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool sand::UiState::paused</definition>
+        <argsstring></argsstring>
+        <name>paused</name>
+        <qualifiedname>sand::UiState::paused</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="118" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="118" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1aa4386692488f2de745bc01f3556a7967" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sand::UiState::radius</definition>
+        <argsstring></argsstring>
+        <name>radius</name>
+        <qualifiedname>sand::UiState::radius</qualifiedname>
+        <initializer>{8}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="119" column="9" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="119" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1a0cc57ff737863877cdc508ba2b8b4b79" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sand::UiState::fps</definition>
+        <argsstring></argsstring>
+        <name>fps</name>
+        <qualifiedname>sand::UiState::fps</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="120" column="9" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="120" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1ad2bacc4c3f808f04696d792b8487912b" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::UiState::gpuMs</definition>
+        <argsstring></argsstring>
+        <name>gpuMs</name>
+        <qualifiedname>sand::UiState::gpuMs</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="121" column="11" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1aa302a9310bcd02fc352a3f5dab4d653d" prot="public" static="no" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view sand::UiState::status</definition>
+        <argsstring></argsstring>
+        <name>status</name>
+        <qualifiedname>sand::UiState::status</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="122" column="22" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_ui_state_1a2c48969505d7ea40a685978e8d808c48" prot="public" static="no" mutable="no">
+        <type>Menu</type>
+        <definition>Menu sand::UiState::menu</definition>
+        <argsstring></argsstring>
+        <name>menu</name>
+        <qualifiedname>sand::UiState::menu</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="123" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="123" bodyend="123"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mutable HUD and simulation UI state for one frame. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/ui.hpp" line="113" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="114" bodyend="124"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_ui_state_1a0cc57ff737863877cdc508ba2b8b4b79" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>fps</name></member>
+      <member refid="structsand_1_1_ui_state_1ad2bacc4c3f808f04696d792b8487912b" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>gpuMs</name></member>
+      <member refid="structsand_1_1_ui_state_1a2c775d4f96c355a77cb314780dc48560" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>material</name></member>
+      <member refid="structsand_1_1_ui_state_1a2c48969505d7ea40a685978e8d808c48" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>menu</name></member>
+      <member refid="structsand_1_1_ui_state_1a125bcce651496b520e91b035a5d7d5bd" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>paused</name></member>
+      <member refid="structsand_1_1_ui_state_1aa4386692488f2de745bc01f3556a7967" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>radius</name></member>
+      <member refid="structsand_1_1_ui_state_1a864993df470ba994d53c719032835cdd" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>scene</name></member>
+      <member refid="structsand_1_1_ui_state_1aa302a9310bcd02fc352a3f5dab4d653d" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>status</name></member>
+      <member refid="structsand_1_1_ui_state_1a10fcf8790f490aef8905b197fcdf3737" prot="public" virt="non-virtual"><scope>sand::UiState</scope><name>tool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

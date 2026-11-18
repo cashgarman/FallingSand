@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_flow_snapshot" kind="struct" language="C++" prot="public">
+    <compoundname>sand::FlowSnapshot</compoundname>
+    <includes refid="vulkan_8hpp" local="no">vulkan.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_flow_snapshot_1a3be193b32ddcb243d5f324967f87070d" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structsand_1_1_point" kindref="compound">Point</ref> &gt;</type>
+        <definition>std::vector&lt;Point&gt; sand::FlowSnapshot::predictor</definition>
+        <argsstring></argsstring>
+        <name>predictor</name>
+        <qualifiedname>sand::FlowSnapshot::predictor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="52" column="17" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_flow_snapshot_1a1e34dfe331b0fc4ddd1ecf6a6b7ec1f6" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structsand_1_1_point" kindref="compound">Point</ref> &gt;</type>
+        <definition>std::vector&lt;Point&gt; sand::FlowSnapshot::projected</definition>
+        <argsstring></argsstring>
+        <name>projected</name>
+        <qualifiedname>sand::FlowSnapshot::projected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="53" column="17" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Advection predictor and projected flow fields copied from the GPU. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/vulkan.hpp" line="50" column="1" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="51" bodyend="54"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_flow_snapshot_1a3be193b32ddcb243d5f324967f87070d" prot="public" virt="non-virtual"><scope>sand::FlowSnapshot</scope><name>predictor</name></member>
+      <member refid="structsand_1_1_flow_snapshot_1a1e34dfe331b0fc4ddd1ecf6a6b7ec1f6" prot="public" virt="non-virtual"><scope>sand::FlowSnapshot</scope><name>projected</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

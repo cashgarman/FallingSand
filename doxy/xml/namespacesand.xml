@@ -1,0 +1,956 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="namespacesand" kind="namespace" language="C++">
+    <compoundname>sand</compoundname>
+    <innerclass refid="structsand_1_1_button" prot="public">sand::Button</innerclass>
+    <innerclass refid="structsand_1_1_cell" prot="public">sand::Cell</innerclass>
+    <innerclass refid="structsand_1_1_draw_frame" prot="public">sand::DrawFrame</innerclass>
+    <innerclass refid="structsand_1_1_flow_snapshot" prot="public">sand::FlowSnapshot</innerclass>
+    <innerclass refid="structsand_1_1_input" prot="public">sand::Input</innerclass>
+    <innerclass refid="structsand_1_1_layout" prot="public">sand::Layout</innerclass>
+    <innerclass refid="structsand_1_1_material_info" prot="public">sand::MaterialInfo</innerclass>
+    <innerclass refid="structsand_1_1_point" prot="public">sand::Point</innerclass>
+    <innerclass refid="structsand_1_1_quad" prot="public">sand::Quad</innerclass>
+    <innerclass refid="structsand_1_1_rect" prot="public">sand::Rect</innerclass>
+    <innerclass refid="structsand_1_1_resolution_choice" prot="public">sand::ResolutionChoice</innerclass>
+    <innerclass refid="structsand_1_1_stroke" prot="public">sand::Stroke</innerclass>
+    <innerclass refid="structsand_1_1_timing" prot="public">sand::Timing</innerclass>
+    <innerclass refid="structsand_1_1_ui_state" prot="public">sand::UiState</innerclass>
+    <innerclass refid="classsand_1_1_vulkan_game" prot="public">sand::VulkanGame</innerclass>
+    <innerclass refid="classsand_1_1_window" prot="public">sand::Window</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81" prot="public" static="no" strong="yes">
+        <type>std::uint32_t</type>
+        <name>Material</name>
+        <qualifiedname>sand::Material</qualifiedname>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81aa2e4822a98337283e39f7b60acf85ec9" prot="public">
+          <name>empty</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a88336b5bb2a1cc21bac7cf33fd451270" prot="public">
+          <name>sand</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a9460370bb0ca1c98a779b1bcc6861c2c" prot="public">
+          <name>water</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81ac5af0543407a6e8ba11db6a69f792014" prot="public">
+          <name>oil</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a0a840ef45467fb3932dbf2c2896c5cbf" prot="public">
+          <name>stone</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a22811dd94d65037ef86535740b98dec8" prot="public">
+          <name>wood</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a015f28b9df1bdd36427dd976fb73b29d" prot="public">
+          <name>fire</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81afdfa02ecf86feac3801254da57c1c9ba" prot="public">
+          <name>smoke</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a75eec5a819fd971e63a55c466a36211c" prot="public">
+          <name>steam</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81acf5bf2ab230c9740415984b28b23661e" prot="public">
+          <name>lava</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a7bdff76536f12a7c5ffde207e72cfe3a" prot="public">
+          <name>ice</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Identifies a paintable material or empty cell in the world grid. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="45" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="46" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="enum" id="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12" prot="public" static="no" strong="yes">
+        <type>std::uint8_t</type>
+        <name>Scene</name>
+        <qualifiedname>sand::Scene</qualifiedname>
+        <enumvalue id="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12a7c6d7f41f739a117e6fc468d9924ca40" prot="public">
+          <name>waterworks</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12a26a27f04d02b653b4b5b77b5d11d7bb9" prot="public">
+          <name>thermal</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12a29f89695e6378f74efa37c1e53a5c8b7" prot="public">
+          <name>refinery</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12aa2e4822a98337283e39f7b60acf85ec9" prot="public">
+          <name>empty</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Built-in experiment layout loaded into a fresh world grid. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="143" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="144" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="enum" id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8" prot="public" static="no" strong="yes">
+        <type>std::uint8_t</type>
+        <name>Action</name>
+        <qualifiedname>sand::Action</qualifiedname>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aebd73ade48cb3e102d1dbbfbc0377c5f" prot="public">
+          <name>choose</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a1e7f604b86415ade94e15fef8627609b" prot="public">
+          <name>scene</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aa3b34c0871dc2fd51eec5559b68f709d" prot="public">
+          <name>play</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a2764ca9d34e90313978d044f27ae433b" prot="public">
+          <name>step</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a86266ee937d97f812a8e57d22b62ee29" prot="public">
+          <name>reset</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a43781db5c40ecc39fd718685594f0956" prot="public">
+          <name>save</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aec4d1eb36b22d19728e9d1d23ca84d1c" prot="public">
+          <name>load</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a68f6f171811b2cede3c3a4084ad9918c" prot="public">
+          <name>brush</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a7171dcadcf98d2109fd407ed89afbe47" prot="public">
+          <name>sizeDown</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a3d055e47e95016396abf1eaaf0d91e7e" prot="public">
+          <name>sizeUp</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aaee552fe2e807ec409cd35f0d1ea352f" prot="public">
+          <name>cycleTool</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aeb14fc5b95c3513f727abd9f3bdd8ca9" prot="public">
+          <name>openSettings</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a69f2afc2390cec954f7c208b07212d39" prot="public">
+          <name>resume</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a469bba0a564235dfceede42db14f17b0" prot="public">
+          <name>back</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8af24f62eeb789199b9b2e467df3b1876b" prot="public">
+          <name>exit</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8ab7e164b34ff76b1cda93a058604190da" prot="public">
+          <name>resolution</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>UI command emitted when the user activates a control. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="24" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="25" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="enum" id="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7e" prot="public" static="no" strong="yes">
+        <type>std::uint8_t</type>
+        <name>Menu</name>
+        <qualifiedname>sand::Menu</qualifiedname>
+        <enumvalue id="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7ea334c4a4c42fdb79d7ebc3e73b517e6f8" prot="public">
+          <name>none</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7eaec1b81965109165de6b38cd92c1e39f9" prot="public">
+          <name>pause</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7ea2e5d8aa3dfa8ef34ca5131d20f9dad51" prot="public">
+          <name>settings</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Active modal overlay on top of the sandbox HUD. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="45" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="46" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="enum" id="ui_8hpp_1a90c98ec1befc19108181174b32de6062" prot="public" static="no" strong="yes">
+        <type>std::uint8_t</type>
+        <name>Tool</name>
+        <qualifiedname>sand::Tool</qualifiedname>
+        <enumvalue id="ui_8hpp_1a90c98ec1befc19108181174b32de6062ac1940aeeb9693a02e28c52eb85ce261c" prot="public">
+          <name>paint</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a90c98ec1befc19108181174b32de6062a26eb25b14d930f9d5f59b2c50798a9a4" prot="public">
+          <name>erase</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="ui_8hpp_1a90c98ec1befc19108181174b32de6062a7c051efa7641541159bf7e63c989167f" prot="public">
+          <name>stir</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Active painting interaction mode. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="67" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="68" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="game_8cpp_1a57393d9540fce55c2614c9f8acb7865d" prot="public" static="no" mutable="no">
+        <type>const std::array&lt; <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>, materialCount &gt;</type>
+        <definition>const std::array&lt; MaterialInfo, materialCount &gt; sand::materials</definition>
+        <argsstring></argsstring>
+        <name>materials</name>
+        <qualifiedname>sand::materials</qualifiedname>
+        <initializer>{
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::sand, &quot;SAND&quot;, &quot;GRANULAR / SINKS&quot;, 0xe7be78},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::water, &quot;WATER&quot;, &quot;LIQUID / COOLANT&quot;, 0x51c4ef},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::oil, &quot;OIL&quot;, &quot;LIQUID / FLOATS&quot;, 0xe39f54},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::stone, &quot;STONE&quot;, &quot;SOLID / BARRIER&quot;, 0x8094a6},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::wood, &quot;WOOD&quot;, &quot;SOLID / FUEL&quot;, 0xc68e6d},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::fire, &quot;FIRE&quot;, &quot;HEAT / IGNITION&quot;, 0xff7e58},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::smoke, &quot;SMOKE&quot;, &quot;GAS / RISES&quot;, 0x998ca7},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::steam, &quot;STEAM&quot;, &quot;GAS / CONDENSES&quot;, 0xb5d9e2},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::lava, &quot;LAVA&quot;, &quot;LIQUID / HOT&quot;, 0xf06036},
+    <ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref>{Material::ice, &quot;ICE&quot;, &quot;SOLID / MELTS&quot;, 0x93dcf2},
+}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="25" column="18" bodyfile="I:/FallingSand/src/game.cpp" bodystart="25" bodyend="36" declfile="I:/FallingSand/src/game.hpp" declline="73" declcolumn="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8cpp_1a50f11839d594d4bd938cd3d67282834f" prot="public" static="no" mutable="no">
+        <type>const std::array&lt; std::string_view, sceneCount &gt;</type>
+        <definition>const std::array&lt; std::string_view, sceneCount &gt; sand::sceneNames</definition>
+        <argsstring></argsstring>
+        <name>sceneNames</name>
+        <qualifiedname>sand::sceneNames</qualifiedname>
+        <initializer>{&quot;WATERWORKS&quot;, &quot;THERMAL VENT&quot;, &quot;REFINERY&quot;,
+                                                          &quot;EMPTY&quot;}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="39" column="18" bodyfile="I:/FallingSand/src/game.cpp" bodystart="39" bodyend="40" declfile="I:/FallingSand/src/game.hpp" declline="155" declcolumn="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8hpp_1a41e083ecaa31ff4176da598023b1af90" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int sand::worldWidth</definition>
+        <argsstring></argsstring>
+        <name>worldWidth</name>
+        <qualifiedname>sand::worldWidth</qualifiedname>
+        <initializer>= 384</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="33" column="22" bodyfile="I:/FallingSand/src/game.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8hpp_1ac50ab8347a8dc4177ec5612414b478f1" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int sand::worldHeight</definition>
+        <argsstring></argsstring>
+        <name>worldHeight</name>
+        <qualifiedname>sand::worldHeight</qualifiedname>
+        <initializer>= 224</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="36" column="22" bodyfile="I:/FallingSand/src/game.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8hpp_1a23e8e0e23308b376db3ddfbb85b1d169" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int sand::worldCells</definition>
+        <argsstring></argsstring>
+        <name>worldCells</name>
+        <qualifiedname>sand::worldCells</qualifiedname>
+        <initializer>= worldWidth * worldHeight</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="39" column="22" bodyfile="I:/FallingSand/src/game.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8hpp_1a824dc2e9a0fe733c517b67f121d2d366" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int sand::simulationHz</definition>
+        <argsstring></argsstring>
+        <name>simulationHz</name>
+        <qualifiedname>sand::simulationHz</qualifiedname>
+        <initializer>= 90</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="42" column="22" bodyfile="I:/FallingSand/src/game.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8hpp_1af3b12f222d557e5503f3336217347e2d" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t sand::materialCount</definition>
+        <argsstring></argsstring>
+        <name>materialCount</name>
+        <qualifiedname>sand::materialCount</qualifiedname>
+        <initializer>= 10</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="70" column="23" bodyfile="I:/FallingSand/src/game.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="game_8hpp_1a25b1341aa1548c04308bab49a33dc734" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t sand::sceneCount</definition>
+        <argsstring></argsstring>
+        <name>sceneCount</name>
+        <qualifiedname>sand::sceneCount</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="152" column="23" bodyfile="I:/FallingSand/src/game.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="ui_8cpp_1a343c611ea1618fb2f8201ac6fba4429d" prot="public" static="no" mutable="no">
+        <type>const std::array&lt; <ref refid="structsand_1_1_resolution_choice" kindref="compound">ResolutionChoice</ref>, resolutionCount &gt;</type>
+        <definition>const std::array&lt; ResolutionChoice, resolutionCount &gt; sand::resolutions</definition>
+        <argsstring></argsstring>
+        <name>resolutions</name>
+        <qualifiedname>sand::resolutions</qualifiedname>
+        <initializer>{
+    <ref refid="structsand_1_1_resolution_choice" kindref="compound">ResolutionChoice</ref>{1280, 800, &quot;1280 X 800&quot;},
+    ResolutionChoice{1600, 900, &quot;1600 X 900&quot;},
+    ResolutionChoice{1920, 1080, &quot;1920 X 1080&quot;},
+    ResolutionChoice{2560, 1440, &quot;2560 X 1440&quot;},
+}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.cpp" line="13" column="18" bodyfile="I:/FallingSand/src/ui.cpp" bodystart="13" bodyend="18" declfile="I:/FallingSand/src/ui.hpp" declline="64" declcolumn="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="ui_8hpp_1a2db0f7a2b8106f72ccf56000657e0ba3" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t sand::resolutionCount</definition>
+        <argsstring></argsstring>
+        <name>resolutionCount</name>
+        <qualifiedname>sand::resolutionCount</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="61" column="23" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="ui_8hpp_1afa06fbacd074690b80545478cb528ab6" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t sand::maxQuads</definition>
+        <argsstring></argsstring>
+        <name>maxQuads</name>
+        <qualifiedname>sand::maxQuads</qualifiedname>
+        <initializer>= 16384</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="137" column="30" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="ui_8hpp_1aa6ed8eddf338c2fc8d4efd7733c7a38b" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int sand::minRadius</definition>
+        <argsstring></argsstring>
+        <name>minRadius</name>
+        <qualifiedname>sand::minRadius</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="140" column="22" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="ui_8hpp_1a5983e732f1e4079f4f9bff92e90eec68" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int sand::maxRadius</definition>
+        <argsstring></argsstring>
+        <name>maxRadius</name>
+        <qualifiedname>sand::maxRadius</qualifiedname>
+        <initializer>= 32</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="143" column="22" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="game_8cpp_1aa121c68f57f51cb1e9d5711ebbde1bcb" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Material</type>
+        <definition>Material sand::kind</definition>
+        <argsstring>(const Cell &amp;cell)</argsstring>
+        <name>kind</name>
+        <qualifiedname>sand::kind</qualifiedname>
+        <param>
+          <type>const <ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <briefdescription>
+<para>Reads the material kind encoded in the low byte of the cell matter word. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>cell</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> whose packed matter word is decoded.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The Material stored in the cell.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="42" column="10" bodyfile="I:/FallingSand/src/game.cpp" bodystart="42" bodyend="46" declfile="I:/FallingSand/src/game.hpp" declline="91" declcolumn="11"/>
+      </memberdef>
+      <memberdef kind="function" id="game_8cpp_1a5dc55453a611fd2586db068722bc2737" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Material</type>
+        <definition>Material sand::displayMaterial</definition>
+        <argsstring>(const Cell &amp;cell)</argsstring>
+        <name>displayMaterial</name>
+        <qualifiedname>sand::displayMaterial</qualifiedname>
+        <param>
+          <type>const <ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> &amp;</type>
+          <declname>cell</declname>
+        </param>
+        <briefdescription>
+<para>Resolves the dominant material in a cell for UI labels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>cell</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> to classify from liquid channels and matter.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Dominant paintable material for tooltip and palette lookup.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="48" column="10" bodyfile="I:/FallingSand/src/game.cpp" bodystart="48" bodyend="70" declfile="I:/FallingSand/src/game.hpp" declline="96" declcolumn="11"/>
+      </memberdef>
+      <memberdef kind="function" id="game_8cpp_1afdb72533f6c2dc85e56671430fe3d4ae" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::optional&lt; std::size_t &gt;</type>
+        <definition>std::optional&lt; std::size_t &gt; sand::paletteIndex</definition>
+        <argsstring>(Material id)</argsstring>
+        <name>paletteIndex</name>
+        <qualifiedname>sand::paletteIndex</qualifiedname>
+        <param>
+          <type>Material</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+<para>Maps a Material to its index in the materials table. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Material to look up.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Palette index, or empty when id is empty or not in the palette.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="72" column="15" bodyfile="I:/FallingSand/src/game.cpp" bodystart="72" bodyend="88" declfile="I:/FallingSand/src/game.hpp" declline="101" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="game_8cpp_1ab10518b7baba046de562f700d292e863" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref></type>
+        <definition>Cell sand::makeCell</definition>
+        <argsstring>(Material id, float quantity=1.0F)</argsstring>
+        <name>makeCell</name>
+        <qualifiedname>sand::makeCell</qualifiedname>
+        <param>
+          <type>Material</type>
+          <declname>id</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>quantity</declname>
+          <defval>1.0F</defval>
+        </param>
+        <briefdescription>
+<para>Builds a default cell for a material with optional fill quantity. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Material to encode.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>quantity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Liquid fill in [0, 1] for water, oil, and lava; ignored for solids and gases.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A cell with liquid channels or matter and heat fields set for the shader and solver.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="90" column="6" bodyfile="I:/FallingSand/src/game.cpp" bodystart="90" bodyend="121" declfile="I:/FallingSand/src/game.hpp" declline="108" declcolumn="7"/>
+      </memberdef>
+      <memberdef kind="function" id="game_8cpp_1a8adb53ca56a226c84e4bf35263d60eef" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::expected&lt; std::vector&lt; <ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> &gt;, std::string &gt;</type>
+        <definition>std::expected&lt; std::vector&lt; Cell &gt;, std::string &gt; sand::makeScene</definition>
+        <argsstring>(Scene scene)</argsstring>
+        <name>makeScene</name>
+        <qualifiedname>sand::makeScene</qualifiedname>
+        <param>
+          <type>Scene</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Fills a new world buffer from the JSON layout for a scene preset. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Preset whose file is read from the layouts directory beside the executable.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A vector of worldCells cells, or an error when that layout is missing or invalid.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="1409" column="15" bodyfile="I:/FallingSand/src/game.cpp" bodystart="1409" bodyend="1413" declfile="I:/FallingSand/src/game.hpp" declline="161" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="game_8cpp_1a8b24781452c902ee3cfbd85ec7cd1697" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::expected&lt; void, std::string &gt;</type>
+        <definition>std::expected&lt; void, std::string &gt; sand::saveWorld</definition>
+        <argsstring>(const std::filesystem::path &amp;path, std::span&lt; const Cell &gt; cells)</argsstring>
+        <name>saveWorld</name>
+        <qualifiedname>sand::saveWorld</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> &gt;</type>
+          <declname>cells</declname>
+        </param>
+        <briefdescription>
+<para>Writes a validated world grid to a binary sandbox file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Destination file; written atomically via a sibling .tmp file.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cells</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Full world grid; must match worldCells and pass cell validation.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Success, or an error message when validation or the filesystem operation fails.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="1415" column="15" bodyfile="I:/FallingSand/src/game.cpp" bodystart="1415" bodyend="1461" declfile="I:/FallingSand/src/game.hpp" declline="168" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="game_8cpp_1abff730f352b40deeb0d39618a103a70a" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::expected&lt; std::vector&lt; <ref refid="structsand_1_1_cell" kindref="compound">Cell</ref> &gt;, std::string &gt;</type>
+        <definition>std::expected&lt; std::vector&lt; Cell &gt;, std::string &gt; sand::loadWorld</definition>
+        <argsstring>(const std::filesystem::path &amp;path)</argsstring>
+        <name>loadWorld</name>
+        <qualifiedname>sand::loadWorld</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Reads a sandbox save into a world grid. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Save file created by saveWorld.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The loaded cells, or an error message when the header, size, or payload is invalid.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.cpp" line="1463" column="15" bodyfile="I:/FallingSand/src/game.cpp" bodystart="1463" bodyend="1500" declfile="I:/FallingSand/src/game.hpp" declline="175" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="ui_8cpp_1ab705df6735d54423dae6512c5ec1911d" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structsand_1_1_layout" kindref="compound">Layout</ref></type>
+        <definition>Layout sand::makeLayout</definition>
+        <argsstring>(int width, int height)</argsstring>
+        <name>makeLayout</name>
+        <qualifiedname>sand::makeLayout</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Computes layout rectangles for the given client size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Client width in pixels.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Client height in pixels.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A layout with canvas, panel, and control bounds.</para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.cpp" line="246" column="8" bodyfile="I:/FallingSand/src/ui.cpp" bodystart="246" bodyend="339" declfile="I:/FallingSand/src/ui.hpp" declline="149" declcolumn="9"/>
+      </memberdef>
+      <memberdef kind="function" id="ui_8cpp_1a50330740b4de1e2c7d30a7a8a30c9d28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sand::composeUi</definition>
+        <argsstring>(std::vector&lt; Quad &gt; &amp;quads, const Layout &amp;layout, const UiState &amp;state, Point mouse, int width, int height, std::optional&lt; std::size_t &gt; canvasMaterial=std::nullopt)</argsstring>
+        <name>composeUi</name>
+        <qualifiedname>sand::composeUi</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="structsand_1_1_quad" kindref="compound">Quad</ref> &gt; &amp;</type>
+          <declname>quads</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structsand_1_1_layout" kindref="compound">Layout</ref> &amp;</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structsand_1_1_ui_state" kindref="compound">UiState</ref> &amp;</type>
+          <declname>state</declname>
+        </param>
+        <param>
+          <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+          <declname>mouse</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type>std::optional&lt; std::size_t &gt;</type>
+          <declname>canvasMaterial</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <briefdescription>
+<para>Builds UI quads for one frame and appends them to the output buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>quads</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output buffer cleared then filled with draw records.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>layout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Precomputed control geometry.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>state</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Current HUD state for labels and highlights.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mouse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Cursor position for hover styling and tooltips.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Client width in pixels.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Client height in pixels.</para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>canvasMaterial</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional palette index for canvas hover tooltip.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.cpp" line="376" column="6" bodyfile="I:/FallingSand/src/ui.cpp" bodystart="376" bodyend="546" declfile="I:/FallingSand/src/ui.hpp" declline="159" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/game.cpp" line="22" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_draw_frame" kind="struct" language="C++" prot="public">
+    <compoundname>sand::DrawFrame</compoundname>
+    <includes refid="vulkan_8hpp" local="no">vulkan.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1abdaae2f3596c4f6bb7eb2b0c20442556" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::DrawFrame::canvas</definition>
+        <argsstring></argsstring>
+        <name>canvas</name>
+        <qualifiedname>sand::DrawFrame::canvas</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="31" column="10" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1ab95eec8313f44e6e0b9e69792a47ddcb" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point sand::DrawFrame::cursor</definition>
+        <argsstring></argsstring>
+        <name>cursor</name>
+        <qualifiedname>sand::DrawFrame::cursor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="32" column="11" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1a55449569908716f5a8ded3ec4c6491d3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::DrawFrame::radius</definition>
+        <argsstring></argsstring>
+        <name>radius</name>
+        <qualifiedname>sand::DrawFrame::radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="33" column="11" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1aad7fd1069866140a3bd490197a87f4f1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool sand::DrawFrame::cursorVisible</definition>
+        <argsstring></argsstring>
+        <name>cursorVisible</name>
+        <qualifiedname>sand::DrawFrame::cursorVisible</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="34" column="10" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1ad990f5e0a72cbb66168296bcd3952a74" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::DrawFrame::visualTime</definition>
+        <argsstring></argsstring>
+        <name>visualTime</name>
+        <qualifiedname>sand::DrawFrame::visualTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="35" column="11" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1a8235d8cd7c96659a82c74d93b4155338" prot="public" static="no" mutable="no">
+        <type>std::optional&lt; <ref refid="structsand_1_1_stroke" kindref="compound">Stroke</ref> &gt;</type>
+        <definition>std::optional&lt;Stroke&gt; sand::DrawFrame::stroke</definition>
+        <argsstring></argsstring>
+        <name>stroke</name>
+        <qualifiedname>sand::DrawFrame::stroke</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="36" column="19" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1a7143f3982929358a96860aae4a84e627" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned sand::DrawFrame::ticks</definition>
+        <argsstring></argsstring>
+        <name>ticks</name>
+        <qualifiedname>sand::DrawFrame::ticks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="37" column="14" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1a0064032246096ca65d7b05a8cf9331b9" prot="public" static="no" mutable="no">
+        <type>std::span&lt; const <ref refid="structsand_1_1_quad" kindref="compound">Quad</ref> &gt;</type>
+        <definition>std::span&lt;const Quad&gt; sand::DrawFrame::ui</definition>
+        <argsstring></argsstring>
+        <name>ui</name>
+        <qualifiedname>sand::DrawFrame::ui</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="38" column="15" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_draw_frame_1ab097baf605982ca0ee8cff528f4eb61b" prot="public" static="no" mutable="no">
+        <type>std::filesystem::path</type>
+        <definition>std::filesystem::path sand::DrawFrame::capture</definition>
+        <argsstring></argsstring>
+        <name>capture</name>
+        <qualifiedname>sand::DrawFrame::capture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="39" column="27" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Parameters for one presented frame of simulation and compositing. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>sand::DrawFrame</label>
+        <link refid="structsand_1_1_draw_frame"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>canvas</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>cursor</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sand::Point</label>
+        <link refid="structsand_1_1_point"/>
+      </node>
+      <node id="2">
+        <label>sand::Rect</label>
+        <link refid="structsand_1_1_rect"/>
+      </node>
+    </collaborationgraph>
+    <location file="I:/FallingSand/src/vulkan.hpp" line="29" column="1" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="30" bodyend="40"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_draw_frame_1abdaae2f3596c4f6bb7eb2b0c20442556" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>canvas</name></member>
+      <member refid="structsand_1_1_draw_frame_1ab097baf605982ca0ee8cff528f4eb61b" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>capture</name></member>
+      <member refid="structsand_1_1_draw_frame_1ab95eec8313f44e6e0b9e69792a47ddcb" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>cursor</name></member>
+      <member refid="structsand_1_1_draw_frame_1aad7fd1069866140a3bd490197a87f4f1" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>cursorVisible</name></member>
+      <member refid="structsand_1_1_draw_frame_1a55449569908716f5a8ded3ec4c6491d3" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>radius</name></member>
+      <member refid="structsand_1_1_draw_frame_1a8235d8cd7c96659a82c74d93b4155338" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>stroke</name></member>
+      <member refid="structsand_1_1_draw_frame_1a7143f3982929358a96860aae4a84e627" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>ticks</name></member>
+      <member refid="structsand_1_1_draw_frame_1a0064032246096ca65d7b05a8cf9331b9" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>ui</name></member>
+      <member refid="structsand_1_1_draw_frame_1ad990f5e0a72cbb66168296bcd3952a74" prot="public" virt="non-virtual"><scope>sand::DrawFrame</scope><name>visualTime</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

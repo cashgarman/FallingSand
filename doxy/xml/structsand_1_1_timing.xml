@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_timing" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Timing</compoundname>
+    <includes refid="vulkan_8hpp" local="no">vulkan.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_timing_1a7840fcd3b5b28748d1dd0a67276d3e70" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double sand::Timing::simulationMs</definition>
+        <argsstring></argsstring>
+        <name>simulationMs</name>
+        <qualifiedname>sand::Timing::simulationMs</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="45" column="12" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_timing_1af27d8df320bb11671d1c52cace458862" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double sand::Timing::gpuMs</definition>
+        <argsstring></argsstring>
+        <name>gpuMs</name>
+        <qualifiedname>sand::Timing::gpuMs</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.hpp" line="46" column="12" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>GPU timing from the most recently completed measured frame. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/vulkan.hpp" line="43" column="1" bodyfile="I:/FallingSand/src/vulkan.hpp" bodystart="44" bodyend="47"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_timing_1af27d8df320bb11671d1c52cace458862" prot="public" virt="non-virtual"><scope>sand::Timing</scope><name>gpuMs</name></member>
+      <member refid="structsand_1_1_timing_1a7840fcd3b5b28748d1dd0a67276d3e70" prot="public" virt="non-virtual"><scope>sand::Timing</scope><name>simulationMs</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

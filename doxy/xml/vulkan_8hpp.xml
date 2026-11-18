@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="vulkan_8hpp" kind="file" language="C++">
+    <compoundname>vulkan.hpp</compoundname>
+    <includes refid="game_8hpp" local="yes">game.hpp</includes>
+    <includes refid="ui_8hpp" local="yes">ui.hpp</includes>
+    <includes local="no">array</includes>
+    <includes local="no">filesystem</includes>
+    <includes local="no">memory</includes>
+    <includes local="no">optional</includes>
+    <includes local="no">span</includes>
+    <includes local="no">string_view</includes>
+    <includes local="no">windows.h</includes>
+    <includedby refid="main_8cpp" local="yes">I:/FallingSand/src/main.cpp</includedby>
+    <includedby refid="vulkan_8cpp" local="yes">I:/FallingSand/src/vulkan.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>game.hpp</label>
+        <link refid="game_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>ui.hpp</label>
+        <link refid="ui_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>I:/FallingSand/src/vulkan.hpp</label>
+        <link refid="vulkan_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>array</label>
+      </node>
+      <node id="4">
+        <label>cstddef</label>
+      </node>
+      <node id="5">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>expected</label>
+      </node>
+      <node id="7">
+        <label>filesystem</label>
+      </node>
+      <node id="15">
+        <label>memory</label>
+      </node>
+      <node id="8">
+        <label>optional</label>
+      </node>
+      <node id="9">
+        <label>span</label>
+      </node>
+      <node id="10">
+        <label>string</label>
+      </node>
+      <node id="11">
+        <label>string_view</label>
+      </node>
+      <node id="12">
+        <label>type_traits</label>
+      </node>
+      <node id="13">
+        <label>vector</label>
+      </node>
+      <node id="16">
+        <label>windows.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>I:/FallingSand/src/main.cpp</label>
+        <link refid="main_8cpp_source"/>
+      </node>
+      <node id="3">
+        <label>I:/FallingSand/src/vulkan.cpp</label>
+        <link refid="vulkan_8cpp_source"/>
+      </node>
+      <node id="1">
+        <label>I:/FallingSand/src/vulkan.hpp</label>
+        <link refid="vulkan_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structsand_1_1_draw_frame" prot="public">sand::DrawFrame</innerclass>
+    <innerclass refid="structsand_1_1_timing" prot="public">sand::Timing</innerclass>
+    <innerclass refid="structsand_1_1_flow_snapshot" prot="public">sand::FlowSnapshot</innerclass>
+    <innerclass refid="classsand_1_1_vulkan_game" prot="public">sand::VulkanGame</innerclass>
+    <innernamespace refid="namespacesand">sand</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;game.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;ui.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;array&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;filesystem&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;memory&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;optional&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string_view&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;windows.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Public<sp/>GPU<sp/>facade.<sp/>Vulkan<sp/>types<sp/>stay<sp/>in<sp/>vulkan.cpp.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Pimpl<sp/>keeps<sp/>the<sp/>public<sp/>class<sp/>in<sp/>this<sp/>header<sp/>and<sp/>the<sp/>device,<sp/>swapchain,<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="comment">//<sp/>pipelines<sp/>behind<sp/>unique_ptr&lt;Impl&gt;.<sp/>unique_ptr<sp/>is<sp/>the<sp/>single<sp/>owner<sp/>of<sp/>that</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="comment">//<sp/>implementation.<sp/>Copy<sp/>is<sp/>deleted<sp/>so<sp/>two<sp/>facades<sp/>cannot<sp/>destroy<sp/>one<sp/>device.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Declaring<sp/>the<sp/>destructor<sp/>also<sp/>suppresses<sp/>implicit<sp/>moves,<sp/>so<sp/>the<sp/>facade<sp/>stays</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment">//<sp/>where<sp/>it<sp/>was<sp/>created.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>destructor<sp/>is<sp/>declared<sp/>here<sp/>and<sp/>defined<sp/>in<sp/>the<sp/>source<sp/>file,<sp/>where<sp/>Impl<sp/>is</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="comment">//<sp/>a<sp/>complete<sp/>type,<sp/>because<sp/>unique_ptr<sp/>deletes<sp/>its<sp/>pointer<sp/>from<sp/>the<sp/>destructor.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//<sp/>span<sp/>and<sp/>optional<sp/>on<sp/>DrawFrame<sp/>borrow<sp/>UI<sp/>quads<sp/>and<sp/>a<sp/>brush<sp/>stroke<sp/>for<sp/>one<sp/>frame.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">//<sp/>deviceName()<sp/>returns<sp/>a<sp/>string_view<sp/>into<sp/>the<sp/>device<sp/>properties<sp/>owned<sp/>by<sp/>Impl.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">sand<sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="structsand_1_1_draw_frame" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_draw_frame" kindref="compound">DrawFrame</ref></highlight></codeline>
+<codeline lineno="30"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref><sp/>canvas;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>UI<sp/>viewport<sp/>used<sp/>to<sp/>letterbox<sp/>the<sp/>world.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_point" kindref="compound">Point</ref><sp/>cursor;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Brush<sp/>position<sp/>in<sp/>world<sp/>grid<sp/>coordinates.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>radius;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Brush<sp/>radius<sp/>in<sp/>grid<sp/>cells.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>cursorVisible;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Whether<sp/>the<sp/>brush<sp/>ring<sp/>is<sp/>drawn.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>visualTime;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Accumulated<sp/>time<sp/>for<sp/>animated<sp/>rendering.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;Stroke&gt;<sp/>stroke;<sp/><sp/></highlight><highlight class="comment">//<sp/>Optional<sp/>paint<sp/>or<sp/>stir<sp/>stroke<sp/>for<sp/>this<sp/>frame.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>ticks;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Simulation<sp/>steps<sp/>to<sp/>run<sp/>before<sp/>draw.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>Quad&gt;<sp/>ui;<sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>UI<sp/>quads<sp/>composited<sp/>over<sp/>the<sp/>world.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>capture;<sp/></highlight><highlight class="comment">//<sp/>When<sp/>non-empty,<sp/>write<sp/>this<sp/>image<sp/>path<sp/>after<sp/>present.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43" refid="structsand_1_1_timing" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_timing" kindref="compound">Timing</ref></highlight></codeline>
+<codeline lineno="44"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>simulationMs{};<sp/></highlight><highlight class="comment">//<sp/>Compute<sp/>time<sp/>for<sp/>simulation<sp/>kernels.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>gpuMs{};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Total<sp/>GPU<sp/>time<sp/>for<sp/>the<sp/>frame.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50" refid="structsand_1_1_flow_snapshot" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_flow_snapshot" kindref="compound">FlowSnapshot</ref></highlight></codeline>
+<codeline lineno="51"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Point&gt;<sp/>predictor;<sp/></highlight><highlight class="comment">//<sp/>Per-cell<sp/>predictor<sp/>flow<sp/>vectors.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Point&gt;<sp/>projected;<sp/></highlight><highlight class="comment">//<sp/>Per-cell<sp/>projected<sp/>flow<sp/>vectors.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57" refid="classsand_1_1_vulkan_game" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">VulkanGame</ref></highlight></codeline>
+<codeline lineno="58"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">VulkanGame</ref>(HWND<sp/>window,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>benchmark,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>validate);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">~VulkanGame</ref>();</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Copy<sp/>is<sp/>deleted.<sp/>unique_ptr<sp/>already<sp/>forbids<sp/>sharing<sp/>the<sp/>implementation.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">VulkanGame</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">VulkanGame</ref>&amp;)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">VulkanGame</ref>&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kindref="member">VulkanGame</ref>&amp;)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/>std::array&lt;int,<sp/>2&gt;<sp/><ref refid="classsand_1_1_vulkan_game_1a28eeff9cdd185abb13cc679f11cda713" kindref="member">prepare</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1a6d1201712e1c42fe0bdf638590ca43ba" kindref="member">draw</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structsand_1_1_draw_frame" kindref="compound">DrawFrame</ref>&amp;<sp/>frame);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1a1397df65de1fcb8f7f35f223dc8fdd47" kindref="member">replaceWorld</ref>(std::span&lt;const<sp/>Cell&gt;<sp/>cells);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/>std::vector&lt;Cell&gt;<sp/><ref refid="classsand_1_1_vulkan_game_1a923fbb6ffa512e08000679a935abe12a" kindref="member">snapshot</ref>();</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref><sp/><ref refid="classsand_1_1_vulkan_game_1aaf3d259bfdd18a7513f8452caf23bed5" kindref="member">probeCell</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>x,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>y);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structsand_1_1_flow_snapshot" kindref="compound">FlowSnapshot</ref><sp/><ref refid="classsand_1_1_vulkan_game_1a9d13ade9ed2e8a5add8fdf083e244916" kindref="member">flowSnapshot</ref>();</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1a1921271164674274c1e872d36ea7d0be" kindref="member">simulate</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>ticks);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1a640953de760197d21ff6dafaca171cce" kindref="member">paint</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structsand_1_1_stroke" kindref="compound">Stroke</ref>&amp;<sp/>stroke);</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1a36dddfb05c1c6823f9a761ebb8e7a0eb" kindref="member">wait</ref>();</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structsand_1_1_timing" kindref="compound">Timing</ref><sp/><ref refid="classsand_1_1_vulkan_game_1a462a9accabdb1bbeac7028b53aaf247e" kindref="member">timing</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/>std::string_view<sp/><ref refid="classsand_1_1_vulkan_game_1af835ffd61a74c7d19f64d0f2f19e5812" kindref="member">deviceName</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/><ref refid="classsand_1_1_vulkan_game_1a552ff01dca2c5f22e10a95faecca5c21" kindref="member">validationErrors</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_vulkan_game_1_1_impl" kindref="compound">Impl</ref>;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;Impl&gt;<sp/>impl_;</highlight></codeline>
+<codeline lineno="126"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>sand</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="I:/FallingSand/src/vulkan.hpp"/>
+  </compounddef>
+</doxygen>

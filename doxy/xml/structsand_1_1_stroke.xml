@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_stroke" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Stroke</compoundname>
+    <includes refid="game_8hpp" local="no">game.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_stroke_1a899fde3246fdf8fcc1566b7783eb1d68" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point sand::Stroke::from</definition>
+        <argsstring></argsstring>
+        <name>from</name>
+        <qualifiedname>sand::Stroke::from</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="135" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_stroke_1a241563761ac82c71e54ab3445cfc6336" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_point" kindref="compound">Point</ref></type>
+        <definition>Point sand::Stroke::to</definition>
+        <argsstring></argsstring>
+        <name>to</name>
+        <qualifiedname>sand::Stroke::to</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="136" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_stroke_1accadfc98cd35b3043622e70e523eda92" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float sand::Stroke::radius</definition>
+        <argsstring></argsstring>
+        <name>radius</name>
+        <qualifiedname>sand::Stroke::radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="137" column="11" bodyfile="I:/FallingSand/src/game.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_stroke_1a220ca70099f28cbf2b112181afd47583" prot="public" static="no" mutable="no">
+        <type>Material</type>
+        <definition>Material sand::Stroke::material</definition>
+        <argsstring></argsstring>
+        <name>material</name>
+        <qualifiedname>sand::Stroke::material</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="138" column="14" bodyfile="I:/FallingSand/src/game.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_stroke_1aacb36d1a5b7deca6e9c38bc82c391a75" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool sand::Stroke::stir</definition>
+        <argsstring></argsstring>
+        <name>stir</name>
+        <qualifiedname>sand::Stroke::stir</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/game.hpp" line="139" column="10" bodyfile="I:/FallingSand/src/game.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Brush stroke passed to the GPU for painting or stirring the grid. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>sand::Point</label>
+        <link refid="structsand_1_1_point"/>
+      </node>
+      <node id="1">
+        <label>sand::Stroke</label>
+        <link refid="structsand_1_1_stroke"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>from</edgelabel>
+          <edgelabel>to</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="I:/FallingSand/src/game.hpp" line="133" column="1" bodyfile="I:/FallingSand/src/game.hpp" bodystart="134" bodyend="140"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_stroke_1a899fde3246fdf8fcc1566b7783eb1d68" prot="public" virt="non-virtual"><scope>sand::Stroke</scope><name>from</name></member>
+      <member refid="structsand_1_1_stroke_1a220ca70099f28cbf2b112181afd47583" prot="public" virt="non-virtual"><scope>sand::Stroke</scope><name>material</name></member>
+      <member refid="structsand_1_1_stroke_1accadfc98cd35b3043622e70e523eda92" prot="public" virt="non-virtual"><scope>sand::Stroke</scope><name>radius</name></member>
+      <member refid="structsand_1_1_stroke_1aacb36d1a5b7deca6e9c38bc82c391a75" prot="public" virt="non-virtual"><scope>sand::Stroke</scope><name>stir</name></member>
+      <member refid="structsand_1_1_stroke_1a241563761ac82c71e54ab3445cfc6336" prot="public" virt="non-virtual"><scope>sand::Stroke</scope><name>to</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="game_8hpp" kind="file" language="C++">
+    <compoundname>game.hpp</compoundname>
+    <includes local="no">array</includes>
+    <includes local="no">cstddef</includes>
+    <includes local="no">cstdint</includes>
+    <includes local="no">expected</includes>
+    <includes local="no">filesystem</includes>
+    <includes local="no">optional</includes>
+    <includes local="no">span</includes>
+    <includes local="no">string</includes>
+    <includes local="no">string_view</includes>
+    <includes local="no">type_traits</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="game_8cpp" local="yes">I:/FallingSand/src/game.cpp</includedby>
+    <includedby refid="main_8cpp" local="yes">I:/FallingSand/src/main.cpp</includedby>
+    <includedby refid="ui_8hpp" local="yes">I:/FallingSand/src/ui.hpp</includedby>
+    <includedby refid="vulkan_8hpp" local="yes">I:/FallingSand/src/vulkan.hpp</includedby>
+    <includedby refid="window_8hpp" local="yes">I:/FallingSand/src/window.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>I:/FallingSand/src/game.hpp</label>
+        <link refid="game_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>array</label>
+      </node>
+      <node id="3">
+        <label>cstddef</label>
+      </node>
+      <node id="4">
+        <label>cstdint</label>
+      </node>
+      <node id="5">
+        <label>expected</label>
+      </node>
+      <node id="6">
+        <label>filesystem</label>
+      </node>
+      <node id="7">
+        <label>optional</label>
+      </node>
+      <node id="8">
+        <label>span</label>
+      </node>
+      <node id="9">
+        <label>string</label>
+      </node>
+      <node id="10">
+        <label>string_view</label>
+      </node>
+      <node id="11">
+        <label>type_traits</label>
+      </node>
+      <node id="12">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>I:/FallingSand/src/game.cpp</label>
+        <link refid="game_8cpp_source"/>
+      </node>
+      <node id="1">
+        <label>I:/FallingSand/src/game.hpp</label>
+        <link refid="game_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>I:/FallingSand/src/main.cpp</label>
+        <link refid="main_8cpp_source"/>
+      </node>
+      <node id="5">
+        <label>I:/FallingSand/src/ui.cpp</label>
+        <link refid="ui_8cpp_source"/>
+      </node>
+      <node id="4">
+        <label>I:/FallingSand/src/ui.hpp</label>
+        <link refid="ui_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>I:/FallingSand/src/vulkan.cpp</label>
+        <link refid="vulkan_8cpp_source"/>
+      </node>
+      <node id="6">
+        <label>I:/FallingSand/src/vulkan.hpp</label>
+        <link refid="vulkan_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>I:/FallingSand/src/window.cpp</label>
+        <link refid="window_8cpp_source"/>
+      </node>
+      <node id="8">
+        <label>I:/FallingSand/src/window.hpp</label>
+        <link refid="window_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structsand_1_1_material_info" prot="public">sand::MaterialInfo</innerclass>
+    <innerclass refid="structsand_1_1_cell" prot="public">sand::Cell</innerclass>
+    <innerclass refid="structsand_1_1_point" prot="public">sand::Point</innerclass>
+    <innerclass refid="structsand_1_1_rect" prot="public">sand::Rect</innerclass>
+    <innerclass refid="structsand_1_1_stroke" prot="public">sand::Stroke</innerclass>
+    <innernamespace refid="namespacesand">sand</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;array&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdint&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;expected&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;filesystem&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;optional&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string_view&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Declarations<sp/>shared<sp/>by<sp/>the<sp/>simulation,<sp/>the<sp/>window,<sp/>and<sp/>the<sp/>GPU<sp/>renderer.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Ordinary<sp/>functions<sp/>and<sp/>tables<sp/>are<sp/>declared<sp/>here<sp/>and<sp/>defined<sp/>once<sp/>in<sp/>game.cpp.<sp/>That</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="comment">//<sp/>keeps<sp/>a<sp/>single<sp/>external<sp/>definition<sp/>for<sp/>each<sp/>of<sp/>them.<sp/>inline<sp/>constexpr<sp/>scalars<sp/>may<sp/>be</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="comment">//<sp/>included<sp/>from<sp/>several<sp/>translation<sp/>units;<sp/>inline<sp/>gives<sp/>those<sp/>copies<sp/>one<sp/>identity.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="comment">//<sp/>A<sp/>constexpr<sp/>function<sp/>can<sp/>run<sp/>at<sp/>compile<sp/>time<sp/>or<sp/>at<sp/>runtime.<sp/>enum<sp/>class<sp/>keeps</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="comment">//<sp/>material<sp/>and<sp/>scene<sp/>ids<sp/>in<sp/>their<sp/>own<sp/>scope.<sp/>string_view<sp/>and<sp/>span<sp/>borrow<sp/>text<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//<sp/>cells<sp/>that<sp/>someone<sp/>else<sp/>owns,<sp/>and<sp/>they<sp/>stay<sp/>valid<sp/>only<sp/>while<sp/>that<sp/>storage<sp/>does.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">//<sp/>array<sp/>holds<sp/>the<sp/>fixed<sp/>palette<sp/>without<sp/>a<sp/>heap<sp/>allocation,<sp/>and<sp/>class<sp/>template</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment">//<sp/>argument<sp/>deduction<sp/>fills<sp/>in<sp/>the<sp/>element<sp/>type<sp/>from<sp/>the<sp/>initializers.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Cell<sp/>is<sp/>trivially<sp/>copyable<sp/>so<sp/>its<sp/>bytes<sp/>can<sp/>be<sp/>copied<sp/>into<sp/>a<sp/>GPU<sp/>buffer.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="comment">//<sp/>expected<sp/>carries<sp/>success<sp/>or<sp/>a<sp/>reason<sp/>the<sp/>UI<sp/>can<sp/>show<sp/>after<sp/>a<sp/>save,<sp/>load,<sp/>or<sp/>scene<sp/>layout.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="comment">//<sp/>nodiscard<sp/>marks<sp/>results<sp/>the<sp/>caller<sp/>needs<sp/>to<sp/>look<sp/>at.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">sand<sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Simulation<sp/>grid<sp/>width<sp/>in<sp/>cells.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>worldWidth<sp/>=<sp/>384;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Simulation<sp/>grid<sp/>height<sp/>in<sp/>cells.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>worldHeight<sp/>=<sp/>224;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Total<sp/>number<sp/>of<sp/>cells<sp/>in<sp/>the<sp/>fixed<sp/>world<sp/>grid.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>worldCells<sp/>=<sp/>worldWidth<sp/>*<sp/>worldHeight;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Fixed<sp/>simulation<sp/>tick<sp/>rate<sp/>used<sp/>during<sp/>ordinary<sp/>play.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>simulationHz<sp/>=<sp/>90;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="keyword">enum<sp/>class</highlight><highlight class="normal"><sp/>Material<sp/>:<sp/>std::uint32_t</highlight></codeline>
+<codeline lineno="46"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>empty,<sp/></highlight><highlight class="comment">//<sp/>No<sp/>matter<sp/>in<sp/>the<sp/>cell.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>sand,<sp/><sp/></highlight><highlight class="comment">//<sp/>Granular<sp/>solid<sp/>that<sp/>sinks<sp/>and<sp/>piles.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>water,<sp/></highlight><highlight class="comment">//<sp/>Coolant<sp/>liquid.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>oil,<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Liquid<sp/>that<sp/>floats<sp/>on<sp/>water.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>stone,<sp/></highlight><highlight class="comment">//<sp/>Solid<sp/>barrier.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>wood,<sp/><sp/></highlight><highlight class="comment">//<sp/>Solid<sp/>fuel.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>fire,<sp/><sp/></highlight><highlight class="comment">//<sp/>Heat<sp/>source<sp/>and<sp/>ignition.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>smoke,<sp/></highlight><highlight class="comment">//<sp/>Rising<sp/>gas.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>steam,<sp/></highlight><highlight class="comment">//<sp/>Condensing<sp/>gas.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>lava,<sp/><sp/></highlight><highlight class="comment">//<sp/>Hot<sp/>liquid.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>ice<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Melting<sp/>solid.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61" refid="structsand_1_1_material_info" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_material_info" kindref="compound">MaterialInfo</ref></highlight></codeline>
+<codeline lineno="62"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>Material<sp/>id;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Palette<sp/>material<sp/>id<sp/>used<sp/>when<sp/>painting<sp/>the<sp/>grid.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string_view<sp/>name;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Short<sp/>uppercase<sp/>label<sp/>shown<sp/>in<sp/>the<sp/>UI.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string_view<sp/>behavior;<sp/></highlight><highlight class="comment">//<sp/>One-line<sp/>behavior<sp/>hint<sp/>for<sp/>the<sp/>material<sp/>picker.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>std::uint32_t<sp/>color;<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>sRGB<sp/>color<sp/>as<sp/>0xRRGGBB<sp/>for<sp/>swatches<sp/>and<sp/>previews.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Number<sp/>of<sp/>paintable<sp/>materials<sp/>in<sp/>the<sp/>palette<sp/>(excludes<sp/>empty).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::size_t<sp/>materialCount<sp/>=<sp/>10;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Display<sp/>names,<sp/>behavior<sp/>labels,<sp/>and<sp/>sRGB<sp/>hex<sp/>colors<sp/>for<sp/>all<sp/>paintable<sp/>materials.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::array&lt;MaterialInfo,<sp/>materialCount&gt;<sp/>materials;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77" refid="structsand_1_1_cell" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref></highlight></codeline>
+<codeline lineno="78"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;float,<sp/>3&gt;<sp/>liquid{};<sp/></highlight><highlight class="comment">//<sp/>Water,<sp/>oil,<sp/>and<sp/>lava<sp/>fill<sp/>levels<sp/>in<sp/>[0,<sp/>1].</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>std::uint32_t<sp/>matter{};<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Packed<sp/>material<sp/>id<sp/>(low<sp/>byte)<sp/>and<sp/>heat<sp/>or<sp/>flags<sp/>in<sp/>upper<sp/>bits.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Alignment,<sp/>size,<sp/>and<sp/>trivial<sp/>copyability<sp/>are<sp/>separate<sp/>facts.<sp/>These<sp/>checks<sp/>lock</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="comment">//<sp/>the<sp/>ones<sp/>the<sp/>GPU<sp/>path<sp/>needs:<sp/>16<sp/>bytes,<sp/>safe<sp/>to<sp/>memcpy,<sp/>matter<sp/>at<sp/>byte<sp/>12.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="keyword">static_assert</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="structsand_1_1_cell" kindref="compound">Cell</ref>)<sp/>==<sp/>16<sp/>&amp;&amp;<sp/>std::is_trivially_copyable_v&lt;Cell&gt;);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="keyword">static_assert</highlight><highlight class="normal">(offsetof(<ref refid="structsand_1_1_cell" kindref="compound">Cell</ref>,<sp/>matter)<sp/>==<sp/>12);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal">[[nodiscard]]<sp/>Material<sp/>kind(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref>&amp;<sp/>cell);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal">[[nodiscard]]<sp/>Material<sp/>displayMaterial(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref>&amp;<sp/>cell);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal">[[nodiscard]]<sp/>std::optional&lt;std::size_t&gt;<sp/>paletteIndex(Material<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal">[[nodiscard]]<sp/><ref refid="structsand_1_1_cell" kindref="compound">Cell</ref><sp/>makeCell(Material<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>quantity<sp/>=<sp/>1.0F);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111" refid="structsand_1_1_point" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_point" kindref="compound">Point</ref></highlight></codeline>
+<codeline lineno="112"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x{};<sp/></highlight><highlight class="comment">//<sp/>Horizontal<sp/>coordinate<sp/>in<sp/>pixels,<sp/>origin<sp/>at<sp/>the<sp/>left<sp/>edge.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y{};<sp/></highlight><highlight class="comment">//<sp/>Vertical<sp/>coordinate<sp/>in<sp/>pixels,<sp/>origin<sp/>at<sp/>the<sp/>top<sp/>edge.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119" refid="structsand_1_1_rect" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></highlight></codeline>
+<codeline lineno="120"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x{};<sp/></highlight><highlight class="comment">//<sp/>Left<sp/>edge<sp/>of<sp/>the<sp/>rectangle.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y{};<sp/></highlight><highlight class="comment">//<sp/>Top<sp/>edge<sp/>of<sp/>the<sp/>rectangle.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>w{};<sp/></highlight><highlight class="comment">//<sp/>Width;<sp/>non-negative<sp/>for<sp/>meaningful<sp/>contains<sp/>tests.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>h{};<sp/></highlight><highlight class="comment">//<sp/>Height;<sp/>non-negative<sp/>for<sp/>meaningful<sp/>contains<sp/>tests.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structsand_1_1_rect_1aa2e151f994d2be866ec2ea8418fbdaa2" kindref="member">contains</ref>(<ref refid="structsand_1_1_point" kindref="compound">Point</ref><sp/>p)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133" refid="structsand_1_1_stroke" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsand_1_1_stroke" kindref="compound">Stroke</ref></highlight></codeline>
+<codeline lineno="134"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_point" kindref="compound">Point</ref><sp/>from;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Brush<sp/>start<sp/>position<sp/>in<sp/>grid<sp/>pixel<sp/>coordinates.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structsand_1_1_point" kindref="compound">Point</ref><sp/>to;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Brush<sp/>end<sp/>position<sp/>in<sp/>grid<sp/>pixel<sp/>coordinates.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>radius;<sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Brush<sp/>radius<sp/>in<sp/>pixels<sp/>for<sp/>the<sp/>GPU<sp/>paint<sp/>pass.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>Material<sp/>material;<sp/></highlight><highlight class="comment">//<sp/>Material<sp/>deposited<sp/>or<sp/>stirred<sp/>along<sp/>the<sp/>stroke.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>stir;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>When<sp/>true,<sp/>mixes<sp/>existing<sp/>cells<sp/>instead<sp/>of<sp/>only<sp/>painting.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight><highlight class="keyword">enum<sp/>class</highlight><highlight class="normal"><sp/>Scene<sp/>:<sp/>std::uint8_t</highlight></codeline>
+<codeline lineno="144"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>waterworks,<sp/></highlight><highlight class="comment">//<sp/>Default<sp/>water<sp/>and<sp/>machinery<sp/>preset.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>thermal,<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Thermal<sp/>vent<sp/>preset.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>refinery,<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Refinery<sp/>preset.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>empty<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Blank<sp/>canvas.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Number<sp/>of<sp/>built-in<sp/>scene<sp/>presets.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::size_t<sp/>sceneCount<sp/>=<sp/>4;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Tab<sp/>labels<sp/>aligned<sp/>with<sp/>Scene<sp/>enum<sp/>order.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::array&lt;std::string_view,<sp/>sceneCount&gt;<sp/>sceneNames;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal">[[nodiscard]]<sp/>std::expected&lt;std::vector&lt;Cell&gt;,<sp/>std::string&gt;<sp/>makeScene(Scene<sp/>scene);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal">[[nodiscard]]<sp/>std::expected&lt;void,<sp/>std::string&gt;<sp/>saveWorld(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>path,</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>Cell&gt;<sp/>cells);</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal">[[nodiscard]]<sp/>std::expected&lt;std::vector&lt;Cell&gt;,<sp/>std::string&gt;<sp/>loadWorld(</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::filesystem::path&amp;<sp/>path);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>sand</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="I:/FallingSand/src/game.hpp"/>
+  </compounddef>
+</doxygen>

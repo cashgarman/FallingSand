@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structsand_1_1_button" kind="struct" language="C++" prot="public">
+    <compoundname>sand::Button</compoundname>
+    <includes refid="ui_8hpp" local="no">ui.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsand_1_1_button_1a4299e3806dc0891c46481bb1fa987929" prot="public" static="no" mutable="no">
+        <type><ref refid="structsand_1_1_rect" kindref="compound">Rect</ref></type>
+        <definition>Rect sand::Button::bounds</definition>
+        <argsstring></argsstring>
+        <name>bounds</name>
+        <qualifiedname>sand::Button::bounds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="77" column="10" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_button_1a9728304bcfe302ca0781dbac832c012d" prot="public" static="no" mutable="no">
+        <type>Action</type>
+        <definition>Action sand::Button::action</definition>
+        <argsstring></argsstring>
+        <name>action</name>
+        <qualifiedname>sand::Button::action</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="78" column="12" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structsand_1_1_button_1a611fbc03403753320c35ac1033ec06b2" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sand::Button::argument</definition>
+        <argsstring></argsstring>
+        <name>argument</name>
+        <qualifiedname>sand::Button::argument</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/ui.hpp" line="79" column="9" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="79" bodyend="79"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Hit-testable control with an associated Action. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>sand::Button</label>
+        <link refid="structsand_1_1_button"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>bounds</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sand::Rect</label>
+        <link refid="structsand_1_1_rect"/>
+      </node>
+    </collaborationgraph>
+    <location file="I:/FallingSand/src/ui.hpp" line="75" column="1" bodyfile="I:/FallingSand/src/ui.hpp" bodystart="76" bodyend="80"/>
+    <listofallmembers>
+      <member refid="structsand_1_1_button_1a9728304bcfe302ca0781dbac832c012d" prot="public" virt="non-virtual"><scope>sand::Button</scope><name>action</name></member>
+      <member refid="structsand_1_1_button_1a611fbc03403753320c35ac1033ec06b2" prot="public" virt="non-virtual"><scope>sand::Button</scope><name>argument</name></member>
+      <member refid="structsand_1_1_button_1a4299e3806dc0891c46481bb1fa987929" prot="public" virt="non-virtual"><scope>sand::Button</scope><name>bounds</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

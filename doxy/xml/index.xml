@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.18.0" xml:lang="en-US">
+  <compound refid="structsand_1_1_button" kind="struct"><name>sand::Button</name>
+    <member refid="structsand_1_1_button_1a4299e3806dc0891c46481bb1fa987929" kind="variable"><name>bounds</name></member>
+    <member refid="structsand_1_1_button_1a9728304bcfe302ca0781dbac832c012d" kind="variable"><name>action</name></member>
+    <member refid="structsand_1_1_button_1a611fbc03403753320c35ac1033ec06b2" kind="variable"><name>argument</name></member>
+  </compound>
+  <compound refid="structsand_1_1_cell" kind="struct"><name>sand::Cell</name>
+    <member refid="structsand_1_1_cell_1a86f4771b81fe3c4c005a9819776f4630" kind="variable"><name>liquid</name></member>
+    <member refid="structsand_1_1_cell_1af5793bd0f5adb5e4713f2e062c7cf7b7" kind="variable"><name>matter</name></member>
+  </compound>
+  <compound refid="structsand_1_1_draw_frame" kind="struct"><name>sand::DrawFrame</name>
+    <member refid="structsand_1_1_draw_frame_1abdaae2f3596c4f6bb7eb2b0c20442556" kind="variable"><name>canvas</name></member>
+    <member refid="structsand_1_1_draw_frame_1ab95eec8313f44e6e0b9e69792a47ddcb" kind="variable"><name>cursor</name></member>
+    <member refid="structsand_1_1_draw_frame_1a55449569908716f5a8ded3ec4c6491d3" kind="variable"><name>radius</name></member>
+    <member refid="structsand_1_1_draw_frame_1aad7fd1069866140a3bd490197a87f4f1" kind="variable"><name>cursorVisible</name></member>
+    <member refid="structsand_1_1_draw_frame_1ad990f5e0a72cbb66168296bcd3952a74" kind="variable"><name>visualTime</name></member>
+    <member refid="structsand_1_1_draw_frame_1a8235d8cd7c96659a82c74d93b4155338" kind="variable"><name>stroke</name></member>
+    <member refid="structsand_1_1_draw_frame_1a7143f3982929358a96860aae4a84e627" kind="variable"><name>ticks</name></member>
+    <member refid="structsand_1_1_draw_frame_1a0064032246096ca65d7b05a8cf9331b9" kind="variable"><name>ui</name></member>
+    <member refid="structsand_1_1_draw_frame_1ab097baf605982ca0ee8cff528f4eb61b" kind="variable"><name>capture</name></member>
+  </compound>
+  <compound refid="structsand_1_1_flow_snapshot" kind="struct"><name>sand::FlowSnapshot</name>
+    <member refid="structsand_1_1_flow_snapshot_1a3be193b32ddcb243d5f324967f87070d" kind="variable"><name>predictor</name></member>
+    <member refid="structsand_1_1_flow_snapshot_1a1e34dfe331b0fc4ddd1ecf6a6b7ec1f6" kind="variable"><name>projected</name></member>
+  </compound>
+  <compound refid="structsand_1_1_vulkan_game_1_1_impl" kind="struct"><name>sand::VulkanGame::Impl</name>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a96f0e8692e13ec8ec0ecdd7eb83602c9" kind="variable"><name>ctx</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1adeab897a1163cd6155abee46a1852989" kind="variable"><name>storage</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a935898484b77506d938c11f273479887" kind="variable"><name>staging</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1ab426bae7d0f845db76fce98090681ddd" kind="variable"><name>commands</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a5ba5e4994bbefca383dc59ac818b16d3" kind="variable"><name>worldLayout</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1abc2a9ed29614df3c1e6e097b9c1266e9" kind="variable"><name>uiLayout</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a41dc7960f7bbd218979dba2c3f02e3eb" kind="variable"><name>descriptors</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1ab36e1c0a3799eecf272f18d4b5200703" kind="variable"><name>pipelineLayout</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1aa7c4db5e1eb788b6302048a944942db4" kind="variable"><name>queries</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a9f58e33777d8ee55d49a0786de68a5f9" kind="variable"><name>compute</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a2ef5ceb3795a124ad5ef5b1463bdfd37" kind="variable"><name>worldPipeline</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a37df0180b38fcf8d53ae957b0f7e8c27" kind="variable"><name>uiPipeline</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a006e952421247d7b875b4129887f7cde" kind="variable"><name>swap</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a4f2de8fb12c3a0f4899866bd8a68dcb8" kind="variable"><name>slots</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a879fcbcd2ce5efc01650048eb8d19d90" kind="variable"><name>worldSet</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a5db54b118b291df08cb6defd92bbe362" kind="variable"><name>immediate</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a14ace6ee06fd9566f20ac75ddc847729" kind="variable"><name>immediateFence</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a6fabd626067828a2dc671b4f4730686d" kind="variable"><name>shaders</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a10dd90dc39e8c7ec21e86cc35a52071e" kind="variable"><name>push</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a8a99dbf4cdad778c6d5dee9926a58bfa" kind="variable"><name>lastTiming</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a72aeb17d90707ab35d10b24402911cec" kind="variable"><name>frame</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a956fbd183a137c20743f0ae074351552" kind="variable"><name>outdated</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a4712d73cc943d1960d5cb808c337ae87" kind="function"><name>Impl</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a431b423bbc0450f0dc2a8a0bf64695c5" kind="function"><name>~Impl</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1aa095481670ecc721af6cb8eb85bb9845" kind="function"><name>setupDescriptors</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a6c513cf5f0165650ac48109953928a4e" kind="function"><name>resize</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a17b0768934c3e4acb7852bccf258b860" kind="function"><name>makeGraphics</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a13d07f58367c9d102205a8446ee999e0" kind="function"><name>shader</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a46a50be4fdc613bcde4fcb4f81c9d5fa" kind="function"><name>graphics</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1ac24d668736e937fb009ab320857fcd99" kind="function"><name>dispatch</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a89b6c87d7c369d14ad3eff4d4d99f03f" kind="function"><name>beginCompute</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a59396d851bf0604e82b1e6f850cafd1c" kind="function"><name>recordBrush</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1acfd73994d97c1134250a433d1ec23e66" kind="function"><name>recordSim</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a3a841d72b907c04f067d8d7a4f7af514" kind="function"><name>draw</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a3cdda5ae6383dea31a97c80e40431bf9" kind="function"><name>recordDraw</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a3725946e5673f1664267e8d23aaa21fd" kind="function"><name>readTiming</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1ac92d873d7c0ddd04daa9ddc6e4e1df0c" kind="function"><name>finishImmediate</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1ad23917e2eaaa26ab40e7ea43867ecc66" kind="function"><name>snapshot</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a2036b36b625b33bb89848d9f054bc5ed" kind="function"><name>probeCell</name></member>
+    <member refid="structsand_1_1_vulkan_game_1_1_impl_1a71d2a3ae003a40e42bac0a876f1cde19" kind="function"><name>flowSnapshot</name></member>
+  </compound>
+  <compound refid="structsand_1_1_input" kind="struct"><name>sand::Input</name>
+    <member refid="structsand_1_1_input_1a189f02d40af8656edf4d77ebd380e060" kind="variable"><name>mouse</name></member>
+    <member refid="structsand_1_1_input_1a4903fcd254aa1ba17f71906ba4b5c11a" kind="variable"><name>pressed</name></member>
+    <member refid="structsand_1_1_input_1aca7c23d0cf1fa399a65ff4c82603b84c" kind="variable"><name>wheel</name></member>
+    <member refid="structsand_1_1_input_1a536c314f976f9f22bffca6a094d26493" kind="variable"><name>paint</name></member>
+    <member refid="structsand_1_1_input_1ae29380b0157ae4e02065d475136a35b2" kind="variable"><name>erase</name></member>
+    <member refid="structsand_1_1_input_1a162fe037a8d76b2cfcb265f5741e09d6" kind="variable"><name>stir</name></member>
+    <member refid="structsand_1_1_input_1af0de2ae5d17fe771ae8abade3199c0a5" kind="variable"><name>paintDown</name></member>
+    <member refid="structsand_1_1_input_1a9bf3f3b1f2818b9043bb4ddc21da38e5" kind="variable"><name>paintPressed</name></member>
+    <member refid="structsand_1_1_input_1a348e05477741c747f56af6f1fa046ff7" kind="variable"><name>erasePressed</name></member>
+    <member refid="structsand_1_1_input_1ad57e79561660fa41458047ea8caf5758" kind="variable"><name>stirPressed</name></member>
+  </compound>
+  <compound refid="structsand_1_1_layout" kind="struct"><name>sand::Layout</name>
+    <member refid="structsand_1_1_layout_1a068d1fe209fa3d8b747957d188efba51" kind="variable"><name>canvas</name></member>
+    <member refid="structsand_1_1_layout_1a10a8cbc8061438cc30e8765863c1925c" kind="variable"><name>panel</name></member>
+    <member refid="structsand_1_1_layout_1a367b74e0f5f61cc5da8f6b96ac464b84" kind="variable"><name>footer</name></member>
+    <member refid="structsand_1_1_layout_1a02f6a39de153c2e86ef27016192325de" kind="variable"><name>brushTrack</name></member>
+    <member refid="structsand_1_1_layout_1a4855669b43025d5f9969a5b9b5fe5bea" kind="variable"><name>gap</name></member>
+    <member refid="structsand_1_1_layout_1aec3b08fff2ea0f5a61af8779d5830a18" kind="variable"><name>scale</name></member>
+    <member refid="structsand_1_1_layout_1ae39a7d45acd93a39d339cd4d1e681963" kind="variable"><name>swatches</name></member>
+    <member refid="structsand_1_1_layout_1a957aaea7a1b9e43cb95cdb7f9206783a" kind="variable"><name>scenes</name></member>
+    <member refid="structsand_1_1_layout_1a5696ab121a5be069f562e4cd6fee2570" kind="variable"><name>controls</name></member>
+    <member refid="structsand_1_1_layout_1ad55fab242ff3a0b03b3b4798526aea9c" kind="variable"><name>cog</name></member>
+    <member refid="structsand_1_1_layout_1a6569df1c5e1b77f3a7637e42d760e867" kind="variable"><name>pausePanel</name></member>
+    <member refid="structsand_1_1_layout_1a670c6fbe21b2b1aa027f2e71ed200472" kind="variable"><name>settingsPanel</name></member>
+    <member refid="structsand_1_1_layout_1aa3785a1a65c26e61dac3cd05bfc2c133" kind="variable"><name>pauseButtons</name></member>
+    <member refid="structsand_1_1_layout_1a2c6c164dbe690c440df3f82f45849a98" kind="variable"><name>settingsButtons</name></member>
+    <member refid="structsand_1_1_layout_1a7515840f77a8fca97b57943af5626050" kind="variable"><name>width</name></member>
+    <member refid="structsand_1_1_layout_1ae8a04f30af2c00f14438a9009c0837f4" kind="variable"><name>height</name></member>
+    <member refid="structsand_1_1_layout_1a454ef9f35f025a1a7864c77bc2f819ba" kind="function"><name>hit</name></member>
+    <member refid="structsand_1_1_layout_1a62b458271190c4f711267c44b522364d" kind="function"><name>worldPoint</name></member>
+  </compound>
+  <compound refid="structsand_1_1_material_info" kind="struct"><name>sand::MaterialInfo</name>
+    <member refid="structsand_1_1_material_info_1aeb261c97c5a40803fc6590d405be28a8" kind="variable"><name>id</name></member>
+    <member refid="structsand_1_1_material_info_1a4f17317940ba46257ce6d6acc986adef" kind="variable"><name>name</name></member>
+    <member refid="structsand_1_1_material_info_1a0750b078a797e7fae796f7403e1418db" kind="variable"><name>behavior</name></member>
+    <member refid="structsand_1_1_material_info_1a3976e9b0a5361ff6fcae3704070049fc" kind="variable"><name>color</name></member>
+  </compound>
+  <compound refid="structsand_1_1_point" kind="struct"><name>sand::Point</name>
+    <member refid="structsand_1_1_point_1a4a0361244daa0c31f1934603cf14cbdd" kind="variable"><name>x</name></member>
+    <member refid="structsand_1_1_point_1aea065fef31f448cdd9bee3a472fa7efd" kind="variable"><name>y</name></member>
+  </compound>
+  <compound refid="structsand_1_1_quad" kind="struct"><name>sand::Quad</name>
+    <member refid="structsand_1_1_quad_1a5ebe28f5105d579f11c5a351f298da50" kind="variable"><name>bounds</name></member>
+    <member refid="structsand_1_1_quad_1a4f87167ad443538d7f27e1c4a03bed37" kind="variable"><name>color</name></member>
+  </compound>
+  <compound refid="structsand_1_1_rect" kind="struct"><name>sand::Rect</name>
+    <member refid="structsand_1_1_rect_1a99c2c612102bfcc54eb30404e59fa627" kind="variable"><name>x</name></member>
+    <member refid="structsand_1_1_rect_1a864a96a2f7d269828180251fede21262" kind="variable"><name>y</name></member>
+    <member refid="structsand_1_1_rect_1a8510e74bd9ac0a6b91e190d213e8bd54" kind="variable"><name>w</name></member>
+    <member refid="structsand_1_1_rect_1a79c166f1b32b88570a3b9213a9680994" kind="variable"><name>h</name></member>
+    <member refid="structsand_1_1_rect_1aa2e151f994d2be866ec2ea8418fbdaa2" kind="function"><name>contains</name></member>
+  </compound>
+  <compound refid="structsand_1_1_resolution_choice" kind="struct"><name>sand::ResolutionChoice</name>
+    <member refid="structsand_1_1_resolution_choice_1aeae67b5cbf1fb987a8e8516180ef0234" kind="variable"><name>width</name></member>
+    <member refid="structsand_1_1_resolution_choice_1a57a25d6f502c680bbe6fad444358716f" kind="variable"><name>height</name></member>
+    <member refid="structsand_1_1_resolution_choice_1ae72ca9bd6776127f280c8f0ce3222156" kind="variable"><name>label</name></member>
+  </compound>
+  <compound refid="structsand_1_1_stroke" kind="struct"><name>sand::Stroke</name>
+    <member refid="structsand_1_1_stroke_1a899fde3246fdf8fcc1566b7783eb1d68" kind="variable"><name>from</name></member>
+    <member refid="structsand_1_1_stroke_1a241563761ac82c71e54ab3445cfc6336" kind="variable"><name>to</name></member>
+    <member refid="structsand_1_1_stroke_1accadfc98cd35b3043622e70e523eda92" kind="variable"><name>radius</name></member>
+    <member refid="structsand_1_1_stroke_1a220ca70099f28cbf2b112181afd47583" kind="variable"><name>material</name></member>
+    <member refid="structsand_1_1_stroke_1aacb36d1a5b7deca6e9c38bc82c391a75" kind="variable"><name>stir</name></member>
+  </compound>
+  <compound refid="structsand_1_1_timing" kind="struct"><name>sand::Timing</name>
+    <member refid="structsand_1_1_timing_1a7840fcd3b5b28748d1dd0a67276d3e70" kind="variable"><name>simulationMs</name></member>
+    <member refid="structsand_1_1_timing_1af27d8df320bb11671d1c52cace458862" kind="variable"><name>gpuMs</name></member>
+  </compound>
+  <compound refid="structsand_1_1_ui_state" kind="struct"><name>sand::UiState</name>
+    <member refid="structsand_1_1_ui_state_1a864993df470ba994d53c719032835cdd" kind="variable"><name>scene</name></member>
+    <member refid="structsand_1_1_ui_state_1a2c775d4f96c355a77cb314780dc48560" kind="variable"><name>material</name></member>
+    <member refid="structsand_1_1_ui_state_1a10fcf8790f490aef8905b197fcdf3737" kind="variable"><name>tool</name></member>
+    <member refid="structsand_1_1_ui_state_1a125bcce651496b520e91b035a5d7d5bd" kind="variable"><name>paused</name></member>
+    <member refid="structsand_1_1_ui_state_1aa4386692488f2de745bc01f3556a7967" kind="variable"><name>radius</name></member>
+    <member refid="structsand_1_1_ui_state_1a0cc57ff737863877cdc508ba2b8b4b79" kind="variable"><name>fps</name></member>
+    <member refid="structsand_1_1_ui_state_1ad2bacc4c3f808f04696d792b8487912b" kind="variable"><name>gpuMs</name></member>
+    <member refid="structsand_1_1_ui_state_1aa302a9310bcd02fc352a3f5dab4d653d" kind="variable"><name>status</name></member>
+    <member refid="structsand_1_1_ui_state_1a2c48969505d7ea40a685978e8d808c48" kind="variable"><name>menu</name></member>
+  </compound>
+  <compound refid="classsand_1_1_vulkan_game" kind="class"><name>sand::VulkanGame</name>
+    <member refid="classsand_1_1_vulkan_game_1a8de9f2dd313e0436e0a07438b6117522" kind="variable"><name>impl_</name></member>
+    <member refid="classsand_1_1_vulkan_game_1ad0dd27c6612216f841172d205c8e2c47" kind="function"><name>VulkanGame</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a01f7d3d6672dd7973b9d00807143871e" kind="function"><name>~VulkanGame</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a33d6dd4dab89593dfa372ed3bf9f3a35" kind="function"><name>VulkanGame</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a745cd6f08d382cb8b83948065072b53d" kind="function"><name>operator=</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a28eeff9cdd185abb13cc679f11cda713" kind="function"><name>prepare</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a6d1201712e1c42fe0bdf638590ca43ba" kind="function"><name>draw</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a1397df65de1fcb8f7f35f223dc8fdd47" kind="function"><name>replaceWorld</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a923fbb6ffa512e08000679a935abe12a" kind="function"><name>snapshot</name></member>
+    <member refid="classsand_1_1_vulkan_game_1aaf3d259bfdd18a7513f8452caf23bed5" kind="function"><name>probeCell</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a9d13ade9ed2e8a5add8fdf083e244916" kind="function"><name>flowSnapshot</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a1921271164674274c1e872d36ea7d0be" kind="function"><name>simulate</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a640953de760197d21ff6dafaca171cce" kind="function"><name>paint</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a36dddfb05c1c6823f9a761ebb8e7a0eb" kind="function"><name>wait</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a462a9accabdb1bbeac7028b53aaf247e" kind="function"><name>timing</name></member>
+    <member refid="classsand_1_1_vulkan_game_1af835ffd61a74c7d19f64d0f2f19e5812" kind="function"><name>deviceName</name></member>
+    <member refid="classsand_1_1_vulkan_game_1a552ff01dca2c5f22e10a95faecca5c21" kind="function"><name>validationErrors</name></member>
+  </compound>
+  <compound refid="classsand_1_1_window" kind="class"><name>sand::Window</name>
+    <member refid="classsand_1_1_window_1a538ed036230208ccc39a3cdf2c7e3a2c" kind="variable"><name>handle_</name></member>
+    <member refid="classsand_1_1_window_1a54405933bd17cfb8366039f83b998d89" kind="variable"><name>input_</name></member>
+    <member refid="classsand_1_1_window_1af0724eee193cb6f60848430c6febcd58" kind="variable"><name>wheelRemainder_</name></member>
+    <member refid="classsand_1_1_window_1a2652058b0147b5ab06a526edf90cfa3f" kind="variable"><name>running_</name></member>
+    <member refid="classsand_1_1_window_1a7edd9aec976153489787c33bb2cf08c5" kind="function"><name>Window</name></member>
+    <member refid="classsand_1_1_window_1a6ca5005ddbbd575c168a5cdaee9d8c2d" kind="function"><name>~Window</name></member>
+    <member refid="classsand_1_1_window_1a4833f5ce3278bb14758179af08f786aa" kind="function"><name>Window</name></member>
+    <member refid="classsand_1_1_window_1a04f6d4c5eda7ee021a9e9bd16c3412f0" kind="function"><name>operator=</name></member>
+    <member refid="classsand_1_1_window_1a961ce4f2f11f5faf10fc245516efc408" kind="function"><name>handle</name></member>
+    <member refid="classsand_1_1_window_1a2291339fb22bb9c1163e23b3ad9efae6" kind="function"><name>size</name></member>
+    <member refid="classsand_1_1_window_1aed9e0a7530cbd6836551bb9a4aebdad3" kind="function"><name>poll</name></member>
+    <member refid="classsand_1_1_window_1ad25eff0d80cdce0f9726cb2ad1fb6ffe" kind="function"><name>consumeInput</name></member>
+    <member refid="classsand_1_1_window_1a2efdb30742c4b14903290fcd7e82d4d0" kind="function"><name>wait</name></member>
+    <member refid="classsand_1_1_window_1a493c965072b36ceb16d9c147053e2a89" kind="function"><name>clientSize</name></member>
+    <member refid="classsand_1_1_window_1aedaba8c247dd9e9d9a02de561a398179" kind="function"><name>route</name></member>
+    <member refid="classsand_1_1_window_1ae757e843d72f7dc0ce6f3e14873464b2" kind="function"><name>process</name></member>
+  </compound>
+  <compound refid="namespacesand" kind="namespace"><name>sand</name>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81" kind="enum"><name>Material</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81aa2e4822a98337283e39f7b60acf85ec9" kind="enumvalue"><name>empty</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a88336b5bb2a1cc21bac7cf33fd451270" kind="enumvalue"><name>sand</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a9460370bb0ca1c98a779b1bcc6861c2c" kind="enumvalue"><name>water</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81ac5af0543407a6e8ba11db6a69f792014" kind="enumvalue"><name>oil</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a0a840ef45467fb3932dbf2c2896c5cbf" kind="enumvalue"><name>stone</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a22811dd94d65037ef86535740b98dec8" kind="enumvalue"><name>wood</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a015f28b9df1bdd36427dd976fb73b29d" kind="enumvalue"><name>fire</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81afdfa02ecf86feac3801254da57c1c9ba" kind="enumvalue"><name>smoke</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a75eec5a819fd971e63a55c466a36211c" kind="enumvalue"><name>steam</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81acf5bf2ab230c9740415984b28b23661e" kind="enumvalue"><name>lava</name></member>
+    <member refid="game_8hpp_1adfed86f3c8f4e47fa82ccf4691a29d81a7bdff76536f12a7c5ffde207e72cfe3a" kind="enumvalue"><name>ice</name></member>
+    <member refid="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12" kind="enum"><name>Scene</name></member>
+    <member refid="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12a7c6d7f41f739a117e6fc468d9924ca40" kind="enumvalue"><name>waterworks</name></member>
+    <member refid="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12a26a27f04d02b653b4b5b77b5d11d7bb9" kind="enumvalue"><name>thermal</name></member>
+    <member refid="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12a29f89695e6378f74efa37c1e53a5c8b7" kind="enumvalue"><name>refinery</name></member>
+    <member refid="game_8hpp_1aadb11116004c7fe9e2ba9446397f7b12aa2e4822a98337283e39f7b60acf85ec9" kind="enumvalue"><name>empty</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8" kind="enum"><name>Action</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aebd73ade48cb3e102d1dbbfbc0377c5f" kind="enumvalue"><name>choose</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a1e7f604b86415ade94e15fef8627609b" kind="enumvalue"><name>scene</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aa3b34c0871dc2fd51eec5559b68f709d" kind="enumvalue"><name>play</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a2764ca9d34e90313978d044f27ae433b" kind="enumvalue"><name>step</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a86266ee937d97f812a8e57d22b62ee29" kind="enumvalue"><name>reset</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a43781db5c40ecc39fd718685594f0956" kind="enumvalue"><name>save</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aec4d1eb36b22d19728e9d1d23ca84d1c" kind="enumvalue"><name>load</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a68f6f171811b2cede3c3a4084ad9918c" kind="enumvalue"><name>brush</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a7171dcadcf98d2109fd407ed89afbe47" kind="enumvalue"><name>sizeDown</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a3d055e47e95016396abf1eaaf0d91e7e" kind="enumvalue"><name>sizeUp</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aaee552fe2e807ec409cd35f0d1ea352f" kind="enumvalue"><name>cycleTool</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8aeb14fc5b95c3513f727abd9f3bdd8ca9" kind="enumvalue"><name>openSettings</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a69f2afc2390cec954f7c208b07212d39" kind="enumvalue"><name>resume</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8a469bba0a564235dfceede42db14f17b0" kind="enumvalue"><name>back</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8af24f62eeb789199b9b2e467df3b1876b" kind="enumvalue"><name>exit</name></member>
+    <member refid="ui_8hpp_1a77bc9d9c929e3020ee1a4f3e6a6293c8ab7e164b34ff76b1cda93a058604190da" kind="enumvalue"><name>resolution</name></member>
+    <member refid="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7e" kind="enum"><name>Menu</name></member>
+    <member refid="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7ea334c4a4c42fdb79d7ebc3e73b517e6f8" kind="enumvalue"><name>none</name></member>
+    <member refid="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7eaec1b81965109165de6b38cd92c1e39f9" kind="enumvalue"><name>pause</name></member>
+    <member refid="ui_8hpp_1a8d0c4f6ea7585e365a9e5b0c0b365f7ea2e5d8aa3dfa8ef34ca5131d20f9dad51" kind="enumvalue"><name>settings</name></member>
+    <member refid="ui_8hpp_1a90c98ec1befc19108181174b32de6062" kind="enum"><name>Tool</name></member>
+    <member refid="ui_8hpp_1a90c98ec1befc19108181174b32de6062ac1940aeeb9693a02e28c52eb85ce261c" kind="enumvalue"><name>paint</name></member>
+    <member refid="ui_8hpp_1a90c98ec1befc19108181174b32de6062a26eb25b14d930f9d5f59b2c50798a9a4" kind="enumvalue"><name>erase</name></member>
+    <member refid="ui_8hpp_1a90c98ec1befc19108181174b32de6062a7c051efa7641541159bf7e63c989167f" kind="enumvalue"><name>stir</name></member>
+    <member refid="game_8cpp_1a57393d9540fce55c2614c9f8acb7865d" kind="variable"><name>materials</name></member>
+    <member refid="game_8cpp_1a50f11839d594d4bd938cd3d67282834f" kind="variable"><name>sceneNames</name></member>
+    <member refid="game_8hpp_1a41e083ecaa31ff4176da598023b1af90" kind="variable"><name>worldWidth</name></member>
+    <member refid="game_8hpp_1ac50ab8347a8dc4177ec5612414b478f1" kind="variable"><name>worldHeight</name></member>
+    <member refid="game_8hpp_1a23e8e0e23308b376db3ddfbb85b1d169" kind="variable"><name>worldCells</name></member>
+    <member refid="game_8hpp_1a824dc2e9a0fe733c517b67f121d2d366" kind="variable"><name>simulationHz</name></member>
+    <member refid="game_8hpp_1af3b12f222d557e5503f3336217347e2d" kind="variable"><name>materialCount</name></member>
+    <member refid="game_8hpp_1a25b1341aa1548c04308bab49a33dc734" kind="variable"><name>sceneCount</name></member>
+    <member refid="ui_8cpp_1a343c611ea1618fb2f8201ac6fba4429d" kind="variable"><name>resolutions</name></member>
+    <member refid="ui_8hpp_1a2db0f7a2b8106f72ccf56000657e0ba3" kind="variable"><name>resolutionCount</name></member>
+    <member refid="ui_8hpp_1afa06fbacd074690b80545478cb528ab6" kind="variable"><name>maxQuads</name></member>
+    <member refid="ui_8hpp_1aa6ed8eddf338c2fc8d4efd7733c7a38b" kind="variable"><name>minRadius</name></member>
+    <member refid="ui_8hpp_1a5983e732f1e4079f4f9bff92e90eec68" kind="variable"><name>maxRadius</name></member>
+    <member refid="game_8cpp_1aa121c68f57f51cb1e9d5711ebbde1bcb" kind="function"><name>kind</name></member>
+    <member refid="game_8cpp_1a5dc55453a611fd2586db068722bc2737" kind="function"><name>displayMaterial</name></member>
+    <member refid="game_8cpp_1afdb72533f6c2dc85e56671430fe3d4ae" kind="function"><name>paletteIndex</name></member>
+    <member refid="game_8cpp_1ab10518b7baba046de562f700d292e863" kind="function"><name>makeCell</name></member>
+    <member refid="game_8cpp_1a8adb53ca56a226c84e4bf35263d60eef" kind="function"><name>makeScene</name></member>
+    <member refid="game_8cpp_1a8b24781452c902ee3cfbd85ec7cd1697" kind="function"><name>saveWorld</name></member>
+    <member refid="game_8cpp_1abff730f352b40deeb0d39618a103a70a" kind="function"><name>loadWorld</name></member>
+    <member refid="ui_8cpp_1ab705df6735d54423dae6512c5ec1911d" kind="function"><name>makeLayout</name></member>
+    <member refid="ui_8cpp_1a50330740b4de1e2c7d30a7a8a30c9d28" kind="function"><name>composeUi</name></member>
+  </compound>
+  <compound refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327" kind="namespace"><name>sand::@070372004357023202020213304362300110151343340327</name>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596" kind="enum"><name>Kernel</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a68f6f171811b2cede3c3a4084ad9918c" kind="enumvalue"><name>brush</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ae0ab074e8104870583f417cbd8afa027" kind="enumvalue"><name>reaction</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ac6e1a4478e049d98320b1c83e9288dfa" kind="enumvalue"><name>grains</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a59a9f87755ec523b0db73207fc8362df" kind="enumvalue"><name>predict</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a1fc3e5c19c13c474bf1e23cf97130dc5" kind="enumvalue"><name>equation</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ad99fad96a5d0a7cb2eb41341ea556093" kind="enumvalue"><name>pressure</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a46f86faa6bbf9ac94a7e459509a20ed0" kind="enumvalue"><name>project</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596aab18b3e58a3b1bb5106ced208a8bd460" kind="enumvalue"><name>flux</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596aaa9f73eea60a006820d0f8768bc8a3fc" kind="enumvalue"><name>limit</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a47b0b16fa7e28800d89fccace269d4af" kind="enumvalue"><name>advect</name></member>
+    <member refid="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ae0e163572822006823fd6bed78bbfebd" kind="enumvalue"><name>separate</name></member>
+  </compound>
+  <compound refid="namespacesand_1_1_0d105002347124122245111217325243023221076164026140" kind="namespace"><name>sand::@105002347124122245111217325243023221076164026140</name>
+  </compound>
+  <compound refid="namespacesand_1_1_0d231321025025173363370376231223365221362346372065" kind="namespace"><name>sand::@231321025025173363370376231223365221362346372065</name>
+  </compound>
+  <compound refid="namespacesand_1_1_0d235120014224003354173007024046342323073263141362" kind="namespace"><name>sand::@235120014224003354173007024046342323073263141362</name>
+  </compound>
+  <compound refid="namespacesand_1_1_0d346117262052323064243207316113136135015010225116" kind="namespace"><name>sand::@346117262052323064243207316113136135015010225116</name>
+  </compound>
+  <compound refid="_r_e_a_d_m_e_8md" kind="file"><name>README.md</name>
+  </compound>
+  <compound refid="game_8cpp" kind="file"><name>game.cpp</name>
+  </compound>
+  <compound refid="game_8hpp" kind="file"><name>game.hpp</name>
+  </compound>
+  <compound refid="main_8cpp" kind="file"><name>main.cpp</name>
+    <member refid="main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="ui_8cpp" kind="file"><name>ui.cpp</name>
+  </compound>
+  <compound refid="ui_8hpp" kind="file"><name>ui.hpp</name>
+  </compound>
+  <compound refid="vulkan_8cpp" kind="file"><name>vulkan.cpp</name>
+  </compound>
+  <compound refid="vulkan_8hpp" kind="file"><name>vulkan.hpp</name>
+  </compound>
+  <compound refid="window_8cpp" kind="file"><name>window.cpp</name>
+  </compound>
+  <compound refid="window_8hpp" kind="file"><name>window.hpp</name>
+  </compound>
+  <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>I:/FallingSand/src</name>
+  </compound>
+  <compound refid="indexpage" kind="page"><name>index</name>
+  </compound>
+</doxygenindex>

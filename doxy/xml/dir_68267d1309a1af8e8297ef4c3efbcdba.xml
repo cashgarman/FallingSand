@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir">
+    <compoundname>I:/FallingSand/src</compoundname>
+    <innerfile refid="game_8cpp">game.cpp</innerfile>
+    <innerfile refid="game_8hpp">game.hpp</innerfile>
+    <innerfile refid="main_8cpp">main.cpp</innerfile>
+    <innerfile refid="ui_8cpp">ui.cpp</innerfile>
+    <innerfile refid="ui_8hpp">ui.hpp</innerfile>
+    <innerfile refid="vulkan_8cpp">vulkan.cpp</innerfile>
+    <innerfile refid="vulkan_8hpp">vulkan.hpp</innerfile>
+    <innerfile refid="window_8cpp">window.cpp</innerfile>
+    <innerfile refid="window_8hpp">window.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327" kind="namespace" language="C++">
+    <compoundname>sand::@070372004357023202020213304362300110151343340327</compoundname>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596" prot="public" static="no" strong="yes">
+        <type>std::size_t</type>
+        <name>Kernel</name>
+        <qualifiedname>sand::@070372004357023202020213304362300110151343340327::Kernel</qualifiedname>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a68f6f171811b2cede3c3a4084ad9918c" prot="public">
+          <name>brush</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ae0ab074e8104870583f417cbd8afa027" prot="public">
+          <name>reaction</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ac6e1a4478e049d98320b1c83e9288dfa" prot="public">
+          <name>grains</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a59a9f87755ec523b0db73207fc8362df" prot="public">
+          <name>predict</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a1fc3e5c19c13c474bf1e23cf97130dc5" prot="public">
+          <name>equation</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ad99fad96a5d0a7cb2eb41341ea556093" prot="public">
+          <name>pressure</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a46f86faa6bbf9ac94a7e459509a20ed0" prot="public">
+          <name>project</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596aab18b3e58a3b1bb5106ced208a8bd460" prot="public">
+          <name>flux</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596aaa9f73eea60a006820d0f8768bc8a3fc" prot="public">
+          <name>limit</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596a47b0b16fa7e28800d89fccace269d4af" prot="public">
+          <name>advect</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacesand_1_1_0d070372004357023202020213304362300110151343340327_1a24e5a0924dc1328377514058af75c596ae0e163572822006823fd6bed78bbfebd" prot="public">
+          <name>separate</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="I:/FallingSand/src/vulkan.cpp" line="460" column="1" bodyfile="I:/FallingSand/src/vulkan.cpp" bodystart="461" bodyend="473"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="I:/FallingSand/src/vulkan.cpp" line="41" column="1"/>
+  </compounddef>
+</doxygen>
