@@ -1,0 +1,59 @@
+{
+  "shapes": [
+    { "op": "beam", "x0": 20, "y0": 98, "x1": 148, "y1": 124, "thick": 7, "material": "stone" },
+    { "op": "block", "x0": 20, "y0": 36, "x1": 26, "y1": 101, "material": "stone" },
+    { "op": "block", "x0": 91, "y0": 91, "x1": 97, "y1": 113, "material": "stone" },
+    { "op": "block", "x0": 25, "y0": 66, "x1": 91, "y1": 99, "material": "water" },
+    {
+      "op": "columns",
+      "x0": 26,
+      "x1": 91,
+      "layers": [
+        {
+          "material": "water",
+          "y0": 98,
+          "y1": { "base": 98, "anchor": 20, "rise": 26, "run": 128 }
+        }
+      ]
+    },
+    { "op": "block", "x0": 91, "y0": 90, "x1": 97, "y1": 112, "material": "stone" },
+    { "op": "ellipse", "cx": 121, "cy": 53, "rx": 17, "ry": 9, "material": "water" },
+    { "op": "beam", "x0": 131, "y0": 154, "x1": 214, "y1": 170, "thick": 8, "material": "stone" },
+    { "op": "beam", "x0": 205, "y0": 171, "x1": 269, "y1": 146, "thick": 8, "material": "stone" },
+    { "op": "block", "x0": 266, "y0": 132, "x1": 272, "y1": 154, "material": "stone" },
+    { "op": "block", "x0": 174, "y0": 154, "x1": 181, "y1": 164, "material": "wood" },
+    { "op": "block", "x0": 205, "y0": 164, "x1": 234, "y1": 167, "material": "water" },
+    { "op": "beam", "x0": 265, "y0": 109, "x1": 360, "y1": 83, "thick": 8, "material": "stone" },
+    { "op": "block", "x0": 354, "y0": 27, "x1": 360, "y1": 88, "material": "stone" },
+    { "op": "block", "x0": 305, "y0": 74, "x1": 310, "y1": 99, "material": "stone" },
+    {
+      "op": "columns",
+      "x0": 310,
+      "x1": 354,
+      "layers": [
+        {
+          "material": "oil",
+          "y0": { "base": 58, "every": 6, "extra": 1 },
+          "y1": 69
+        },
+        {
+          "material": "water",
+          "y0": 69,
+          "y1": { "base": 109, "anchor": 265, "rise": -26, "run": 95, "offset": -1 }
+        }
+      ]
+    },
+    { "op": "ellipse", "cx": 311, "cy": 34, "rx": 18, "ry": 8, "material": "sand" },
+    { "op": "ellipse", "cx": 76, "cy": 25, "rx": 13, "ry": 5, "material": "sand" },
+    { "op": "block", "x0": 14, "y0": 180, "x1": 21, "y1": 221, "material": "stone" },
+    { "op": "block", "x0": 350, "y0": 174, "x1": 358, "y1": 221, "material": "stone" },
+    { "op": "block", "x0": 14, "y0": 215, "x1": 358, "y1": 221, "material": "stone" },
+    { "op": "block", "x0": 21, "y0": 193, "x1": 350, "y1": 215, "material": "water" },
+    { "op": "block", "x0": 64, "y0": 210, "x1": 105, "y1": 215, "material": "sand" },
+    { "op": "block", "x0": 109, "y0": 212, "x1": 144, "y1": 215, "material": "sand" },
+    { "op": "block", "x0": 281, "y0": 209, "x1": 326, "y1": 215, "material": "sand" },
+    { "op": "block", "x0": 318, "y0": 186, "x1": 350, "y1": 193, "material": "ice" },
+    { "op": "block", "x0": 328, "y0": 181, "x1": 350, "y1": 187, "material": "ice" },
+    { "op": "block", "x0": 341, "y0": 177, "x1": 350, "y1": 186, "material": "ice" }
+  ]
+}

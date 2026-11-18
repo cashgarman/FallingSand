@@ -1,0 +1,39 @@
+{
+  "shapes": [
+    { "op": "beam", "x0": 20, "y0": 112, "x1": 152, "y1": 133, "thick": 9, "material": "stone" },
+    { "op": "block", "x0": 20, "y0": 41, "x1": 28, "y1": 115, "material": "stone" },
+    { "op": "block", "x0": 28, "y0": 78, "x1": 112, "y1": 112, "material": "lava" },
+    { "op": "ellipse", "cx": 139, "cy": 90, "rx": 18, "ry": 9, "material": "lava" },
+    { "op": "beam", "x0": 201, "y0": 146, "x1": 361, "y1": 95, "thick": 10, "material": "stone" },
+    { "op": "block", "x0": 353, "y0": 28, "x1": 361, "y1": 103, "material": "stone" },
+    {
+      "op": "columns",
+      "x0": 252,
+      "x1": 353,
+      "layers": [
+        {
+          "material": "water",
+          "y0": 80,
+          "y1": { "base": 146, "anchor": 201, "rise": -51, "run": 160 }
+        }
+      ]
+    },
+    { "op": "ellipse", "cx": 342, "cy": 67, "rx": 15, "ry": 8, "material": "ice" },
+    {
+      "op": "block",
+      "note": "Repaint the wall where the ice ellipse overlaps it.",
+      "x0": 353,
+      "y0": 28,
+      "x1": 361,
+      "y1": 103,
+      "material": "stone"
+    },
+    { "op": "block", "x0": 70, "y0": 209, "x1": 314, "y1": 221, "material": "stone" },
+    { "op": "block", "x0": 70, "y0": 171, "x1": 79, "y1": 209, "material": "stone" },
+    { "op": "block", "x0": 305, "y0": 173, "x1": 314, "y1": 209, "material": "stone" },
+    { "op": "block", "x0": 86, "y0": 189, "x1": 150, "y1": 192, "material": "wood" },
+    { "op": "block", "x0": 90, "y0": 192, "x1": 94, "y1": 209, "material": "wood" },
+    { "op": "block", "x0": 145, "y0": 192, "x1": 149, "y1": 209, "material": "wood" },
+    { "op": "block", "x0": 79, "y0": 200, "x1": 305, "y1": 209, "material": "water" }
+  ]
+}
