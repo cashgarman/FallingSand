@@ -11,8 +11,13 @@
 #include <windows.h>
 
 namespace sand {
+
+// Helpers in this unnamed namespace have internal linkage. They belong to this
+// translation unit only, so they cannot collide with the same name in another file.
 namespace {
 
+// mdspan maps a row and a column onto one flat buffer. The view owns nothing;
+// the vector that supplies cells.data() keeps the cells alive.
 using Grid = std::mdspan<Cell, std::extents<std::size_t, worldHeight, worldWidth>>;
 
 // Fill an axis-aligned rectangle with a single material.
@@ -51,6 +56,8 @@ void ellipse(Grid cells, int cx, int cy, int rx, int ry, Material material)
 // Stroke a thick line between two points by interpolating along x and stamping vertical blocks.
 void beam(Grid cells, int x0, int y0, int x1, int y1, int thick, Material material)
 {
+    // views::iota is a view of x coordinates. The loop reads it in place and does not
+    // build a container of indexes. The source of the view is the iterator pair itself.
     // Step along x and stamp a vertical slab at the interpolated y.
     for (int x : std::views::iota(x0, x1))
     {
@@ -63,7 +70,9 @@ void beam(Grid cells, int x0, int y0, int x1, int y1, int thick, Material materi
 
 void waterworks(Grid cells)
 {
+    // using enum brings this function's Material enumerators into scope by name.
     using enum Material;
+
     // Terraces, holding cups, a splash baffle, and a deep catch basin.
     beam(cells, 20, 98, 148, 124, 7, stone);
     block(cells, 20, 36, 26, 101, stone);
@@ -114,6 +123,7 @@ void waterworks(Grid cells)
 // Lava pour, water runoff, wood fuel, and a shared catch basin.
 void thermal(Grid cells)
 {
+    // using enum, as in waterworks, so stone and lava name Material enumerators.
     using enum Material;
     beam(cells, 20, 112, 152, 133, 9, stone);
     block(cells, 20, 41, 28, 115, stone);
@@ -144,6 +154,7 @@ void thermal(Grid cells)
 // Oil and water separation demo with a burner and settling pool.
 void refinery(Grid cells)
 {
+    // using enum, as in waterworks, so oil, water, and fire name Material enumerators.
     using enum Material;
     beam(cells, 24, 100, 161, 125, 8, stone);
     block(cells, 24, 31, 31, 107, stone);
@@ -166,11 +177,17 @@ void refinery(Grid cells)
     block(cells, 191, 191, 196, 209, stone);
 }
 
+// The magic bytes are a constexpr array, so the file signature is fixed at compile time.
 constexpr std::array<char, 8> magic{'S', 'A', 'N', 'D', '0', '0', '0', '1'};
+
+// bit_cast copies host bits. The save format is little-endian, so this build checks that
+// the host order matches the file order before those bits are written out.
 static_assert(std::endian::native == std::endian::little);
 
 void putWord(std::ostream& output, std::uint32_t word)
 {
+    // bit_cast forms a char array from the word's object representation. Both types
+    // are trivially copyable and the same size, which is what the operation requires.
     const auto bytes = std::bit_cast<std::array<char, 4>>(word);
     output.write(bytes.data(), bytes.size());
 }
@@ -179,12 +196,17 @@ std::uint32_t getWord(std::istream& input)
 {
     std::array<char, 4> bytes{};
     input.read(bytes.data(), bytes.size());
+
+    // The reverse of putWord: bit_cast rebuilds the integer from the four file bytes.
     return std::bit_cast<std::uint32_t>(bytes);
 }
 
 // Reject cells with reserved matter bits, unknown materials, or invalid liquid sums.
 bool validCell(const Cell& c)
 {
+    // to_underlying reads the enum class as its integer without a hand-written cast.
+    // all_of applies a capture-free lambda to each liquid channel. The lambda lives
+    // only for this call, so it does not need to own or borrow any surrounding state.
     return (c.matter >> 26) == 0 && (c.matter & 255u) <= std::to_underlying(Material::ice) &&
            std::ranges::all_of(c.liquid, [](float v) { return v >= 0.0F && v <= 1.001F; }) &&
            c.liquid[0] + c.liquid[1] + c.liquid[2] <= 1.001F;
@@ -194,6 +216,7 @@ bool validCell(const Cell& c)
 
 std::vector<Cell> makeScene(Scene scene)
 {
+    // The vector owns the cells. The mdspan is a view of that storage and must not outlive it.
     // Allocate an empty world buffer and view it as a height × width grid.
     std::vector<Cell> cells(worldCells);
     Grid grid(cells.data());
@@ -214,12 +237,15 @@ std::vector<Cell> makeScene(Scene scene)
         break;
     }
 
+    // Return the named local directly so the compiler can construct it in the caller.
     return cells;
 }
 
 std::expected<void, std::string> saveWorld(const std::filesystem::path& path,
                                            std::span<const Cell> cells)
 {
+    // The span borrows the caller's cells for this call. expected<void, string> carries
+    // success, or a reason when validation or the filesystem operation fails.
     // Refuse saves that are the wrong size or contain invalid cells.
     if (cells.size() != worldCells || !std::ranges::all_of(cells, validCell))
     {
@@ -230,6 +256,7 @@ std::expected<void, std::string> saveWorld(const std::filesystem::path& path,
     auto temporary = path;
     temporary += L".tmp";
 
+    // ofstream owns the temporary file. close() finishes the write before the replace below.
     std::ofstream file(temporary, std::ios::binary | std::ios::trunc);
 
     // Write header and little-endian cell payload.
@@ -242,6 +269,7 @@ std::expected<void, std::string> saveWorld(const std::filesystem::path& path,
     {
         for (float v : cell.liquid)
         {
+            // Same-size trivially copyable types: the float's bits travel as a uint32_t.
             putWord(file, std::bit_cast<std::uint32_t>(v));
         }
         putWord(file, cell.matter);
@@ -252,6 +280,7 @@ std::expected<void, std::string> saveWorld(const std::filesystem::path& path,
     if (!file || !MoveFileExW(temporary.c_str(), path.c_str(),
                               MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
     {
+        // The error_code overload stores the result in error. Cleanup stays best-effort.
         std::error_code error;
         std::filesystem::remove(temporary, error);
         return std::unexpected("COULD NOT SAVE WORLD");
@@ -262,6 +291,7 @@ std::expected<void, std::string> saveWorld(const std::filesystem::path& path,
 
 std::expected<std::vector<Cell>, std::string> loadWorld(const std::filesystem::path& path)
 {
+    // ifstream owns the file handle and closes it when this function returns.
     std::ifstream file(path, std::ios::binary);
     std::array<char, magic.size()> header{};
 
@@ -281,6 +311,8 @@ std::expected<std::vector<Cell>, std::string> loadWorld(const std::filesystem::p
     {
         for (float& v : cell.liquid)
         {
+            // A float and a uint32_t are the same size and trivially copyable, so bit_cast
+            // rebuilds the liquid value from the bits that putWord stored.
             v = std::bit_cast<float>(getWord(file));
         }
         cell.matter = getWord(file);

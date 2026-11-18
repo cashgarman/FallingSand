@@ -9,6 +9,7 @@
 namespace sand {
 namespace {
 
+// Shared HUD colors. constexpr keeps each channel value a constant expression.
 constexpr std::uint32_t screen = 0x0e131b;
 constexpr std::uint32_t panel = 0x151e29;
 constexpr std::uint32_t inset = 0x101823;
@@ -19,6 +20,9 @@ constexpr std::uint32_t mint = 0x87e4ba;
 constexpr std::uint32_t mintDark = 0x1b3836;
 
 using Glyph = std::array<unsigned, 7>;
+
+// Bitmap font. Each glyph is seven rows of bits, stored in a constexpr array so
+// text layout can use it from any later constant context.
 constexpr std::array<Glyph, 36> font{{
     {14, 17, 17, 31, 17, 17, 17}, {30, 17, 17, 30, 17, 17, 30}, {14, 17, 16, 16, 16, 17, 14},
     {30, 17, 17, 17, 17, 17, 30}, {31, 16, 16, 30, 16, 16, 31}, {31, 16, 16, 30, 16, 16, 16},
@@ -36,6 +40,7 @@ constexpr std::array<Glyph, 36> font{{
 
 constexpr Glyph glyph(char c)
 {
+    // Compile-time lookup when the character is a constant. Runtime calls use the same body.
     if (c >= 'A' && c <= 'Z')
     {
         return font[static_cast<std::size_t>(c - 'A')];
@@ -78,6 +83,7 @@ constexpr std::array<std::array<std::uint8_t, 8>, materials.size()> icons{{
 
 std::array<float, 4> linear(std::uint32_t rgb)
 {
+    // Capture-free lambda for one sRGB channel. It exists only for this conversion.
     const auto channel = [](std::uint32_t value) {
         const float s = static_cast<float>(value & 255) / 255.0F;
         return s <= 0.04045F ? s / 12.92F : std::pow((s + 0.055F) / 1.055F, 2.4F);
@@ -88,6 +94,8 @@ std::array<float, 4> linear(std::uint32_t rgb)
 class Painter
 {
   public:
+
+    // explicit so a quad vector is not implicitly converted into a Painter.
     explicit Painter(std::vector<Quad>& quads) : quads_(quads)
     {
         quads_.clear();
@@ -106,6 +114,7 @@ class Painter
 
     void label(float x, float y, std::string_view value, float px, std::uint32_t color)
     {
+        // string_view reads the caller's characters. It does not allocate or own them.
         auto ink = linear(color);
         for (char c : value)
         {
@@ -128,6 +137,8 @@ class Painter
     }
 
   private:
+
+    // Borrows the caller's quad buffer. The vector must outlive this Painter.
     std::vector<Quad>& quads_;
 
     void box(Rect r, const std::array<float, 4>& ink)
@@ -239,6 +250,10 @@ std::optional<Button> Layout::hit(Point mouse) const
             return Button{scenes[i], Action::scene, static_cast<int>(i)};
         }
     }
+
+    // find_if walks the controls with a lambda that borrows mouse by copy of the Point.
+
+    // The lambda does not outlive this statement. optional is empty when nothing matched.
     auto found = std::ranges::find_if(
         controls, [mouse](const Button& b) { return b.bounds.contains(mouse); });
     return found == controls.end() ? std::nullopt : std::optional(*found);
@@ -261,6 +276,7 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     const float end = l.panel.x + l.panel.w;
     const float headerY = std::max(13 * s, y - 102 * s);
     constexpr std::uint32_t tile = 0x223b3c;
+
     // Keep the canvas available to the fluid pass.
     p.rect({0, 0, static_cast<float>(width), y}, screen);
     p.rect({0, y, x, l.canvas.h}, screen);
@@ -272,6 +288,7 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     p.label(x + 59 * s, headerY + 3 * s, "FALLING SAND", std::max(2.0F, std::round(3 * s)), white);
     p.label(x + 60 * s, headerY + 33 * s, "MATERIAL SANDBOX", tiny, muted);
 
+    // format fills the badge from the frame rate and the GPU time, and returns a string.
     const auto metric = std::format("{:3} FPS   {:.2f} MS GPU", state.fps, state.gpuMs);
     const float badgeWidth = (static_cast<float>(metric.size()) * 6 * px + 31 * s);
     const Rect badge{end - badgeWidth, headerY + 8 * s, badgeWidth, 28 * s};
@@ -319,6 +336,9 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
         {
             p.label(r.x + 35 * s, r.y + r.h - 7 * tiny - 4 * s, info.behavior, tiny, muted);
         }
+
+        // The key character lives for this iteration. The string_view passed below
+        // borrows that one character only for the label call.
         const char key = i == 9 ? '0' : static_cast<char>('1' + i);
         const Rect keycap{r.x + r.w - 24 * s, r.y + (r.h - 17 * s) / 2, 16 * s, 17 * s};
         p.frame(keycap, active ? 0x568577 : border, inset);
@@ -327,6 +347,7 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     }
     p.label(l.panel.x + 13 * s, y + l.panel.h - 20 * s, "1-0  SELECT MATERIAL", tiny, muted);
 
+    // CTAD picks the array extent from this initializer list.
     const std::array captions{state.paused ? "PLAY" : "PAUSE",
                               "STEP",
                               "RESET",

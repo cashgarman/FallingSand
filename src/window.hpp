@@ -5,6 +5,15 @@
 #include <array>
 #include <windows.h>
 
+// Win32 window owner.
+//
+// The class acquires an HWND and releases it in the destructor. Copying is deleted
+// because two objects would destroy the same window. Declaring the destructor
+// suppresses the implicit move operations, so a Window stays where it was created.
+// handle() and the other observers are const because they do not change that ownership.
+// nodiscard flags results the caller needs. The constructor is explicit so a bool
+// cannot become a Window through an implicit conversion.
+
 namespace sand {
 
 struct Input
@@ -22,6 +31,8 @@ class Window
   public:
     explicit Window(bool show);
     ~Window();
+
+    // Copy is deleted. A second owner would destroy the same HWND.
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
 

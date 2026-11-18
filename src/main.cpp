@@ -21,9 +21,25 @@
 #include <utility>
 #include <windowsx.h>
 
+// Process entry, the interactive sandbox, and the GPU checks.
+//
+// A span over argv is a counted view of the argument pointers. string_view names
+// each flag without allocating. from_chars reports the parse end and the error
+// through a structured binding. format builds messages that include those values.
+//
+// steady_clock measures intervals, and duration keeps the tick length in seconds.
+// filesystem::path composes the save location from the environment or the current
+// directory. expected is how save and load hand back a reason the status line can show.
+//
+// The frame loop is an ordinary loop. Each iteration runs to completion, so there
+// is no paused frame waiting to be resumed. Ranges and views walk cells and keys
+// in place. optional holds a brush point when a stroke is active and is empty when
+// the stroke should break.
+
 namespace sand {
 namespace {
 
+// Clock and duration aliases keep the unit on the type. tickSeconds is one sim step.
 using Clock = std::chrono::steady_clock;
 using Seconds = std::chrono::duration<double>;
 constexpr double tickSeconds = 1.0 / simulationHz;
@@ -42,9 +58,15 @@ struct Options
 Options parse(std::span<char*> arguments)
 {
     Options options;
+
+    // The lambda takes a string_view of one argument. from_chars writes into value
+    // and the structured binding names the end pointer and the error code.
     const auto number = [](std::string_view word) {
         unsigned value{};
         const auto [end, error] = std::from_chars(word.data(), word.data() + word.size(), value);
+
+        // 100'000 uses a digit separator so the bound stays readable. The whole token
+        // must be consumed: end has to land on the last character of the view.
         if (error != std::errc{} || end != word.data() + word.size() || value > 100'000)
         {
             throw std::runtime_error("Expected an integer between 0 and 100000.");
@@ -54,6 +76,9 @@ Options parse(std::span<char*> arguments)
     for (std::size_t i = 1; i < arguments.size(); ++i)
     {
         const std::string_view key = arguments[i];
+
+        // Captures the argument index by reference so a flag can consume the next word.
+        // format fills the message if that word is missing.
         const auto next = [&] {
             if (++i == arguments.size())
             {
@@ -82,6 +107,8 @@ Options parse(std::span<char*> arguments)
         } else if (key == "--scene")
         {
             const auto scene = next();
+
+            // string_view keys share the literal storage. find walks them in place.
             constexpr std::array<std::string_view, sceneNames.size()> keys{"waterworks", "thermal",
                                                                            "refinery", "empty"};
             const auto found = std::ranges::find(keys, scene);
@@ -100,6 +127,7 @@ Options parse(std::span<char*> arguments)
 
 void require(bool result, std::string_view test)
 {
+    // string_view borrows the test name literal for the message. format inserts it.
     if (!result)
     {
         throw std::runtime_error(std::format("GPU test failed: {}.", test));
@@ -108,6 +136,7 @@ void require(bool result, std::string_view test)
 
 std::array<double, 3> phaseTotals(std::span<const Cell> cells)
 {
+    // span borrows the world buffer for this check. The array owns the three totals.
     std::array<double, 3> count{};
     for (const auto& cell : cells)
     {
@@ -126,9 +155,12 @@ std::array<double, 3> phaseTotals(std::span<const Cell> cells)
 
 void simulationTests(bool validate)
 {
+    // using enum so the test body can name sand, water, and the other materials directly.
     using enum Material;
     VulkanGame game(nullptr, false, validate);
     auto cells = makeScene(Scene::empty);
+
+    // index is capture-free. fill captures cells by reference and lives only in this test.
     const auto index = [](int x, int y) { return y * worldWidth + x; };
     const auto fill = [&](int x0, int y0, int x1, int y1, Material m) {
         for (int y = y0; y < y1; ++y)
@@ -152,6 +184,8 @@ void simulationTests(bool validate)
     game.simulate(1);
 
     const auto flow = game.flowSnapshot();
+
+    // The lambda borrows index and takes the velocity field as a span for this check.
     const auto rmsDivergence = [&](std::span<const Point> field) {
         double sum{};
         int count{};
@@ -179,10 +213,14 @@ void simulationTests(bool validate)
         require(std::abs(afterTotals[i] - totals[i]) < 0.02, "transport conserves each liquid");
     }
     require(result[index(110, 144)].matter == std::to_underlying(stone), "tank wall was retained");
+
+    // count_if applies a capture-free predicate. The count is the number of sand cells.
     require(std::ranges::count_if(result, [](const Cell& c) { return kind(c) == sand; }) == 56,
             "granular motion conserves grains");
     const auto phaseCenter = [&](std::span<const Cell> state, std::size_t phase, double volume) {
         double position{};
+
+        // enumerate yields the index and the cell together. The binding names both.
         for (auto [i, c] : std::views::enumerate(state))
         {
             position += static_cast<double>(i / worldWidth) * c.liquid[phase];
@@ -226,6 +264,8 @@ void simulationTests(bool validate)
 
 std::filesystem::path saveLocation()
 {
+    // The buffer is sized for the environment-variable limit, so the wide string
+    // allocates its storage once and the API writes into that storage.
     std::wstring folder(32768, L'\0');
     const DWORD length =
         GetEnvironmentVariableW(L"LOCALAPPDATA", folder.data(), static_cast<DWORD>(folder.size()));
@@ -234,12 +274,16 @@ std::filesystem::path saveLocation()
         return std::filesystem::current_path() / "world.sandbox";
     }
     folder.resize(length);
+
+    // path joins the directory pieces with the platform separator.
     return std::filesystem::path(folder) / "FallingSand" / "world.sandbox";
 }
 
 class Sandbox
 {
   public:
+
+    // gpu_ borrows the device owner. Sandbox does not destroy it.
     Sandbox(VulkanGame& game, Scene scene) : gpu_(game)
     {
         state.scene = scene;
@@ -285,6 +329,9 @@ class Sandbox
         {
             drawDrag_ = layout.canvas.contains(inputs.paintDown);
             sliderDrag_ = false;
+
+            // The initializer keeps the hit result in this if. Both branches can see it,
+            // and it leaves scope at the end of the statement.
             if (auto pressed = layout.hit(inputs.paintDown))
             {
                 sliderDrag_ = pressed->action == Action::brush;
@@ -324,11 +371,15 @@ class Sandbox
             return std::nullopt;
         }
         const auto point = layout.worldPoint(mouse);
+
+        // Tool is an enum class. The stroke remembers which tool produced it.
         const Tool tool = erase ? Tool::erase : stir ? Tool::stir : state.tool;
         const auto material = tool == Tool::erase ? Material::empty : state.material;
         const Point start = previous_ && tool == previousTool_ && material == previousMaterial_
                                 ? *previous_
                                 : point;
+
+        // nullopt breaks the stroke. optional(point) keeps the end point for the next move.
         previous_ = pulse ? std::nullopt : std::optional(point);
         previousTool_ = tool;
         previousMaterial_ = material;
@@ -336,7 +387,11 @@ class Sandbox
     }
 
   private:
+
+    // Reference member: the device owner lives in play() or the test, not in Sandbox.
     VulkanGame& gpu_;
+
+    // path owns the save location. optional is empty until a drag has a previous point.
     std::filesystem::path save_{saveLocation()};
     std::optional<Point> previous_;
     Tool previousTool_{};
@@ -354,6 +409,7 @@ class Sandbox
 
     void showStatus(std::string message)
     {
+        // Move the message into the owned string. status borrows that storage for the HUD.
         status_ = std::move(message);
         state.status = status_;
         statusUntil_ = Clock::now() + std::chrono::seconds(3);
@@ -366,6 +422,7 @@ class Sandbox
 
     void action(Action action, int argument)
     {
+        // Action is a closed enum class. Each command is one arm of this switch.
         switch (action)
         {
         case Action::choose:
@@ -390,6 +447,8 @@ class Sandbox
             showStatus("SCENE RESET");
             break;
         case Action::save: {
+            // error_code keeps directory creation from throwing. expected then carries
+            // either success or the message showStatus will borrow.
             std::error_code error;
             if (save_.has_parent_path())
             {
@@ -403,6 +462,8 @@ class Sandbox
         }
         case Action::load: {
             auto loaded = loadWorld(save_);
+
+            // The expected holds the world, or a reason. The contextual bool selects which.
             if (loaded)
             {
                 gpu_.replaceWorld(*loaded);
@@ -429,6 +490,8 @@ class Sandbox
 void windowTests(Window& window, VulkanGame& gpu)
 {
     Sandbox sandbox(gpu, Scene::waterworks);
+
+    // Structured bindings name the two client dimensions from the returned array.
     const auto [w, h] = window.size();
     const auto [width, height] = gpu.prepare(w, h);
     auto layout = makeLayout(width, height);
@@ -448,6 +511,8 @@ void windowTests(Window& window, VulkanGame& gpu)
     require(sandbox.state.material == Material::sand, "material button");
     click(layout.controls[1].bounds);
     sandbox.input(window.consumeInput(), layout);
+
+    // exchange both tests the step flag and clears it for the next input.
     require(sandbox.state.paused && std::exchange(sandbox.step, false), "step button");
     click(layout.canvas);
     const auto paint = window.consumeInput();
@@ -470,6 +535,8 @@ void windowTests(Window& window, VulkanGame& gpu)
         require(gpu.draw({layout.canvas, {}, 8, false, 0, {}, 1, quads, {}}),
                 "present resized window");
     }
+
+    // temp_directory_path and format build a per-process save name.
     const auto saved = std::filesystem::temp_directory_path() /
                        std::format("falling-sand-{}.sandbox", GetCurrentProcessId());
     require(saveWorld(saved, gpu.snapshot()).has_value(), "save world");
@@ -488,7 +555,10 @@ void windowTests(Window& window, VulkanGame& gpu)
 void reportBenchmark(std::vector<double>& gpu, const std::vector<double>& sim, unsigned frames,
                      double elapsed, std::string_view device)
 {
+    // Sort the owned sample in place. string_view borrows the device name for printing.
     std::ranges::sort(gpu);
+
+    // span borrows either sample for the mean. The lambda does not keep the view.
     const auto average = [](std::span<const double> values) {
         return values.empty() ? 0.0
                               : std::accumulate(values.begin(), values.end(), 0.0) /
@@ -506,6 +576,8 @@ void reportBenchmark(std::vector<double>& gpu, const std::vector<double>& sim, u
 
 void play(const Options& options)
 {
+    // Window and VulkanGame are the resource owners for this scope. Their destructors
+    // release the HWND and the device when play returns, including on an exception.
     Window window(true);
     const bool fast = options.benchmarkFrames != 0 || options.windowTest;
     VulkanGame gpu(window.handle(), fast, options.validate);
@@ -516,6 +588,8 @@ void play(const Options& options)
     }
     Sandbox sandbox(gpu, options.scene);
     std::vector<Quad> quads;
+
+    // Default allocator. reserve covers the HUD budget before the first frame.
     quads.reserve(maxQuads);
     std::vector<double> gpuMs, simMs;
     const auto start = Clock::now();
@@ -529,6 +603,7 @@ void play(const Options& options)
 
     while (window.poll())
     {
+        // Each pass finishes before the next. The bindings name the client size.
         const auto [clientW, clientH] = window.size();
         const auto [w, h] = gpu.prepare(clientW, clientH);
         if (w <= 0 || h <= 0)
@@ -555,6 +630,8 @@ void play(const Options& options)
         } else if (sandbox.state.paused)
         {
             accumulator = 0.0;
+
+            // exchange reads the one-shot step flag and leaves it false.
             ticks = std::exchange(sandbox.step, false) ? 1u : 0u;
         } else
         {
@@ -596,6 +673,7 @@ void play(const Options& options)
                 benchmarkTime = Clock::now();
             } else if (rendered > warmup)
             {
+                // Timing is a small aggregate. The binding copies the two millisecond fields.
                 auto [simulation, total] = gpu.timing();
                 if (total > 0.0)
                 {
@@ -627,6 +705,7 @@ int main(int argc, char* argv[])
 {
     try
     {
+        // CTAD builds a span from the pointer and the count. argv storage is the process's.
         const auto options = sand::parse(std::span(argv, static_cast<std::size_t>(argc)));
         if (options.test)
         {
@@ -647,6 +726,7 @@ int main(int argc, char* argv[])
         return EXIT_SUCCESS;
     } catch (const std::exception& error)
     {
+        // what() is the message from argument parsing, a failed check, or device setup.
         std::cerr << error.what() << '\n';
         if (argc == 1)
         {

@@ -8,6 +8,16 @@
 #include <string_view>
 #include <vector>
 
+// Immediate-mode layout for the sandbox HUD.
+//
+// Action and Tool are enum classes, so the closed set of commands stays scoped and
+// the compositor can switch on every value. optional is the result of a hit test:
+// either a button or an empty miss, with no error to explain. string_view status
+// borrows text owned by the caller for this frame. array sizes follow the material
+// and scene tables, so a new entry forces the layout arrays to match.
+// Quad is alignas(16) and 32 bytes so the GPU record matches the shader stride.
+// inline constexpr limits are header values with one identity across translation units.
+
 namespace sand {
 
 enum class Action : std::uint8_t
@@ -70,6 +80,8 @@ struct alignas(16) Quad
     std::array<float, 4> bounds;
     std::array<float, 4> color;
 };
+
+// Size and alignment are separate representation checks. The shader reads 32-byte quads.
 static_assert(sizeof(Quad) == 32);
 
 inline constexpr std::size_t maxQuads = 16384;

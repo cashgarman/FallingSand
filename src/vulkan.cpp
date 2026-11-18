@@ -17,6 +17,26 @@
 
 #include <vulkan/vulkan.h>
 
+// Vulkan device, swapchain, and compute passes. This is the private side of the pimpl.
+//
+// Owner is a move-only RAII handle. A concept requires the destroy function to be
+// callable with the parent, the handle, and the allocator callbacks. Copy is deleted
+// and move uses exchange so the source keeps an empty handle. The five special
+// members agree on that single owner.
+//
+// source_location records the call site of a failed Vulkan result, and format builds
+// the exception text. Atomics use relaxed ordering for a validation-error counter
+// that does not publish other data. Designated initializers name the Vulkan fields
+// each call sets. Ranges search extension and format lists in place. string_view
+// compares extension names without allocating. enumerate pairs a frame slot with
+// its index. countr_zero turns a composite-alpha bit mask into a bit index.
+// filesystem::path finds the shader directory beside the executable.
+//
+// Returning a move-only Owner by value lets the compiler move it into the caller.
+// std::move transfers a replacement swapchain into the one the frame loop keeps.
+// memcpy copies trivially copyable cells and quads. The public destructor is
+// defaulted in this file because unique_ptr needs Impl to be complete.
+
 namespace sand {
 namespace {
 
@@ -32,6 +52,7 @@ static_assert(fluxLimitPasses % 2 == 1);
 
 void check(VkResult result, std::source_location loc = std::source_location::current())
 {
+    // The default argument captures the caller's line, so the message names that call.
     if (result != VK_SUCCESS)
     {
         throw std::runtime_error(std::format("Vulkan returned {} at {}:{}",
@@ -40,30 +61,42 @@ void check(VkResult result, std::source_location loc = std::source_location::cur
     }
 }
 
+// Parent is the Vulkan object the destroy function needs. Handle is the handle type.
+// Destroy is a compile-time function pointer, so each handle kind gets its own Owner.
+// The requires-clause drops the template unless Destroy can be called with those arguments.
 template <class Parent, class Handle, auto Destroy>
     requires std::invocable<decltype(Destroy), Parent, Handle, const VkAllocationCallbacks*>
 class Owner
 {
   public:
+
+    // A defaulted constructor owns nothing until put() acquires a handle.
     Owner() = default;
+
     ~Owner()
     {
         reset();
     }
 
+    // Deleted copy. Two owners would pass the same handle to Destroy.
     Owner(const Owner&) = delete;
     Owner& operator=(const Owner&) = delete;
 
+    // Move takes the handle and is noexcept because copying two handles cannot fail.
+    // exchange leaves the source with an empty value.
     Owner(Owner&& other) noexcept : parent_(other.parent_), value_(std::exchange(other.value_, {}))
     {
     }
 
     Owner& operator=(Owner&& other) noexcept
     {
+        // Skip self-move. Releasing first would destroy the handle this object still needs.
         if (this != &other)
         {
             reset();
             parent_ = other.parent_;
+
+            // Install an empty handle in the source and keep the previous value here.
             value_ = std::exchange(other.value_, {});
         }
         return *this;
@@ -85,6 +118,7 @@ class Owner
     {
         if (value_)
         {
+            // exchange returns the live handle and stores an empty one before Destroy runs.
             Destroy(parent_, std::exchange(value_, {}), nullptr);
         }
     }
@@ -110,10 +144,13 @@ struct Context
     VkQueue queue{};
     std::uint32_t queueFamily{};
     std::uint32_t timestampBits{};
+
+    // Independent counter. Relaxed ordering is enough because no other data is published with it.
     std::atomic_uint errors{};
 
     ~Context()
     {
+        // Destroy in reverse order of acquisition: device, surface, messenger, instance.
         if (device)
         {
             vkDestroyDevice(device, nullptr);
@@ -145,6 +182,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugMessage(VkDebugUtilsMessageSeverityFlagBitsE
     (void)type;
     if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
     {
+        // The validation callback can run on another thread. The counter is the only shared field.
         static_cast<Context*>(user)->errors.fetch_add(1, std::memory_order_relaxed);
     }
     std::fprintf(stderr, "Vulkan validation: %s\n", message->pMessage);
@@ -153,6 +191,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugMessage(VkDebugUtilsMessageSeverityFlagBitsE
 
 void Context::create(HWND window, bool validation)
 {
+    // Designated initializers name the fields this call sets. The rest are value-initialized.
     const VkApplicationInfo app{
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
         .pApplicationName = "Falling Sand",
@@ -249,6 +288,9 @@ void Context::create(HWND window, bool validation)
             std::vector<VkExtensionProperties> available(count);
             check(
                 vkEnumerateDeviceExtensionProperties(candidate, nullptr, &count, available.data()));
+
+            // none_of is true when no listed extension has this name. string_view
+            // borrows each fixed-size name for the comparison and does not allocate.
             if (std::ranges::none_of(available, [](const VkExtensionProperties& extension) {
                     return std::string_view(extension.extensionName) ==
                            VK_KHR_SWAPCHAIN_EXTENSION_NAME;
@@ -323,6 +365,7 @@ struct Buffer
 
     ~Buffer()
     {
+        // Unmap while the memory Owner is still alive. Members are destroyed after this body.
         if (mapped)
         {
             vkUnmapMemory(device, memory.get());
@@ -331,6 +374,7 @@ struct Buffer
 
     void create(const Context& ctx, VkDeviceSize bytes, VkBufferUsageFlags usage, bool host = false)
     {
+        // Record the device, then put() the new buffer and memory into their Owners.
         device = ctx.device;
         size = bytes;
         const VkBufferCreateInfo info{
@@ -409,6 +453,8 @@ struct Push
     std::array<float, 4> cursor{};
     std::array<float, 4> screen{};
 };
+
+// The push-constant block is 96 bytes with screen at offset 80, matching the shaders.
 static_assert(sizeof(Push) == 96 && offsetof(Push, screen) == 80);
 
 enum class Kernel : std::size_t
@@ -437,6 +483,8 @@ constexpr std::array bufferSizes{cellBytes,          cellBytes,     flowBytes,  
                                  pressureBytes,      pressureBytes};
 constexpr VkShaderStageFlags pushStages =
     VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT;
+
+// Point is eight trivially copyable bytes, so a flow buffer can be memcpy'd as raw storage.
 static_assert(sizeof(Point) == 8 && std::is_trivially_copyable_v<Point>);
 
 std::filesystem::path shaderDirectory()
@@ -458,6 +506,7 @@ std::filesystem::path shaderDirectory()
     }
 }
 
+// Synchronization2 barrier. Designated fields name the stages and the access masks.
 void dependency(VkCommandBuffer cmd, VkPipelineStageFlags2 source, VkAccessFlags2 sourceAccess,
                 VkPipelineStageFlags2 target, VkAccessFlags2 targetAccess)
 {
@@ -532,6 +581,8 @@ void dumpBitmap(const std::filesystem::path& path, const Buffer& source, VkExten
                 VkFormat format)
 {
     std::array<unsigned char, 54> header{};
+
+    // The lambda captures the header by reference and writes one little-endian word.
     const auto set = [&header](std::size_t offset, std::uint32_t value) {
         for (unsigned i = 0; i < 4; ++i)
         {
@@ -560,6 +611,8 @@ void dumpBitmap(const std::filesystem::path& path, const Buffer& source, VkExten
         }
         data = swizzled.data();
     }
+
+    // ofstream owns the screenshot file and closes it when this function returns.
     std::ofstream output(path, std::ios::binary);
     output.write(reinterpret_cast<const char*>(header.data()), header.size());
     output.write(data, static_cast<std::streamsize>(source.size));
@@ -653,6 +706,8 @@ VulkanGame::Impl::Impl(HWND window, bool validation)
             .flags = VK_FENCE_CREATE_SIGNALED_BIT,
         };
         constexpr VkSemaphoreCreateInfo semInfo{.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
+
+        // enumerate names the slot index. The command buffer for that slot sits one past immediate.
         for (auto [i, slot] : std::views::enumerate(slots))
         {
             slot.commands = buffers[static_cast<std::size_t>(i) + 1];
@@ -698,6 +753,7 @@ VulkanGame::Impl::~Impl()
 
 void VulkanGame::Impl::setupDescriptors(bool windowed)
 {
+    // The binding array matches the storage buffers. Its extent is the buffer count.
     std::array<VkDescriptorSetLayoutBinding, bufferSizes.size()> bindings{};
     for (std::uint32_t i = 0; i < bindings.size(); ++i)
     {
@@ -746,6 +802,8 @@ void VulkanGame::Impl::setupDescriptors(bool windowed)
         .pSetLayouts = layouts.data(),
     };
     check(vkAllocateDescriptorSets(ctx.device, &allocate, &worldSet));
+
+    // Captures this so the write can use the device. The lambda lives for this function.
     const auto update = [this](VkDescriptorSet set, std::uint32_t binding, const Buffer& buffer) {
         const auto info = buffer.descriptor();
         const VkWriteDescriptorSet write{
@@ -776,6 +834,8 @@ void VulkanGame::Impl::setupDescriptors(bool windowed)
 DeviceOwner<VkShaderModule, vkDestroyShaderModule> VulkanGame::Impl::shader(
     std::string_view name) const
 {
+    // string_view borrows the shader name. format and path build the .spv location.
+    // ifstream owns the file, opened at the end so the size is one tellg.
     const auto file = shaders / std::format("{}.spv", name);
     std::ifstream input(file, std::ios::binary | std::ios::ate);
     const auto end = input.tellg();
@@ -796,11 +856,14 @@ DeviceOwner<VkShaderModule, vkDestroyShaderModule> VulkanGame::Impl::shader(
     };
     DeviceOwner<VkShaderModule, vkDestroyShaderModule> module;
     check(vkCreateShaderModule(ctx.device, &info, nullptr, module.put(ctx.device)));
+
+    // Return the named owner directly. It is move-only, so the caller receives the handle.
     return module;
 }
 
 void VulkanGame::Impl::resize(int width, int height)
 {
+    // Rebuild the swapchain after the device is idle. The old one is passed in as oldSwapchain.
     check(vkDeviceWaitIdle(ctx.device));
     VkSurfaceCapabilitiesKHR capabilities{};
     check(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ctx.gpu, ctx.surface, &capabilities));
@@ -812,6 +875,8 @@ void VulkanGame::Impl::resize(int width, int height)
     check(vkGetPhysicalDeviceSurfaceFormatsKHR(ctx.gpu, ctx.surface, &count, nullptr));
     std::vector<VkSurfaceFormatKHR> formats(count);
     check(vkGetPhysicalDeviceSurfaceFormatsKHR(ctx.gpu, ctx.surface, &count, formats.data()));
+
+    // find_if returns an iterator. The lambda tests one format and captures nothing.
     auto srgb = std::ranges::find_if(formats, [](VkSurfaceFormatKHR f) {
         return (f.format == VK_FORMAT_B8G8R8A8_SRGB || f.format == VK_FORMAT_R8G8B8A8_SRGB) &&
                f.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
@@ -840,6 +905,7 @@ void VulkanGame::Impl::resize(int width, int height)
     check(vkGetPhysicalDeviceSurfacePresentModesKHR(ctx.gpu, ctx.surface, &count, modes.data()));
     for (auto mode : {VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_MAILBOX_KHR})
     {
+        // contains reports whether this present mode is in the list the surface advertised.
         if (std::ranges::contains(modes, mode))
         {
             presentMode = mode;
@@ -852,6 +918,8 @@ void VulkanGame::Impl::resize(int width, int height)
         capabilities.maxImageCount == 0
             ? capabilities.minImageCount + 1
             : std::min(capabilities.minImageCount + 1, capabilities.maxImageCount);
+
+    // countr_zero finds the lowest set bit in the mask, which is the alpha mode to request.
     const auto alpha = static_cast<VkCompositeAlphaFlagBitsKHR>(
         1u << std::countr_zero(capabilities.supportedCompositeAlpha));
     const VkSwapchainCreateInfoKHR info{
@@ -895,6 +963,8 @@ void VulkanGame::Impl::resize(int width, int height)
                                 replacement.finished[i].put(ctx.device)));
     }
     const bool changed = swap.format != replacement.format;
+
+    // Drop the old views and semaphores before the move, then transfer the new swapchain.
     swap.views.clear();
     swap.finished.clear();
     swap = std::move(replacement);
@@ -913,6 +983,7 @@ void VulkanGame::Impl::makeGraphics()
 
 Pipeline VulkanGame::Impl::graphics(std::string_view vertex, std::string_view frag) const
 {
+    // string_view borrows the shader names. The modules are released at the end of this function.
     auto vs = shader(vertex);
     auto fs = shader(frag);
     const std::array stages{
@@ -986,6 +1057,8 @@ Pipeline VulkanGame::Impl::graphics(std::string_view vertex, std::string_view fr
     };
     Pipeline result;
     check(vkCreateGraphicsPipelines(ctx.device, {}, 1, &info, nullptr, result.put(ctx.device)));
+
+    // Named return of a move-only pipeline. The caller owns the Vulkan pipeline after this.
     return result;
 }
 
@@ -998,6 +1071,7 @@ void VulkanGame::Impl::beginCompute(VkCommandBuffer cmd)
 
 void VulkanGame::Impl::dispatch(VkCommandBuffer cmd, Kernel kernel, unsigned x, unsigned y)
 {
+    // to_underlying supplies the kernel's integer index into the pipeline array.
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE,
                       compute[std::to_underlying(kernel)].get());
     vkCmdPushConstants(cmd, pipelineLayout.get(), pushStages, 0, sizeof(push), &push);
@@ -1010,6 +1084,8 @@ void VulkanGame::Impl::recordBrush(VkCommandBuffer cmd, const Stroke& stroke)
     push.operation = {stroke.stir ? 1u : 0u, 0, std::to_underlying(stroke.material), 0};
     push.brush = {stroke.from.x, stroke.from.y, stroke.to.x, stroke.to.y};
     push.cursor[2] = stroke.radius;
+
+    // Init-capture copies the radius into the lambda. The stroke need not stay alive later.
     const auto covering = [radius = stroke.radius](float a, float b) {
         return static_cast<unsigned>(std::ceil(std::abs(a - b) + 2 * radius)) + 2;
     };
@@ -1019,6 +1095,7 @@ void VulkanGame::Impl::recordBrush(VkCommandBuffer cmd, const Stroke& stroke)
 
 void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
 {
+    // One ordinary loop per tick. Each dispatch finishes recording before the next is written.
     constexpr unsigned fullX = groups(worldWidth, 16), fullY = groups(worldHeight, 8);
     for (unsigned step = 0; step < ticks; ++step)
     {
@@ -1071,6 +1148,7 @@ void VulkanGame::Impl::readTiming(const FrameSlot& slot, std::uint32_t first)
 
 bool VulkanGame::Impl::draw(const DrawFrame& params)
 {
+    // Two frames in flight. The slot's fence waits until the GPU is done with that slot's buffers.
     if (params.ui.size() > maxQuads)
     {
         throw std::runtime_error("The pixel UI exceeded its quad budget.");
@@ -1102,6 +1180,8 @@ bool VulkanGame::Impl::draw(const DrawFrame& params)
         capture.create(ctx, static_cast<VkDeviceSize>(swap.extent.width) * swap.extent.height * 4,
                        VK_BUFFER_USAGE_TRANSFER_DST_BIT, true);
     }
+
+    // Quad is trivially copyable. size_bytes() is the span's extent times the element size.
     std::memcpy(slot.ui.mapped, params.ui.data(), params.ui.size_bytes());
     auto cmd = slot.commands;
     startCommands(cmd);
@@ -1181,6 +1261,7 @@ bool VulkanGame::Impl::draw(const DrawFrame& params)
     return true;
 }
 
+// Dynamic rendering. The image moves from undefined, to color attachment, then to present.
 void VulkanGame::Impl::recordDraw(VkCommandBuffer cmd, unsigned imageIndex, const DrawFrame& p,
                                   const FrameSlot& slot, const Buffer* capture)
 {
@@ -1277,6 +1358,7 @@ void VulkanGame::Impl::finishImmediate()
 
 std::vector<Cell> VulkanGame::Impl::snapshot()
 {
+    // Copy the device buffer to host staging, then memcpy into an owned vector.
     startCommands(immediate);
     dependency(immediate, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, VK_ACCESS_2_MEMORY_WRITE_BIT,
                VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_READ_BIT);
@@ -1288,6 +1370,8 @@ std::vector<Cell> VulkanGame::Impl::snapshot()
 
     std::vector<Cell> result(worldCells);
     std::memcpy(result.data(), staging.mapped, cellBytes);
+
+    // Return the named vector directly so it can be constructed in the caller.
     return result;
 }
 
@@ -1304,6 +1388,8 @@ FlowSnapshot VulkanGame::Impl::flowSnapshot()
     finishImmediate();
 
     FlowSnapshot result{std::vector<Point>(worldCells), std::vector<Point>(worldCells)};
+
+    // std::byte is the pointer type for raw storage. The Point arrays are filled by memcpy.
     const auto* bytes = static_cast<const std::byte*>(staging.mapped);
     std::memcpy(result.projected.data(), bytes, flowBytes);
     std::memcpy(result.predictor.data(), bytes + flowBytes, flowBytes);
@@ -1315,6 +1401,7 @@ VulkanGame::VulkanGame(HWND window, bool /*benchmark*/, bool validate)
 {
 }
 
+// Defined here, where Impl is complete. unique_ptr destroys Impl from this destructor.
 VulkanGame::~VulkanGame() = default;
 
 std::array<int, 2> VulkanGame::prepare(int width, int height)
@@ -1339,6 +1426,7 @@ bool VulkanGame::draw(const DrawFrame& frame)
 
 void VulkanGame::replaceWorld(std::span<const Cell> cells)
 {
+    // The span borrows the caller's cells. Cell is trivially copyable, so memcpy is defined.
     auto& self = *impl_;
     if (cells.size() != worldCells)
     {
@@ -1407,11 +1495,13 @@ Timing VulkanGame::timing() const
 
 std::string_view VulkanGame::deviceName() const
 {
+    // The view borrows the device-name array inside Impl. It stays valid while the game does.
     return impl_->ctx.properties.deviceName;
 }
 
 unsigned VulkanGame::validationErrors() const
 {
+    // Same relaxed counter the validation callback increments. No other payload is attached.
     return impl_->ctx.errors.load(std::memory_order_relaxed);
 }
 

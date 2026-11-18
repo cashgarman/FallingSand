@@ -11,6 +11,18 @@
 #include <string_view>
 #include <windows.h>
 
+// Public GPU facade. Vulkan types stay in vulkan.cpp.
+//
+// Pimpl keeps the public class in this header and the device, swapchain, and
+// pipelines behind unique_ptr<Impl>. unique_ptr is the single owner of that
+// implementation. Copy is deleted so two facades cannot destroy one device.
+// Declaring the destructor also suppresses implicit moves, so the facade stays
+// where it was created.
+// The destructor is declared here and defined in the source file, where Impl is
+// a complete type, because unique_ptr deletes its pointer from the destructor.
+// span and optional on DrawFrame borrow UI quads and a brush stroke for one frame.
+// deviceName() returns a string_view into the device properties owned by Impl.
+
 namespace sand {
 
 struct DrawFrame
@@ -43,6 +55,8 @@ class VulkanGame
   public:
     VulkanGame(HWND window, bool benchmark, bool validate);
     ~VulkanGame();
+
+    // Copy is deleted. unique_ptr already forbids sharing the implementation.
     VulkanGame(const VulkanGame&) = delete;
     VulkanGame& operator=(const VulkanGame&) = delete;
 

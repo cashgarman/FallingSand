@@ -10,6 +10,22 @@
 #include <type_traits>
 #include <vector>
 
+// Declarations shared by the simulation, the window, and the GPU renderer.
+//
+// Ordinary functions are declared here and defined once in game.cpp. That keeps a
+// single external definition for each of them. inline constexpr variables and
+// functions may be included from several translation units; inline gives those
+// copies one identity.
+//
+// A constexpr function can run at compile time or at runtime. enum class keeps
+// material and scene ids in their own scope. string_view and span borrow text and
+// cells that someone else owns, and they stay valid only while that storage does.
+// array holds the fixed palette without a heap allocation, and class template
+// argument deduction fills in the element type from the initializers.
+// Cell is trivially copyable so its bytes can be copied into a GPU buffer.
+// expected carries success or a reason the UI can show after a save or load.
+// nodiscard marks results the caller needs to look at.
+
 namespace sand {
 
 /// <summary>Gets the simulation grid width in cells.</summary>
@@ -72,6 +88,9 @@ struct Cell
     /// <summary>Packed material id (low byte) and optional heat or flags in upper bits.</summary>
     std::uint32_t matter{};
 };
+
+// Alignment, size, and trivial copyability are separate facts. These checks lock
+// the ones the GPU path needs: 16 bytes, safe to memcpy, matter at byte 12.
 static_assert(sizeof(Cell) == 16 && std::is_trivially_copyable_v<Cell>);
 static_assert(offsetof(Cell, matter) == 12);
 
@@ -80,6 +99,7 @@ static_assert(offsetof(Cell, matter) == 12);
 /// <returns>The <see cref="Material"/> stored in the cell.</returns>
 [[nodiscard]] constexpr Material kind(const Cell& cell)
 {
+    // The low byte holds the material id. The cast back to the enum class is explicit.
     return static_cast<Material>(cell.matter & 255u);
 }
 
@@ -89,23 +109,29 @@ static_assert(offsetof(Cell, matter) == 12);
 /// <returns>A cell with liquid channels or matter/heat fields set for the shader and solver.</returns>
 [[nodiscard]] constexpr Cell makeCell(Material id, float quantity = 1.0F)
 {
+    // Value-initialize every field, then fill only the channels this material uses.
+    // constexpr lets a caller build the cell at compile time when the arguments are constant.
     Cell result{};
     switch (id)
     {
     case Material::water:
+
         // Store fill in the water liquid channel.
         result.liquid[0] = quantity;
         break;
     case Material::oil:
+
         // Store fill in the oil liquid channel.
         result.liquid[1] = quantity;
         break;
     case Material::lava:
+
         // Lava uses the lava channel plus a hot matter temperature field.
         result.liquid[2] = quantity;
         result.matter = 1023u << 16;
         break;
     default:
+
         // Solids and gases pack the material id and optional heat in matter.
         result.matter = static_cast<std::uint32_t>(id);
         result.matter |= (id == Material::fire ? 950u : id == Material::steam ? 480u : 0u) << 16;

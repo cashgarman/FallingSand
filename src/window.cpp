@@ -6,6 +6,7 @@
 namespace sand {
 namespace {
 
+// Fixed registration values. constexpr keeps them available as constant expressions.
 constexpr wchar_t className[] = L"FallingSandVulkan";
 constexpr DWORD windowStyle = WS_OVERLAPPEDWINDOW;
 
@@ -13,8 +14,11 @@ constexpr DWORD windowStyle = WS_OVERLAPPEDWINDOW;
 
 Window::Window(bool show)
 {
+    // Per-monitor DPI so client pixels match the swapchain extent.
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
     HINSTANCE instance = GetModuleHandleW(nullptr);
+
+    // Value-initialize the window class so unused Win32 fields stay zero.
     WNDCLASSW type{};
     type.lpfnWndProc = route;
     type.hInstance = instance;
@@ -23,6 +27,8 @@ Window::Window(bool show)
     type.hIcon = LoadIconW(nullptr, IDI_APPLICATION);
     if (!RegisterClassW(&type))
     {
+        // Failure here is not a value the caller can recover. An exception leaves
+        // no Window object, so the destructor does not run for this attempt.
         throw std::runtime_error("Could not register the Falling Sand window.");
     }
 
@@ -44,6 +50,7 @@ Window::Window(bool show)
 
 Window::~Window()
 {
+    // Release the HWND this object acquired, then the window class.
     if (IsWindow(handle_))
     {
         DestroyWindow(handle_);
@@ -58,6 +65,7 @@ HWND Window::handle() const
 
 std::array<int, 2> Window::size() const
 {
+    // The array is the width and height. A minimized window reports an empty size.
     RECT bounds{};
     GetClientRect(handle_, &bounds);
     if (IsIconic(handle_))
@@ -69,6 +77,7 @@ std::array<int, 2> Window::size() const
 
 bool Window::poll()
 {
+    // Drain the thread queue. WM_QUIT ends the frame loop.
     MSG msg{};
     while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE))
     {
@@ -84,6 +93,7 @@ bool Window::poll()
 
 Input Window::consumeInput()
 {
+    // Copy the latched edges, then clear them. The caller owns the copy.
     Input result = input_;
     input_.pressed.fill(false);
     input_.wheel = 0;
@@ -100,9 +110,13 @@ LRESULT CALLBACK Window::route(HWND handle, UINT message, WPARAM wparam, LPARAM 
 {
     if (message == WM_NCCREATE)
     {
+        // lparam is the CREATESTRUCT for this message. The pointer stored in
+        // lpCreateParams is the Window* passed to CreateWindowExW.
         const auto* create = reinterpret_cast<const CREATESTRUCTW*>(lparam);
         auto* window = static_cast<Window*>(create->lpCreateParams);
         window->handle_ = handle;
+
+        // Store the Window* as an integer-sized slot, then read that same pointer back.
         SetWindowLongPtrW(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
     }
     auto* window = reinterpret_cast<Window*>(GetWindowLongPtrW(handle, GWLP_USERDATA));
@@ -112,6 +126,7 @@ LRESULT CALLBACK Window::route(HWND handle, UINT message, WPARAM wparam, LPARAM 
 
 LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
 {
+    // The messages this window understands. Anything else goes to DefWindowProc.
     switch (message)
     {
     case WM_CLOSE:
@@ -132,6 +147,8 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
         return 0;
     }
     case WM_KEYDOWN:
+
+        // Bit 30 of lparam is the previous key state. A set bit means this is a repeat.
         if (wparam < input_.pressed.size() && (lparam & (1L << 30)) == 0)
         {
             input_.pressed[wparam] = true;
@@ -143,6 +160,7 @@ LRESULT Window::process(UINT message, WPARAM wparam, LPARAM lparam)
         wheelRemainder_ %= WHEEL_DELTA;
         return 0;
     case WM_MOUSEMOVE: {
+        // GET_X_LPARAM sign-extends the low word. A narrowing cast to float is explicit.
         input_.mouse = {static_cast<float>(GET_X_LPARAM(lparam)),
                         static_cast<float>(GET_Y_LPARAM(lparam))};
         TRACKMOUSEEVENT track{sizeof(track), TME_LEAVE, handle_, 0};
