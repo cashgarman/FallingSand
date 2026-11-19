@@ -463,6 +463,7 @@ enum class Kernel : std::size_t
     reaction,
     grains,
     predict,
+    hydrostatic,
     equation,
     pressure,
     project,
@@ -471,9 +472,10 @@ enum class Kernel : std::size_t
     advect,
     separate
 };
-constexpr std::array kernelNames{"brush.comp",    "reaction.comp", "grains.comp",  "predict.comp",
-                                 "equation.comp", "pressure.comp", "project.comp", "flux.comp",
-                                 "limit.comp",    "advect.comp",   "separate.comp"};
+constexpr std::array kernelNames{"brush.comp",       "reaction.comp", "grains.comp",
+                                 "predict.comp",     "hydrostatic.comp", "equation.comp",
+                                 "pressure.comp",    "project.comp",  "flux.comp",
+                                 "limit.comp",       "advect.comp",   "separate.comp"};
 
 constexpr std::size_t cellBytes = worldCells * sizeof(Cell);
 constexpr std::size_t flowBytes = worldCells * sizeof(Point);
@@ -659,7 +661,7 @@ struct VulkanGame::Impl
     void dispatch(VkCommandBuffer cmd, Kernel kernel, unsigned x, unsigned y);
     void beginCompute(VkCommandBuffer cmd);
     void recordBrush(VkCommandBuffer cmd, const Stroke& stroke);
-    void recordSim(VkCommandBuffer cmd, unsigned ticks);
+    void recordSim(VkCommandBuffer cmd, unsigned ticks, const Stroke* pour = nullptr);
     bool draw(const DrawFrame& params);
     void recordDraw(VkCommandBuffer cmd, unsigned imageIndex, const DrawFrame& params,
                     const FrameSlot& slot, const Buffer* capture);
@@ -1097,12 +1099,22 @@ void VulkanGame::Impl::recordBrush(VkCommandBuffer cmd, const Stroke& stroke)
              groups(covering(stroke.from.y, stroke.to.y), 8));
 }
 
-void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
+void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks, const Stroke* pour)
 {
     // One ordinary loop per tick. Each dispatch finishes recording before the next is written.
     constexpr unsigned fullX = groups(worldWidth, 16), fullY = groups(worldHeight, 8);
     for (unsigned step = 0; step < ticks; ++step)
     {
+        if (pour)
+        {
+            // Give each tick its own part of the stroke as the mouse moves across the canvas.
+            const auto pointAt = [pour, ticks](unsigned index) {
+                const float fraction = static_cast<float>(index) / static_cast<float>(ticks);
+                return Point{std::lerp(pour->from.x, pour->to.x, fraction),
+                             std::lerp(pour->from.y, pour->to.y, fraction)};
+            };
+            recordBrush(cmd, {pointAt(step), pointAt(step + 1), pour->radius, pour->material, false});
+        }
         ++push.tick;
         dispatch(cmd, Kernel::reaction, fullX, fullY);
         push.state ^= 1u;
@@ -1110,7 +1122,9 @@ void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
                  groups((worldHeight + 2) / 2, 8));
         dispatch(cmd, Kernel::predict, fullX, fullY);
         dispatch(cmd, Kernel::equation, fullX, fullY);
-        // Red-black pressure solves alternate parity each pass.
+        dispatch(cmd, Kernel::hydrostatic, groups(worldWidth, 32), 1);
+
+        // Refine the weight estimate by alternating between two pressure buffers.
         for (unsigned pass = 0; pass < pressureBatches; ++pass)
         {
             push.operation[1] = pass & 1u;
@@ -1124,7 +1138,6 @@ void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
             push.operation = {pass, pass & 1u, 0, 0};
             dispatch(cmd, Kernel::limit, fullX, fullY);
         }
-        push.operation[2] = 0u;
         dispatch(cmd, Kernel::advect, fullX, fullY);
         push.state ^= 1u;
         // Separate liquid phases on two checkerboard passes.
@@ -1202,11 +1215,12 @@ bool VulkanGame::Impl::draw(const DrawFrame& params)
     if (params.stroke || params.ticks)
     {
         beginCompute(cmd);
-        if (params.stroke)
+        const bool pourPerTick = params.ticks != 0 && params.stroke && params.stroke->poursLiquid();
+        if (params.stroke && !pourPerTick)
         {
             recordBrush(cmd, *params.stroke);
         }
-        recordSim(cmd, params.ticks);
+        recordSim(cmd, params.ticks, pourPerTick ? &*params.stroke : nullptr);
     }
     if (queries.get())
     {

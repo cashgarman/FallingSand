@@ -3,6 +3,8 @@
 
 const uint EMPTY = 0u, SAND = 1u, WATER = 2u, OIL = 3u, STONE = 4u, WOOD = 5u;
 const uint FIRE = 6u, SMOKE = 7u, STEAM = 8u, LAVA = 9u, ICE = 10u;
+const vec3 liquidDensity = vec3(1.0, 0.78, 2.3);
+const float gravityPerTick = 0.085;
 
 struct Cell
 {
@@ -144,11 +146,19 @@ void writeOther(int i, Cell c)
     else
         cellsA[i] = c;
 }
+
+// Read the signed volume coming in from the left, top, right, and bottom faces.
+vec4 incomingFaces(ivec2 gridPos, int cellIndex)
+{
+	float left = gridPos.x > 0 ? flux[cellIndex - 1].x : 0.0;
+	float top = gridPos.y > 0 ? flux[cellIndex - pc.size.x].y : 0.0;
+	return vec4(left, top, -flux[cellIndex]);
+}
 #endif
 
 float inverseDensity(Cell c)
 {
-    return volume(c) / max(dot(c.liquid, vec3(1.0, 0.78, 2.3)), 0.001);
+    return volume(c) / max(dot(c.liquid, liquidDensity), 0.001);
 }
 
 float faceWeight(Cell a, Cell b)

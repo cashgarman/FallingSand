@@ -47,10 +47,6 @@ void main()
         row.rhs = leftInflow + upwardInflow - predictedVelocity.x - predictedVelocity.y;
     }
 
-    // Store this row for the Jacobi pressure solve; fade old pressure where the cell is still
-    // active.
+    // Store this row for the pressure passes that refine the estimate from the liquid's weight.
     equation[cellIndex] = row;
-    pressureA[cellIndex] = dot(row.weights, vec4(1)) > 0.0
-                               ? 0.86 * pressureA[cellIndex]
-                               : 0.0; // 0.86: keep a little history on wet links
 }

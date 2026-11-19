@@ -65,9 +65,8 @@ void main()
 			return;
 
 		// Pick water, oil, or lava storage, then pour until the square reads as full (lava also marks the cell hot for later chemistry).
-		// Implementation: liquidChannel 0/1/2 from brushMaterial; += 1.0 - volume(cell) tops up; LAVA uses packMatter(EMPTY, 0u, 1.0)
 		int liquidChannel = brushMaterial == WATER ? 0 : brushMaterial == OIL ? 1 : 2;
-		cell.liquid[liquidChannel] += 1.0 - volume(cell);
+		cell.liquid[liquidChannel] += max(0.0, 1.0 - volume(cell));
 		if (brushMaterial == LAVA)
 			cell.matter = packMatter(EMPTY, 0u, 1.0); // 1.0: as hot as we store in the cell data
 	}

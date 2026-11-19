@@ -99,7 +99,7 @@ void main()
                     damp;
 
         // A little extra downward pull each frame — liquids feel heavy.
-        predicted.y += 0.085; // 0.085: gentle downward drift for liquids
+        predicted.y += gravityPerTick;
 
         // Keep guesses within what the projection step can correct safely.
         predicted =

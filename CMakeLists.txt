@@ -24,7 +24,7 @@ if(MSVC)
 endif()
 target_link_libraries(falling_sand PRIVATE Vulkan::Vulkan user32 gdi32)
 
-set(shader_names brush.comp reaction.comp grains.comp predict.comp
+set(shader_names brush.comp reaction.comp grains.comp predict.comp hydrostatic.comp
     equation.comp pressure.comp project.comp flux.comp limit.comp advect.comp separate.comp
     fullscreen.vert world.frag ui.vert ui.frag)
 set(shader_outputs)

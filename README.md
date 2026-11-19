@@ -269,7 +269,7 @@ From `world.glsl` (compute; read-only subset in `world.frag` via `WORLD_READ_ONL
 
 `vulkan.cpp` constants:
 
-- **`pressureBatches = 12`** — 12 pressure dispatches per tick (red-black `operation[1] = pass & 1`).
+- **`pressureBatches = 12`** — 12 pressure dispatches per tick. `operation[1]` selects which buffer each pass reads.
 - **`fluxLimitPasses = 5`** — odd count so limit field settles before advection.
 
 ---
@@ -282,8 +282,8 @@ Each frame (`VulkanGame::draw`):
 2. Acquire swapchain image.
 3. Upload **UI quads** to the slot’s storage buffer.
 4. **Compute** (if stroke and/or `ticks > 0`):
-   - Optional **`brush.comp`** for the current stroke.
-   - **`recordSim`**: `ticks` iterations of the simulation chain (below).
+   - Optional **`brush.comp`** for the current stroke. Held liquid brushes refill once per simulation tick. Single clicks and paused edits paint immediately.
+   - **`recordSim`** runs the simulation chain once per tick.
 5. **Graphics** (`recordDraw`):
    - Barrier: compute writes → fragment shader read.
    - Dynamic rendering: clear → **world** pass (scissored to canvas) → **UI** pass (full window).
@@ -295,7 +295,7 @@ Play loop (`main.cpp`): when not paused, accumulates real time and runs `floor(a
 
 ## Simulation tick (compute) {#simulation-tick-compute}
 
-Order inside **one tick** (`VulkanGame::Impl::recordSim` in `vulkan.cpp`). Brush is **outside** this loop and runs once per frame when the user strokes.
+Order inside **one tick** (`VulkanGame::Impl::recordSim` in `vulkan.cpp`). If the player is pouring, the brush deposits liquid before the tick runs.
 
 | Step | Kernel | Workgroup layout | What it does |
 | ---: | --- | --- | --- |
@@ -304,13 +304,14 @@ Order inside **one tick** (`VulkanGame::Impl::recordSim` in `vulkan.cpp`). Brush
 | 2 | **grains.comp** | 16×8 over 2×2 blocks | Sand **falls**, gas **rises**; local 2×2 updates to reduce races. |
 | 3 | **predict.comp** | 16×8 | Semi-Lagrangian **velocity prediction** from neighbors, viscosity, gravity. |
 | 4 | **equation.comp** | 16×8 | Build **pressure network row** per wet, non-solid cell (`faceWeight` on neighbors). |
-| 5 | **pressure.comp** ×12 | 16×16, shared mem | **Jacobi** relaxation on pressure (two iterations per dispatch, halo tile); red-black phases via `operation[1]`. |
-| 6 | **project.comp** | 16×8 | **Project** predicted velocity with pressure gradients (divergence reduction). |
-| 7 | **flux.comp** | 16×8 | Face **outward liquid flux** from velocity; negative flow pulls from neighbors. |
-| 8 | **limit.comp** ×5 | 16×8 | **Inflow limits** ping-pong (`limitA`/`limitB`); how much each cell can accept. |
-| 9 | **advect.comp** | 16×8 | Move **water/oil/lava** along flux subject to limits; writes other cell buffer. |
+| 5 | **hydrostatic.comp** | 32 threads, one per column | Estimate pressure from the weight of liquid above each cell. Air gaps and solids start a new column. |
+| 6 | **pressure.comp** ×12 | 16×16, shared memory | Refine the estimate with two **Jacobi** iterations per dispatch using a tile with a halo. |
+| 7 | **project.comp** | 16×8 | Project the predicted velocity with pressure gradients and reduce divergence. |
+| 8 | **flux.comp** | 16×8 | Plan one signed liquid transfer per face based on velocity and available donor volume. |
+| 9 | **limit.comp** ×5 | 16×8 | Limit incoming liquid to the room available after accepted outflow. |
+| 10 | **advect.comp** | 16×8 | Use those same accepted transfers at both ends of each face to conserve liquid and bound cell fill. |
 | — | `state ^= 1` | — | Toggle cell ping-pong after advection. |
-| 10 | **separate.comp** ×2 | 16×8, half height dispatch | **Phase separation** oil/lava vs water on staggered rows; `operation[1]` checkerboard with `tick`. |
+| 11 | **separate.comp** ×2 | 16×8, half height dispatch | Separate oil and lava from water on staggered rows. |
 
 **brush.comp** (when painting): dispatches over a bounding box of the stroke; modes — deposit material/liquid, erase, or stir (`pc.operation` mode + `pc.brush` + radius).
 
@@ -353,8 +354,8 @@ Host code does not parse GLSL; keeping `Cell` layout and material IDs in sync is
 .\build\Release\FallingSand.exe --benchmark 1200 --scene thermal
 ```
 
-- **`--test`**: GPU checks (walls, divergence reduction, phase conservation, sand, thermal reactions, brush) without a visible window loop.
-- **`--window-test`**: Scene buttons, paint, step, resize, present, save/load.
+- **`--test`** checks that brush-spawned water, oil, and lava spread and conserve volume, that water drains from the Thermal Vent ramp, and that wall, pressure, sand, and thermal behavior still work.
+- **`--window-test`** checks scene selection, brush timing, step, resize, presentation, and save/load.
 - **`--benchmark`**: 60-frame warmup, then mean/p95 GPU ms and simulation ms; device name in header.
 
 `--validate` enables validation layers for debugging synchronization and API usage.

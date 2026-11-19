@@ -137,6 +137,12 @@ struct Stroke
     float radius;      // Brush radius in pixels for the GPU paint pass.
     Material material; // Material deposited or stirred along the stroke.
     bool stir;         // When true, mixes existing cells instead of only painting.
+
+    [[nodiscard]] constexpr bool poursLiquid() const
+    {
+        return !stir && (material == Material::water || material == Material::oil ||
+                         material == Material::lava);
+    }
 };
 
 /// <summary>Built-in experiment layout loaded into a fresh world grid.</summary>

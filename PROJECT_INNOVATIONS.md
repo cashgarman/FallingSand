@@ -21,6 +21,7 @@
 10. [Branch lineage](#10-branch-lineage)
 11. [References & open implementations](#11-references--open-implementations)
 12. [Lessons learned](#12-lessons-learned)
+13. [Tower / spill session — pairing research & next step](#13-tower--spill-session--pairing-research--next-step)
 
 ---
 
@@ -297,5 +298,88 @@ Git note: branch `Enhanced Fluid Dynamics` was created as **`enhanced-fluid-dyna
 | **2026-11-18 ~5:09–5:13 PM** | Paired transfer + molasses research |
 | **2026-11-18 ~5:06–5:07 PM** | Displacement bugs + research roundup |
 | **2026-11-18 afternoon** | Bounded fill failures on limit inflation / pass-0 credit bugs |
+
+---
+
+## 13. Tower / spill session — pairing research & next step
+
+**When:** **Nov 18, 2026** ~5:33–5:52 PM UTC-7 (continuation of §§7–8).  
+**Branch:** `mass-transfer-root` (commit `6104937` baseline; per-face single dispatch after this section).
+
+### 13.1 Standing towers — four culprits (confirmed)
+
+| # | Mechanism | Where | Effect on towers |
+|---|-----------|--------|------------------|
+| **1** | **Zero-flux export gate** | Mass only when all face flux negligible / exact zero | Residual `flux[]` after project → **no mass export** |
+| **2** | **Flux XOR mass** (whole cell) | One transport mode per cell per tick | Mixed columns: flux on active faces, **mass off everywhere** |
+| **3** | **Red–black + half-step + min flow** | `kMinFlow` (was 0.01), `flow *= 0.5` | Half of cells export per advect; drainage **stutters** |
+| **4** | **No downward mass gravity term** | Bias in `predict.y` only; mass faces down/left/right | Side spill needs horizontal mass or flux; slopes favor **down chute** over basin |
+
+### 13.2 Spill-fix attempts & results
+
+Tried in `advect.comp` before pairing fix:
+
+| Change | Result |
+|--------|--------|
+| `kMinFlow` **0.01 → 0.005** | Helps small flows; part of passing baseline |
+| **`kGravityFall` 1.12** on vertical mass | Stronger column drain on quiet faces |
+| **`kSideFallBias` 0.55** when `canFall` | Sideways nudge when void below |
+| **Per-face negligible** (`kMassFollowEpsilon` 0.04) | Enables mass on quiet faces while flux active elsewhere |
+| Combine flux + mass **without** per-face disjoint + shared `remaining` | **`bounded cell fill` FAIL** |
+| **`bounded cell fill`** | **PASS** (single-dispatch disjoint per-face split) |
+| **RMS divergence** (pressure projection) | **0.094 → ~0.028** (session measurement) |
+
+### 13.3 Screenshot / in-game finding
+
+- **Poured columns** keep **nonzero face flux** on at least one face → whole-cell quiet gate blocked mass export for a long time.  
+- On **slopes**, flux magnitude favors the **downward chute** over **sideways into a basin** (project faces + limit acceptance), so water **stands on ridges** until limits equalize across many ticks.
+
+### 13.4 Second advect dispatch (`pc.operation.z == 1`)
+
+- Shader had **`massFollowUp`** follow-up with offset red–black import parity.  
+- **`vulkan.cpp`**: only **one** `dispatch(Kernel::advect)`; `push.operation[2] = 0`.  
+- Enabling **pass 2** → **`transport conserves each liquid` FAIL** (vertical-only, offset RB, half-step mass, per-face merge — all tried).
+
+**Suspected cause:** Pass 0 applies **fully parallel** flux on a cell; pass 2 runs **red–black mass** on **post-flux** volumes. Donor/receiver pairing on quiet faces no longer matches who already moved mass on flux faces → **double debit or missed import** across phases.
+
+### 13.5 Pairing research (open CA / GPU fluids)
+
+| Source | Pattern |
+|--------|---------|
+| **Sandspiel** | CPU CA: **one owner** per move (`api.set`); wind NS is **separate field** |
+| **w-shadow / GameDev CA** | **`NewMass` scratch** — accumulate debits/credits, then commit; **one mass pass per tick** |
+| **Terraria `Liquid.cs`** | **Queue**: one tile update owns vertical + horizontal spread |
+| **Stam / Godot NS** | **One advect** per scalar per step; **ping-pong** buffers |
+| **Red–black** | Appropriate for **`pressure` / `limit`** (in-place Jacobi), **not** second mass advect after flux on the same buffer |
+
+**Mismatch in FallingSand:** flux pass = parallel; second mass pass = paired RB on **flux-already-changed** state. Fix is **not** offset parity alone — it is **never debiting the same face twice** in one tick.
+
+### 13.6 Recommended next step & what landed in `advect.comp`
+
+**Target (research):** Single dispatch, per face: heavy flux faces → limits; quiet faces → mass with **`remaining = amount − fluxOutTotal`**.
+
+**GPU result (Nov 18 ~6 PM):** **Simultaneous flux + mass on the same cell in one parallel pass fails `bounded cell fill`** (and/or phase conservation if import caps are applied). Tried: shared `remaining`, import headroom, 0.5 mass scale on mixed cells, export-only mass on mixed — all failed `--test`.
+
+**Shipped (passes `--test`):** Single dispatch, **disjoint cell modes**:
+
+- **Any face** with `|toward| > kFluxEpsilon` (0): **limit flux only on non-quiet faces** (per-face `faceIn`/`faceOut`), donor total-out cap unchanged.  
+- **All faces quiet:** full-cell **red–black mass** with **shared `remaining`** on export (`quietFaceMass`).  
+- Removed dead **`pc.operation.z == 1`** follow-up path; **one** `dispatch(advect)` in Vulkan.
+
+**Ledger (Nov 18 ~6:05 PM):** Pass **0** packs per-face flux out/in into **`limitB[cell]`** (8 bits). Pass **1** (`ledgerMassFollowUp`) applies **mass only** on **`kMassFollowEpsilon`** faces with no ledger bit; reads post-flux cells from **`cellsB`** ping-pong. Enabling the second `dispatch` still fails **`transport conserves each liquid`** (paired import after flux debit). **Vulkan:** pass **1** not dispatched until gather/debit is symmetric (e.g. edge SSBO).
+
+**Next for tower spill:** wire pass **1** with an explicit **per-edge delta buffer** so import credits match export debits — ledger alone is not enough.
+
+**Won't fix towers alone:** Pass 2 only on **`allFluxNegligible`** whole cells.
+
+### Document history (addendum)
+
+| Date | Event |
+|------|--------|
+| **2026-11-18 ~6:05 PM UTC-7** | Flux ledger in `limitB` (pass 0); `operation.z==1` mass follow-up coded but **unwired** (`transport conserves` fail when enabled) |
+| **2026-11-18 ~6:00 PM UTC-7** | Single-dispatch per-face flux / all-quiet mass (`--test` pass); mixed flux+mass fails bounded fill |
+| **2026-11-18 ~5:52 PM UTC-7** | Per-face single dispatch + pairing research log (§13) |
+| **2026-11-18 ~5:33+ PM UTC-7** | Tower diagnosis + spill experiments |
+| **2026-11-18 ~5:22 PM** | `mass-transfer-root` GPU baseline pass |
 
 *This file is a living log. Update when branches merge or GPU status changes.*

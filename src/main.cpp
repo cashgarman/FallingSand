@@ -153,6 +153,107 @@ std::array<double, 3> phaseTotals(std::span<const Cell> cells)
     return count;
 }
 
+// Reproduce a stationary liquid brush above a wide shelf, then let the liquid settle.
+void liquidBrushTest(VulkanGame& game, std::span<const Cell> shelf)
+{
+    constexpr std::array brushMaterials{Material::water, Material::oil, Material::lava};
+    constexpr int floorRow = 170;
+    constexpr Point source{192.0F, 104.0F};
+    constexpr Stroke brush{source, source, 8.0F, Material::water, false};
+    std::array<int, brushMaterials.size()> widths{};
+    for (const auto [phase, material] : std::views::enumerate(brushMaterials))
+    {
+        game.replaceWorld(shelf);
+        Stroke pour = brush;
+        pour.material = material;
+        for (int tick = 0; tick < 100; ++tick)
+        {
+            game.paint(pour);
+            game.simulate(1);
+        }
+
+        const auto before = game.snapshot();
+        game.simulate(240);
+        const auto after = game.snapshot();
+        int top = floorRow;
+        int left = worldWidth;
+        int right = 0;
+        double pooled = 0.0;
+        double total = 0.0;
+        for (const auto [index, cell] : std::views::enumerate(after))
+        {
+            const auto column = static_cast<int>(index % worldWidth);
+            const auto row = static_cast<int>(index / worldWidth);
+            const float amount = cell.liquid[phase];
+            total += amount;
+            if (row >= floorRow - 16)
+            {
+                pooled += amount;
+            }
+            if (amount >= 0.20F)
+            {
+                top = std::min(top, row);
+                left = std::min(left, column);
+                right = std::max(right, column);
+            }
+        }
+
+        widths[phase] = right - left + 1;
+        require(total > 250.0, "brush pours a sustained stream");
+        std::println("Liquid brush phase {} | volume {:.2f} | height {} | width {} | pooled {:.1f}%",
+                     phase, total, floorRow - top, widths[phase], 100.0 * pooled / total);
+        require(top >= floorRow - 24 && pooled > total * 0.95, "liquid settles into a low pool");
+        require(widths[phase] >= 69, "liquid spreads sideways after reaching a flat shelf");
+        const auto beforeTotals = phaseTotals(before);
+        const auto afterTotals = phaseTotals(after);
+        require(std::abs(afterTotals[phase] - beforeTotals[phase]) < 0.05,
+                "brush liquid volume is conserved after release");
+    }
+    require(widths[0] > widths[1] && widths[1] > widths[2],
+            "water spreads faster than oil, and oil faster than lava");
+}
+
+// Pour above the sloped shelf where the tower was reported, then remove the source.
+void thermalVentPourTest(VulkanGame& game)
+{
+    auto scene = makeScene(Scene::thermal);
+    require(scene.has_value(), "load Thermal Vent");
+    game.replaceWorld(*scene);
+    game.simulate(300);
+    const double startingWater = phaseTotals(game.snapshot())[0];
+    constexpr Point source{280.0F, 30.0F};
+    constexpr Stroke pour{source, source, 8.0F, Material::water, false};
+    for (int tick = 0; tick < 180; ++tick)
+    {
+        game.paint(pour);
+        game.simulate(1);
+    }
+
+    // Once the brush stops, water above the open ramp should drain away. The ice ledge to
+    // the right can hold water, so this check covers only the span beneath the brush.
+    game.simulate(240);
+    const auto settled = game.snapshot();
+    const auto totals = phaseTotals(settled);
+    double towerMass = 0.0;
+    int visibleWaterTop = 75;
+    for (int row = 0; row < 75; ++row)
+    {
+        for (int column = 230; column < 325; ++column)
+        {
+            const float fill = settled[row * worldWidth + column].liquid[0];
+            towerMass += fill;
+            if (fill >= 0.20F)
+            {
+                visibleWaterTop = std::min(visibleWaterTop, row);
+            }
+        }
+    }
+    std::println("Thermal Vent after pouring | added water {:.2f} | above ramp {:.2f} | top {}",
+                 totals[0] - startingWater, towerMass, visibleWaterTop);
+    require(totals[0] > startingWater + 200.0 && visibleWaterTop == 75 && towerMass < 10.0,
+            "painted water drains from the Thermal Vent ramp");
+}
+
 void simulationTests(bool validate)
 {
     // using enum so the test body can name sand, water, and the other materials directly.
@@ -179,6 +280,10 @@ void simulationTests(bool validate)
             }
         }
     };
+    fill(0, 170, worldWidth, 173, stone);
+    liquidBrushTest(game, cells);
+    thermalVentPourTest(game);
+    cells = emptyWorld();
     fill(70, 144, 161, 148, stone);
     fill(70, 108, 74, 144, stone);
     fill(157, 108, 161, 144, stone);
@@ -383,14 +488,15 @@ class Sandbox
                 return;
             }
             drawDrag_ = layout.canvas.contains(inputs.paintDown);
-            sliderDrag_ = false;
+            sliderDrag_ = worldResDrag_ = false;
 
             // The initializer keeps the hit result in this if. Both branches can see it,
             // and it leaves scope at the end of the statement.
             if (auto pressed = layout.hit(inputs.paintDown))
             {
                 sliderDrag_ = pressed->action == Action::brush;
-                if (!sliderDrag_)
+                worldResDrag_ = pressed->action == Action::worldCell;
+                if (!sliderDrag_ && !worldResDrag_)
                 {
                     action(pressed->action, pressed->argument);
                 }
@@ -403,9 +509,19 @@ class Sandbox
             const float t = std::clamp((x - track.x) / track.w, 0.0F, 1.0F);
             state.radius = minRadius + static_cast<int>(std::round((maxRadius - minRadius) * t));
         }
+        if (worldResDrag_ && (inputs.paint || inputs.paintPressed))
+        {
+            const auto& track = layout.worldResTrack;
+            const float x = inputs.paint ? inputs.mouse.x : inputs.paintDown.x;
+            const float t = std::clamp((x - track.x) / track.w, 0.0F, 1.0F);
+            state.pendingWorldCellPx =
+                minWorldCellPx +
+                static_cast<int>(std::round((maxWorldCellPx - minWorldCellPx) * t));
+            state.worldResConfirm = state.pendingWorldCellPx != state.worldCellPx;
+        }
         if (!inputs.paint && !inputs.paintPressed)
         {
-            drawDrag_ = sliderDrag_ = false;
+            drawDrag_ = sliderDrag_ = worldResDrag_ = false;
         }
         if (Clock::now() >= statusUntil_)
         {
@@ -413,7 +529,7 @@ class Sandbox
         }
     }
 
-    std::optional<Stroke> stroke(const Input& input, const Layout& layout)
+    std::optional<Stroke> stroke(const Input& input, const Layout& layout, bool advancing = true)
     {
         if (state.menu != Menu::none)
         {
@@ -439,11 +555,20 @@ class Sandbox
                                 ? *previous_
                                 : point;
 
-        // nullopt breaks the stroke. optional(point) keeps the end point for the next move.
+        const Stroke result{start, point, static_cast<float>(state.radius), material,
+                            tool == Tool::stir};
+
+        // A click always paints. A held liquid brush waits for a simulation tick to refill.
+        if (result.poursLiquid() && !advancing && !state.paused && !input.paintPressed)
+        {
+            return std::nullopt;
+        }
+
+        // Keep the last painted point so skipped frames cannot leave gaps in the stroke.
         previous_ = pulse ? std::nullopt : std::optional(point);
         previousTool_ = tool;
         previousMaterial_ = material;
-        return Stroke{start, point, static_cast<float>(state.radius), material, tool == Tool::stir};
+        return result;
     }
 
   private:
@@ -458,6 +583,7 @@ class Sandbox
     Material previousMaterial_{};
     bool drawDrag_{};
     bool sliderDrag_{};
+    bool worldResDrag_{};
     bool pausedBefore_{};
     Menu settingsReturn_{Menu::pause};
     std::string status_;
@@ -470,7 +596,7 @@ class Sandbox
             pausedBefore_ = state.paused;
             state.paused = true;
             previous_.reset();
-            drawDrag_ = sliderDrag_ = false;
+            drawDrag_ = sliderDrag_ = worldResDrag_ = false;
         }
         state.menu = menu;
     }
@@ -614,6 +740,22 @@ class Sandbox
             break;
         case Action::brush:
             break;
+        case Action::worldCell:
+            break;
+        case Action::worldResApply:
+            if (state.worldResConfirm)
+            {
+                state.worldCellPx = state.pendingWorldCellPx;
+                state.worldResConfirm = false;
+                adopt(state.scene, true);
+                showStatus("WORLD RESET — NEW CELL SIZE");
+            }
+            break;
+        case Action::worldResCancel:
+            state.pendingWorldCellPx = state.worldCellPx;
+            state.worldResConfirm = false;
+            showStatus("CELL SIZE UNCHANGED");
+            break;
         case Action::openSettings:
             openSettings(Menu::pause);
             break;
@@ -698,10 +840,28 @@ void windowTests(Window& window, VulkanGame& gpu)
         loaded.has_value() &&
             std::ranges::any_of(*loaded, [](const Cell& c) { return kind(c) == Material::sand; }),
         "load saved world");
+
+    // A held brush should pour on simulation ticks even if the window draws extra frames.
+    click(layout.swatches[1]);
+    sandbox.input(window.consumeInput(), layout);
+    click(layout.controls[0].bounds);
+    sandbox.input(window.consumeInput(), layout);
+    const auto brushPos = MAKELPARAM(static_cast<int>(layout.canvas.x + layout.canvas.w / 2),
+                                    static_cast<int>(layout.canvas.y + layout.canvas.h / 2));
+    SendMessageW(window.handle(), WM_LBUTTONDOWN, MK_LBUTTON, brushPos);
+    const auto firstBrushFrame = window.consumeInput();
+    sandbox.input(firstBrushFrame, layout);
+    require(sandbox.stroke(firstBrushFrame, layout, false).has_value(), "liquid click paints immediately");
+    const auto nextBrushFrame = window.consumeInput();
+    sandbox.input(nextBrushFrame, layout);
+    require(!sandbox.stroke(nextBrushFrame, layout, false), "extra render frame does not refill liquid");
+    require(sandbox.stroke(nextBrushFrame, layout, true).has_value(), "held brush refills on a tick");
+    SendMessageW(window.handle(), WM_LBUTTONUP, 0, brushPos);
+
     gpu.wait();
     require(gpu.validationErrors() == 0, "no Vulkan validation errors in windowed mode");
     std::println(
-        "Window tests passed for scenes, materials, painting, stepping, resize, and save/load.");
+        "Window tests passed for scenes, materials, brush timing, stepping, resize, and save/load.");
 }
 
 void reportBenchmark(std::vector<double>& gpu, const std::vector<double>& sim, unsigned frames,
@@ -781,7 +941,10 @@ void play(const Options& options)
         const auto now = Clock::now();
         const double elapsed = Seconds(now - previousTime).count();
         previousTime = now;
-        const auto layout = makeLayout(w, h);
+        const int cellPx =
+            sandbox.state.worldResConfirm ? sandbox.state.pendingWorldCellPx
+                                          : sandbox.state.worldCellPx;
+        const auto layout = makeLayout(w, h, cellPx);
         sandbox.input(input, layout);
         if (sandbox.quit)
         {
@@ -834,7 +997,8 @@ void play(const Options& options)
         const auto capture =
             rendered == options.captureAfter ? options.capture : std::filesystem::path{};
         if (!gpu.draw({layout.canvas, worldMouse, static_cast<float>(sandbox.state.radius), cursor,
-                       visualTime, sandbox.stroke(input, layout), ticks, quads, capture}))
+                       visualTime, sandbox.stroke(input, layout, ticks != 0), ticks, quads,
+                       capture}))
         {
             continue;
         }

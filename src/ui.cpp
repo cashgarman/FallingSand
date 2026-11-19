@@ -243,7 +243,7 @@ void cog(Painter& p, Rect r, Point mouse)
 
 } // namespace
 
-Layout makeLayout(int width, int height)
+Layout makeLayout(int width, int height, int cellPixelSize)
 {
     const auto w = static_cast<float>(width), h = static_cast<float>(height);
     Layout l{};
@@ -252,12 +252,21 @@ Layout makeLayout(int width, int height)
     l.gap = 24 * s;
     const float rightWidth = 236 * s;
     const float top = 119 * s;
-    const float bottom = h - 83 * s;
+    const float worldResH = 52 * s;
+    const float bottom = h - 83 * s - worldResH;
     const float availableWidth = w - rightWidth - 3 * l.gap;
     constexpr float aspect = static_cast<float>(worldWidth) / worldHeight;
-    // Fit the world viewport to the remaining width while preserving grid aspect.
-    const float stageWidth = std::min(availableWidth, (bottom - top) * aspect);
-    const float stageHeight = stageWidth / aspect;
+    float stageWidth = std::min(availableWidth, (bottom - top) * aspect);
+    float stageHeight = stageWidth / aspect;
+    // When cellPixelSize is set, size the canvas from pixels-per-cell instead of only aspect fit.
+    if (cellPixelSize > 0)
+    {
+        const float desiredW = static_cast<float>(worldWidth * cellPixelSize);
+        const float desiredH = static_cast<float>(worldHeight * cellPixelSize);
+        const float fit = std::min({availableWidth / desiredW, (bottom - top) / desiredH, 1.0F});
+        stageWidth = desiredW * fit;
+        stageHeight = desiredH * fit;
+    }
     const float horizontalSpace = w - (stageWidth + l.gap + rightWidth);
     const float y = std::round(top + (bottom - top - stageHeight) / 2);
     const float x = std::round(horizontalSpace / 2);
@@ -296,6 +305,19 @@ Layout makeLayout(int width, int height)
         Button{{x + 451 * s, f, 105 * s, row}, Action::cycleTool},
     };
     l.brushTrack = {x + 294 * s, f + row * 0.68F, 115 * s, 3 * s};
+
+    const float barY = h - worldResH - 6 * s;
+    l.worldResBar = {8 * s, barY, w - 16 * s, worldResH};
+    const float barPad = 10 * s;
+    const float trackW = l.worldResBar.w * 0.42F;
+    l.worldResTrack = {l.worldResBar.x + 280 * s, l.worldResBar.y + barPad + 18 * s, trackW, 5 * s};
+    const float btnY = l.worldResBar.y + barPad;
+    const float btnW = 118 * s;
+    const float btnH = l.worldResBar.h - 2 * barPad;
+    l.worldResApply = Button{{l.worldResBar.x + l.worldResBar.w - 2 * btnW - 12 * s, btnY, btnW, btnH},
+                             Action::worldResApply};
+    l.worldResCancel = Button{{l.worldResBar.x + l.worldResBar.w - btnW - 4 * s, btnY, btnW, btnH},
+                              Action::worldResCancel};
 
     const float cogSize = std::max(22.0F, std::round(26 * s));
     const float margin = std::max(10.0F, std::round(12 * s));
@@ -363,7 +385,23 @@ std::optional<Button> Layout::hit(Point mouse) const
     // The lambda does not outlive this statement. optional is empty when nothing matched.
     auto found = std::ranges::find_if(
         controls, [mouse](const Button& b) { return b.bounds.contains(mouse); });
-    return found == controls.end() ? std::nullopt : std::optional(*found);
+    if (found != controls.end())
+    {
+        return *found;
+    }
+    if (worldResApply.bounds.contains(mouse))
+    {
+        return worldResApply;
+    }
+    if (worldResCancel.bounds.contains(mouse))
+    {
+        return worldResCancel;
+    }
+    if (worldResTrack.contains(mouse))
+    {
+        return Button{worldResTrack, Action::worldCell};
+    }
+    return std::nullopt;
 }
 
 Point Layout::worldPoint(Point pixel) const
@@ -483,6 +521,35 @@ void composeUi(std::vector<Quad>& quads, const Layout& l, const UiState& state, 
     fill.w *= static_cast<float>(state.radius - minRadius) / (maxRadius - minRadius);
     p.rect(fill, mint);
     p.rect({fill.x + fill.w - 1, fill.y - 2 * s, 3 * s, fill.h + 4 * s}, mint);
+
+    constexpr std::uint32_t worldResFill = 0x7a1b6e;
+    constexpr std::uint32_t worldResEdge = 0xff2ef0;
+    constexpr std::uint32_t worldResInk = 0xfff44a;
+    const int cellPx =
+        state.worldResConfirm ? state.pendingWorldCellPx : state.worldCellPx;
+    const Rect& resBar = l.worldResBar;
+    p.frame(resBar, worldResEdge, worldResFill);
+    p.label(resBar.x + 12 * s, resBar.y + 8 * s, ">>> BUILD REFRESH — WORLD PX / SAND CELL <<<",
+            std::max(2.0F, px), worldResInk);
+    p.label(resBar.x + 12 * s, resBar.y + 28 * s,
+            std::format("GRID {}x{}   VALUE {:d} PX/CELL", worldWidth, worldHeight, cellPx),
+            tiny, white);
+    p.rect(l.worldResTrack, 0x2e0a28);
+    auto resFill = l.worldResTrack;
+    resFill.w *= static_cast<float>(cellPx - minWorldCellPx) / (maxWorldCellPx - minWorldCellPx);
+    p.rect(resFill, worldResEdge);
+    p.rect({resFill.x + resFill.w - 1, resFill.y - 3 * s, 4 * s, resFill.h + 6 * s}, white);
+    if (state.worldResConfirm)
+    {
+        button(p, l.worldResApply.bounds, mouse, "APPLY + RESET", tiny,
+               l.worldResApply.bounds.contains(mouse));
+        button(p, l.worldResCancel.bounds, mouse, "CANCEL", tiny,
+               l.worldResCancel.bounds.contains(mouse));
+    } else
+    {
+        button(p, l.worldResApply.bounds, mouse, "APPLY + RESET", tiny, false);
+        button(p, l.worldResCancel.bounds, mouse, "CANCEL", tiny, false);
+    }
 
     const float foot = l.footer.y + l.footer.h + 8 * s;
     p.label(x, foot, "SPACE PLAY/PAUSE   N STEP   RMB ERASE   MMB STIR   WHEEL SIZE   ESC MENU",

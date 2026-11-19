@@ -1,0 +1,33 @@
+// Start the pressure solve with the weight of liquid above each square.
+// The solver then adjusts this estimate to account for sideways flow and moving liquid.
+#version 460
+#extension GL_GOOGLE_include_directive : require
+#include "world.glsl"
+
+layout(local_size_x = 32) in;
+
+// Walk one column from top to bottom. An air gap or solid starts a new liquid column.
+void main()
+{
+	int column = int(gl_GlobalInvocationID.x);
+	if (column >= pc.size.x)
+		return;
+
+	float pressure = 0.0;
+	for (int row = 0; row < pc.size.y; ++row)
+	{
+		int cellIndex = indexOf(ivec2(column, row));
+		Cell cell = readCell(cellIndex);
+		if (solid(cell) || !wet(cell))
+		{
+			pressure = 0.0;
+		}
+		else
+		{
+			// Denser liquids create more pressure at the same depth.
+			// Implementation: with one cell per grid unit, each layer adds rho * fill * gravity.
+			pressure += gravityPerTick * dot(cell.liquid, liquidDensity);
+		}
+		pressureA[cellIndex] = pressure;
+	}
+}
