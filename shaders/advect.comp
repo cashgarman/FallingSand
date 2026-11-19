@@ -1,73 +1,213 @@
 // Liquid advection: move water, oil, and lava between neighbors according to flux and flow limits.
-// Each thread updates one grid square when fluid is actually flowing across its faces.
+// operation.z: 0 = flux or full-cell quiet mass; 1 = mass follow-up (red-black) on flux-quiet faces.
 #version 460
 #extension GL_GOOGLE_include_directive : require
 #include "world.glsl"
 
-// Same 16×8 thread layout as the other world simulation compute steps.
 layout(local_size_x = 16, local_size_y = 8) in;
 
-// Scale donor cell liquids by how much is leaving through a face.
+const float kMaxMass = 1.0;
+const float kMaxCompress = 0.02;
+const float kMinFlow = 0.005;
+const float kFluxEpsilon = 0.0;
+const float kMassFollowEpsilon = 0.04;
+const float kGravityFall = 1.12;
+const float kSideFallBias = 0.55;
+
+float stableFill(float totalMass)
+{
+	if (totalMass <= kMaxMass)
+		return totalMass;
+	if (totalMass < 2.0 * kMaxMass + kMaxCompress)
+		return (kMaxMass * kMaxMass + totalMass * kMaxCompress) / (kMaxMass + kMaxCompress);
+	return (totalMass + kMaxCompress) * 0.5;
+}
+
+float verticalTransfer(float donorFill, float recvFill)
+{
+	if (donorFill <= 0.0)
+		return 0.0;
+	float headroom = max(0.0, kMaxMass - recvFill);
+	float flow = stableFill(donorFill + recvFill) - recvFill;
+	if (flow <= kMinFlow)
+		return 0.0;
+	flow *= 0.5 * kGravityFall;
+	return min(flow, min(donorFill, headroom));
+}
+
+float horizontalTransfer(float donorFill, float recvFill, float sideScale)
+{
+	if (donorFill <= recvFill)
+		return 0.0;
+	float headroom = max(0.0, kMaxMass - recvFill);
+	float flow = (donorFill - recvFill) * 0.25;
+	if (flow <= kMinFlow)
+		return 0.0;
+	flow *= 0.5 * sideScale;
+	return min(flow, min(donorFill, headroom));
+}
+
+bool faceFluxBelow(float towardComponent, float epsilon)
+{
+	return abs(towardComponent) <= epsilon;
+}
+
+bool allFluxBelow(vec4 toward, float epsilon)
+{
+	return all(lessThanEqual(abs(toward), vec4(epsilon)));
+}
+
 vec3 received(int donorIndex, float amount)
 {
-	// Nothing to receive when the face offered no liquid this tick.
 	if (amount <= 0.0)
 		return vec3(0);
 
-	// Donor mix decides how much water, oil, and lava ride along with the transfer.
 	Cell donorCell = readCell(donorIndex);
-	return donorCell.liquid * (amount / max(volume(donorCell), 1e-30)); // 1e-30: avoid divide-by-zero on empty donors
+	return donorCell.liquid * (amount / max(volume(donorCell), 1e-30));
 }
 
-// Apply net inflow and outflow to this square's liquid channels.
-void main()
+bool anyFluxFace(vec4 toward)
 {
-	// Map this thread to one grid square in the simulation.
-	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
-	if (!inside(gridPos))
+	return !allFluxBelow(toward, kMassFollowEpsilon);
+}
+
+void massFollowUp(ivec2 gridPos, int cellIndex, inout Cell cell, vec4 toward, bool importMass,
+                  bool followPassVerticalOnly)
+{
+	float amount = volume(cell);
+	if (amount <= 0.0)
 		return;
 
-	// Same flat slot the flux and limit passes use for this square.
-	int cellIndex = indexOf(gridPos);
-	Cell cell = readCell(cellIndex);
-
-	// Neighbor indices clamp to self at world edges so edge math stays uniform.
 	int leftIndex = gridPos.x > 0 ? cellIndex - 1 : cellIndex;
 	int rightIndex = gridPos.x + 1 < pc.size.x ? cellIndex + 1 : cellIndex;
 	int topIndex = gridPos.y > 0 ? cellIndex - pc.size.x : cellIndex;
 	int bottomIndex = gridPos.y + 1 < pc.size.y ? cellIndex + pc.size.x : cellIndex;
 
-	// Positive flux toward this cell from left and top; negative of our own flux as outward demand.
-	// Implementation: toward = vec4(left, top, -end.x, -end.y) from neighbor flux[] and flux[cellIndex]
+	Cell leftCell = readCell(leftIndex);
+	Cell rightCell = readCell(rightIndex);
+	Cell topCell = readCell(topIndex);
+	Cell bottomCell = readCell(bottomIndex);
+
+	bool canFall =
+	    gridPos.y + 1 < pc.size.y && !solid(bottomCell) &&
+	    (kMaxMass - volume(bottomCell)) > kMinFlow;
+	float sideScale = canFall ? kSideFallBias : 1.0;
+
+	vec4 massIn = vec4(0);
+	vec4 massOut = vec4(0);
+	float remaining = amount;
+
+	if (importMass)
+	{
+		if (!followPassVerticalOnly && gridPos.x > 0 && !solid(leftCell) &&
+		    faceFluxBelow(toward.x, kFluxEpsilon))
+			massIn.x = horizontalTransfer(volume(leftCell), amount, sideScale);
+		if (!followPassVerticalOnly && gridPos.x + 1 < pc.size.x && !solid(rightCell) &&
+		    faceFluxBelow(toward.z, kFluxEpsilon))
+			massIn.z = horizontalTransfer(volume(rightCell), amount, sideScale);
+		if (gridPos.y > 0 && !solid(topCell) && faceFluxBelow(toward.y, kFluxEpsilon))
+			massIn.y = verticalTransfer(volume(topCell), amount);
+	}
+	else
+	{
+		if (gridPos.y + 1 < pc.size.y && !solid(bottomCell) &&
+		    faceFluxBelow(toward.w, kFluxEpsilon))
+		{
+			float flow = min(verticalTransfer(amount, volume(bottomCell)), remaining);
+			massOut.w = flow;
+			remaining -= flow;
+		}
+		if (!followPassVerticalOnly)
+		{
+			if (gridPos.x > 0 && !solid(leftCell) && faceFluxBelow(toward.x, kFluxEpsilon) &&
+			    remaining > kMinFlow)
+			{
+				float flow =
+				    min(horizontalTransfer(amount, volume(leftCell), sideScale), remaining);
+				massOut.x = flow;
+				remaining -= flow;
+			}
+			if (gridPos.x + 1 < pc.size.x && !solid(rightCell) &&
+			    faceFluxBelow(toward.z, kFluxEpsilon) && remaining > kMinFlow)
+			{
+				float flow = min(
+				    horizontalTransfer(amount, volume(rightCell), sideScale), remaining);
+				massOut.z = flow;
+			}
+		}
+	}
+
+	float massMove = dot(massIn, vec4(1)) + dot(massOut, vec4(1));
+	if (massMove <= 0.0)
+		return;
+
+	float totalOut = dot(massOut, vec4(1));
+	cell.liquid *= max(0.0, 1.0 - totalOut / amount);
+
+	cell.liquid += received(leftIndex, massIn.x) + received(topIndex, massIn.y) +
+	               received(rightIndex, massIn.z) + received(bottomIndex, massIn.w);
+}
+
+void quietMassPass(ivec2 gridPos, int cellIndex, inout Cell cell, vec4 toward, bool importMass)
+{
+	massFollowUp(gridPos, cellIndex, cell, toward, importMass, false);
+}
+
+void main()
+{
+	ivec2 gridPos = ivec2(gl_GlobalInvocationID.xy);
+	if (!inside(gridPos))
+		return;
+
+	int cellIndex = indexOf(gridPos);
+	Cell cell = readCell(cellIndex);
+
+	int leftIndex = gridPos.x > 0 ? cellIndex - 1 : cellIndex;
+	int rightIndex = gridPos.x + 1 < pc.size.x ? cellIndex + 1 : cellIndex;
+	int topIndex = gridPos.y > 0 ? cellIndex - pc.size.x : cellIndex;
+	int bottomIndex = gridPos.y + 1 < pc.size.y ? cellIndex + pc.size.x : cellIndex;
+
 	float leftFlux = gridPos.x > 0 ? flux[leftIndex].x : 0.0;
 	float topFlux = gridPos.y > 0 ? flux[topIndex].y : 0.0;
 	vec2 endFlux = flux[cellIndex];
 	vec4 toward = vec4(leftFlux, topFlux, -endFlux.x, -endFlux.y);
 
-	// When anything is pushing or pulling liquid here, scale down what we keep and add what neighbors send.
-	if (any(notEqual(toward, vec4(0))))
+	bool importMass = ((cellIndex + int(pc.operation.x)) & 1) == 1;
+
+	if (pc.operation.z == 1u)
 	{
-		// Conserve mass: clip how much stays here, then add neighbor donations — limits prevent overfilling anyone.
-		// Implementation: into = max(toward, 0) * limitA; outflow = dot(max(-toward, 0), remote limits)
-
-		// How much fluid each face tries to deliver here, capped by this square's inflow allowance.
-		vec4 into = max(toward, vec4(0)) * limitA[cellIndex];
-
-		// Each neighbor's remaining capacity to absorb what we push out that way.
-		vec4 remote = vec4(limitA[leftIndex], limitA[topIndex],
-		                    limitA[rightIndex], limitA[bottomIndex]);
-
-		// Share of our volume demanded outward, weighted by whether the target can take it.
-		float outflow = dot(max(-toward, vec4(0)), remote);
-		float amount = volume(cell);
-
-		// Scale water, oil, and lava down together by the fraction not leaving (empty cells skip the ratio).
-		cell.liquid *= amount > 0.0 ? max(0.0, 1.0 - outflow / amount) : 1.0;
-
-		// Credit imports: each face pulls the donor's mix in proportion to accepted inflow.
-		cell.liquid += received(leftIndex, into.x) + received(topIndex, into.y) +
-		               received(rightIndex, into.z) + received(bottomIndex, into.w);
+		// Mass follow-up after flux: export-only on flux-quiet faces (conservation tuning pending).
+		if (!anyFluxFace(toward) || volume(cell) <= 0.0)
+		{
+			writeOther(cellIndex, cell);
+			return;
+		}
+		bool followImport = ((cellIndex + int(pc.operation.x) + 1) & 1) == 1;
+		massFollowUp(gridPos, cellIndex, cell, toward, followImport, false);
+		writeOther(cellIndex, cell);
+		return;
 	}
+
+	if (!allFluxBelow(toward, kFluxEpsilon))
+	{
+		float amount = volume(cell);
+		vec4 faceIn = max(toward, vec4(0)) * limitA[cellIndex];
+		vec4 nbrLimit = vec4(limitA[leftIndex], limitA[topIndex], limitA[rightIndex],
+		                     limitA[bottomIndex]);
+		vec4 faceOut = max(-toward, vec4(0)) * nbrLimit;
+
+		float rawOut = dot(faceOut, vec4(1));
+		float totalOut = min(amount, rawOut);
+		if (rawOut > totalOut && rawOut > 0.0)
+			faceOut *= totalOut / rawOut;
+
+		cell.liquid *= amount > 0.0 ? max(0.0, 1.0 - totalOut / amount) : 1.0;
+
+		cell.liquid += received(leftIndex, faceIn.x) + received(topIndex, faceIn.y) +
+		               received(rightIndex, faceIn.z) + received(bottomIndex, faceIn.w);
+	}
+	else if (volume(cell) > 0.0)
+		quietMassPass(gridPos, cellIndex, cell, toward, importMass);
 
 	writeOther(cellIndex, cell);
 }

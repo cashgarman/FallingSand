@@ -87,14 +87,16 @@ void main()
         }
 
         // Thick liquids drag harder; blend toward neighbor velocities and add a tiny downward bias.
-        // Implementation: viscosity from weighted liquid phase; blend 1 - 4*viscosity; *0.992 damp;
+        // Implementation: viscosity from weighted liquid phase; blend 1 - 4*viscosity; water damp 0.996;
         // +0.085 gravity on y
         vec3 phase = centerCell.liquid + rightCell.liquid + downCell.liquid;
-        float viscosity = dot(phase, vec3(0.022, 0.095, 0.19)) / max(dot(phase, vec3(1)), 0.001);
+        float phaseSum = max(dot(phase, vec3(1)), 0.001);
+        float viscosity = dot(phase, vec3(0.005, 0.095, 0.19)) / phaseSum;
+        float damp = mix(0.992, 0.996, phase.x / phaseSum); // 0.996 water; 0.992 oil / lava
         // Keep most of the traced speed, but let neighbors pull thick fluid along each axis.
         predicted = (predicted * (1.0 - 4.0 * viscosity) +
                      viscosity * (leftVelocity + rightVelocity + upVelocity + downVelocity)) *
-                    0.992; // 0.992: per-tick velocity retention
+                    damp;
 
         // A little extra downward pull each frame — liquids feel heavy.
         predicted.y += 0.085; // 0.085: gentle downward drift for liquids

@@ -1124,9 +1124,9 @@ void VulkanGame::Impl::recordSim(VkCommandBuffer cmd, unsigned ticks)
             push.operation = {pass, pass & 1u, 0, 0};
             dispatch(cmd, Kernel::limit, fullX, fullY);
         }
+        push.operation[2] = 0u;
         dispatch(cmd, Kernel::advect, fullX, fullY);
         push.state ^= 1u;
-
         // Separate liquid phases on two checkerboard passes.
         for (unsigned phase = 0; phase < 2; ++phase)
         {
